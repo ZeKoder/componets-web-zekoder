@@ -1,5 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import IconButton from './IconButton.vue';
+import { describe, it, expect } from 'vitest'
 
 describe('IconButton', () => {
   it('renders button with correct icon class', () => {
