@@ -1,6 +1,13 @@
 <template>
   <div :class="customClass ? customClass + '-container' : ''">
-    <b-form-group :label="label" :label-for="id" :description="description">
+    <b-form-group
+      :label="label"
+      :label-for="id"
+      :description="description"
+      :valid-feedback="successMessage"
+      :invalid-feedback="errorMessage"
+      :state="error"
+    >
       <b-form-input
         :id="id"
         :value="value"
@@ -11,7 +18,7 @@
         :step="step"
         :size="size"
         :formatter="formatter"
-        :state="state"
+        :state="error"
         :disabled="disabled"
         :readonly="readonly"
         :required="required"
@@ -62,7 +69,7 @@ export default {
       type: String,
       default: ''
     },
-    state: {
+    error: {
       type: String
     },
     formatter: {
@@ -100,7 +107,15 @@ export default {
     customStyle: {
       type: Object,
       default: () => ({})
-    }
+    },
+    successMessage: {
+      type: String,
+      default: ''
+    },
+    errorMessage: {
+      type: String,
+      default: ''
+    },
   },
   emits: ['input', 'change'],
   methods: {

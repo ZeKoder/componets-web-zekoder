@@ -23,7 +23,7 @@ export default {
       defaultValue: 'text'
     },
     label: {
-      control: { type: 'object' }
+      control: { type: 'text' }
     },
     customClass: { type: 'text' },
     customStyle: { type: 'object' },
