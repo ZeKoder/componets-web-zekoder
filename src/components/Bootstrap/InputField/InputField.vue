@@ -25,6 +25,7 @@
         :name="name"
         :class="customClass"
         :style="customStyle"
+        :form="formID"
         @change="change"
         @input="input"
       ></b-form-input>
@@ -116,6 +117,10 @@ export default {
       type: String,
       default: ''
     },
+    formID: {
+      type: String,
+      default: ''
+    }
   },
   emits: ['input', 'change'],
   methods: {
