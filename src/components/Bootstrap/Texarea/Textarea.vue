@@ -25,6 +25,8 @@
           :max-rows="maxRows"
           :form="formID"
           :plaintext="plaintext"
+          :no-auto-shrink="noAutoShrink"
+          :no-resize="noResize"
           @change="change"
           @input="input"
         ></b-form-textarea>
@@ -113,6 +115,14 @@
         default: ''
       },
       plaintext: {
+        type: Boolean,
+        default: false
+      },
+      noResize: {
+        type: Boolean,
+        default: false
+      },
+      noAutoShrink: {
         type: Boolean,
         default: false
       },
