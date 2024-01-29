@@ -24,7 +24,7 @@ import CarbonComponentsVue from '@carbon/vue';
 // Bind plugins to the app
 import { setup } from "@storybook/vue3"
 setup((app) => {
-  app.use(BootstrapVueNextPlugin); // BootstrapVue
+  app.use(BootstrapVueNextPlugin({ components: false, directives: true})); // BootstrapVue
   app.use(Vuetify); // Vuetify
   app.use(PrimeVue); // PrimeVue
   app.use(CarbonComponentsVue); // Carbon Vue
