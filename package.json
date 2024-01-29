@@ -6,6 +6,7 @@
   "scripts": {
     "build": "vite build",
     "build-storybook": "storybook build",
+    "coverage": "vitest run --coverage",
     "dev": "vite",
     "format": "prettier --write src/",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
@@ -16,7 +17,7 @@
   "dependencies": {
     "@carbon/vue": "^3.0.11",
     "bootstrap": "^5.3.2",
-    "bootstrap-vue-next": "^0.15.5",
+    "bootstrap-vue-next": "^0.16.0",
     "primevue": "^3.46.0",
     "vue": "^3.3.11",
     "vue-router": "^4.2.5",
