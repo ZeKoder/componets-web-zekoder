@@ -1,8 +1,8 @@
-import InputField from './InputField.vue'
+import ZekBvInput from './ZekBvInput.vue'
 
 export default {
-  title: 'Components/ZekInputField',
-  component: InputField,
+  title: 'Bootstrap/ZekBvInput',
+  component: ZekBvInput,
   tags: ['autodocs'],
   argTypes: {
     type: {
@@ -54,9 +54,6 @@ export default {
     step: {
       control: { type: 'text' }
     },
-    size: {
-      control: { type: 'text' }
-    },
     description: {
       control: { type: 'text' }
     },
@@ -66,8 +63,8 @@ export default {
     readonly: {
       control: { type: 'boolean' }
     },
-    input: { control: 'action', action: 'input' }, 
-    change: { control: 'action', action: 'change' },
+    onInput: { control: 'action', action: 'input' }, 
+    onChange: { control: 'action', action: 'change' },
   }
 }
 
@@ -76,8 +73,8 @@ const Template = (args, { argTypes }) => ({
     return { args }
   },
   props: Object.keys(argTypes),
-  components: { InputField },
-  template: '<InputField v-bind="args" @input="input" @change="change" />' //REVIEW - events are not triggered in actions.
+  components: { ZekBvInput },
+  template: '<ZekBvInput v-bind="args" />' 
 })
 
 export const Default = Template.bind({})

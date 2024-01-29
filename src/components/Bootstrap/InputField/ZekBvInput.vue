@@ -7,6 +7,7 @@
       :valid-feedback="successMessage"
       :invalid-feedback="errorMessage"
       :state="error"
+      :label-class="labelClass + (required ? ' required' : '')"
     >
       <b-form-input
         :id="id"
@@ -16,7 +17,6 @@
         :min="min"
         :max="max"
         :step="step"
-        :size="size"
         :formatter="formatter"
         :state="error"
         :disabled="disabled"
@@ -32,10 +32,14 @@
     </b-form-group>
   </div>
 </template>
-
 <script>
+import { BFormGroup, BFormInput } from 'bootstrap-vue-next'
 export default {
-  name: 'ZekInputField',
+  name: 'ZekBvInput',
+  components: {
+    BFormGroup,
+    BFormInput
+  },
   props: {
     value: {
       type: String,
@@ -52,7 +56,7 @@ export default {
     },
     id: {
       type: String,
-      default: ''
+      default: Math.floor(Math.random() * 10000).toString().padStart(4, '0')
     },
     min: {
       type: String,
@@ -66,12 +70,9 @@ export default {
       type: String,
       default: ''
     },
-    size: {
-      type: String,
-      default: ''
-    },
     error: {
-      type: String
+      type: Boolean,
+      default: undefined
     },
     formatter: {
       type: Function,
@@ -120,16 +121,27 @@ export default {
     formID: {
       type: String,
       default: ''
+    }, 
+    labelClass: {
+      type: String,
+      default: ''
     }
   },
   emits: ['input', 'change'],
   methods: {
-    input() {
-      this.$emit('input')
+    input(event) {
+      this.$emit('input', event.target.value)
     },
-    change() {
-      this.$emit('change')
+    change(event) {
+      this.$emit('change', event.target.value)
     }
   }
 }
 </script>
+<style>
+.required::after {
+  content: '*';
+  color: red;
+  margin-left: 4px;
+}
+</style>
