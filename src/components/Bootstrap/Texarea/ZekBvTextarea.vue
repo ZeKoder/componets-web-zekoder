@@ -10,7 +10,7 @@
         :label-class="labelClass + (required ? ' required' : '')"
       >
         <b-form-textarea
-          ref="textArea"
+          ref="ZekBvTextarea"
           :id="id"
           :value="value"
           :placeholder="placeholder"
