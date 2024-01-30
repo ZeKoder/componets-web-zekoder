@@ -10,6 +10,7 @@
       :label-class="labelClass + (required ? ' required' : '')"
     >
       <b-form-input
+        ref="ZekBvInput"
         :id="id"
         :value="value"
         :placeholder="placeholder"
@@ -26,6 +27,8 @@
         :class="customClass"
         :style="customStyle"
         :form="formID"
+        v-bind="customProps"
+        v-on="customEvents"
         @change="change"
         @input="input"
       ></b-form-input>
@@ -125,7 +128,15 @@ export default {
     labelClass: {
       type: String,
       default: ''
-    }
+    },
+    customProps: {
+      type: Object,
+      default: () => ({})
+    },
+    customEvents: {
+      type: Object,
+      default: () => ({})
+    },
   },
   emits: ['input', 'change'],
   methods: {

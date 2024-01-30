@@ -1,5 +1,5 @@
 import { mount, shallowMount } from '@vue/test-utils';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import ZekBvInput from './ZekBvInput.vue';
 
 describe('ZekInputField', () => {
@@ -82,6 +82,26 @@ describe('ZekInputField', () => {
     const feedbackMessage = wrapper.find('.invalid-feedback');
     expect(feedbackMessage.text()).toBe('error');
     expect(feedbackMessage.exists()).toBe(true);
+  });
+
+   // Test case 7: Check if customProps and customEvents are passed correctly
+   it('sets customProps and customEvents correctly', () => {
+    // Define customProps and customEvents
+    const customProps = { prop1: 'value1', prop2: 'value2' };
+    const customEvents = {  event1: vi.fn(), event2: vi.fn() };
+
+    // Mount the component with customProps and customEvents
+    const wrapper = mount(ZekBvInput, {
+      props: {
+        customProps,
+        customEvents,
+        // Add other necessary props for testing
+      },
+    });
+
+    // Check if customProps and customEvents are present in the rendered component
+    expect(wrapper.vm.$props.customProps).toEqual(customProps);
+    expect(wrapper.vm.$props.customEvents).toEqual(customEvents);
   });
 
 });
