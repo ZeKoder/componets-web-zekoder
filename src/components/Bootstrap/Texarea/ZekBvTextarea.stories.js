@@ -1,8 +1,8 @@
-import Textarea from './Textarea.vue'
+import ZekBvTextarea from './ZekBvTextarea.vue'
 
 export default {
-  title: 'Components/ZekTextarea',
-  component: Textarea,
+  title: 'Bootstrap/ZekBvTextarea',
+  component: ZekBvTextarea,
   tags: ['autodocs'],
   argTypes: {
     label: {
@@ -28,17 +28,14 @@ export default {
     placeholder: {
       control: { type: 'text' }
     },
-    size: {
-      control: { type: 'text' }
-    },
     description: {
       control: { type: 'text' }
     },
     readonly: {
       control: { type: 'boolean' }
     },
-    input: { control: 'action', action: 'input' }, 
-    change: { control: 'action', action: 'change' },
+    onInput: { control: 'action', action: 'input' }, 
+    onChange: { control: 'action', action: 'change' },
   }
 }
 
@@ -47,8 +44,8 @@ const Template = (args, { argTypes }) => ({
     return { args }
   },
   props: Object.keys(argTypes),
-  components: { Textarea },
-  template: '<Textarea v-bind="args" @input="input" @change="change" />' //REVIEW - events are not triggered in actions.
+  components: { ZekBvTextarea },
+  template: '<ZekBvTextarea v-bind="args" />'
 })
 
 export const Default = Template.bind({})

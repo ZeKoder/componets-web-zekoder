@@ -7,12 +7,13 @@
         :valid-feedback="successMessage"
         :invalid-feedback="errorMessage"
         :state="error"
+        :label-class="labelClass + (required ? ' required' : '')"
       >
         <b-form-textarea
+          ref="textArea"
           :id="id"
           :value="value"
           :placeholder="placeholder"
-          :size="size"
           :formatter="formatter"
           :state="error"
           :disabled="disabled"
@@ -25,8 +26,9 @@
           :max-rows="maxRows"
           :form="formID"
           :plaintext="plaintext"
-          :no-auto-shrink="noAutoShrink"
           :no-resize="noResize"
+          v-bind="customProps"
+          v-on="customEvents"
           @change="change"
           @input="input"
         ></b-form-textarea>
@@ -35,8 +37,13 @@
   </template>
   
   <script>
+  import { BFormTextarea, BFormGroup } from 'bootstrap-vue-next'
   export default {
-    name: 'ZekTextarea',
+    name: 'ZekBvTextarea',
+    components: {
+      BFormTextarea,
+      BFormGroup
+    },
     props: {
       value: {
         type: String,
@@ -49,14 +56,11 @@
       },
       id: {
         type: String,
-        default: ''
-      },
-      size: {
-        type: String,
-        default: ''
+        default: Math.floor(Math.random() * 10000).toString().padStart(4, '0')
       },
       error: {
-        type: String
+        type: Boolean,
+        default: undefined
       },
       formatter: {
         type: Function,
@@ -122,20 +126,34 @@
         type: Boolean,
         default: false
       },
-      noAutoShrink: {
-        type: Boolean,
-        default: false
+      labelClass: {
+        type: String,
+        default: ''
+      },
+      customProps: {
+        type: Object,
+        default: () => ({})
+      },
+      customEvents: {
+        type: Object,
+        default: () => ({})
       },
     },
     emits: ['input', 'change'],
     methods: {
-      input() {
-        this.$emit('input')
+      input(event) {
+        this.$emit('input', event.target.value)
       },
-      change() {
-        this.$emit('change')
+      change(event) {
+        this.$emit('change', event.target.value)
       }
     }
   }
   </script>
-  
+  <style>
+  .required::after {
+    content: '*';
+    color: red;
+    margin-left: 4px;
+  }
+  </style>
