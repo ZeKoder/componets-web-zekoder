@@ -18,7 +18,12 @@ export default {
         'date',
         'time',
         'range',
-        'color'
+        'color',
+        'datetime',
+        'datetime-local',
+        'month',
+        'week'
+
       ],
       defaultValue: 'text'
     },
