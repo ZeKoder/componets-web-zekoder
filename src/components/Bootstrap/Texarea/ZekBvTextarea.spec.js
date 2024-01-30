@@ -72,8 +72,8 @@ describe('ZekBvTextarea', () => {
     expect(feedbackMessage.exists()).toBe(true);
   });
 
-  // Test case 6: Check if error message display on error false
-  it('displays a red asterisk for the label when required', () => {
+   // Test case 6: Check if error message display on error false
+   it('displays error message if error is false', () => {
     const wrapper = mount(ZekBvTextarea, {
       props: {
         error: false,
@@ -86,21 +86,7 @@ describe('ZekBvTextarea', () => {
     expect(feedbackMessage.exists()).toBe(true);
   });
 
-   // Test case 7: Check if error message display on error false
-   it('displays a red asterisk for the label when required', () => {
-    const wrapper = mount(ZekBvTextarea, {
-      props: {
-        error: false,
-        errorMessage: 'error',
-      },
-    });
-
-    const feedbackMessage = wrapper.find('.invalid-feedback');
-    expect(feedbackMessage.text()).toBe('error');
-    expect(feedbackMessage.exists()).toBe(true);
-  });
-
-   // Test case 8: Check if customProps and customEvents are passed correctly
+   // Test case 7: Check if customProps and customEvents are passed correctly
    it('sets customProps and customEvents correctly', () => {
     // Define customProps and customEvents
     const customProps = { prop1: 'value1', prop2: 'value2' };
