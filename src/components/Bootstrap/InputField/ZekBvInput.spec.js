@@ -71,7 +71,7 @@ describe('ZekInputField', () => {
   });
 
   // Test case 6: Check if error message display on error false
-  it('displays a red asterisk for the label when required', () => {
+  it('displays error message if error is false', () => {
     const wrapper = mount(ZekBvInput, {
       props: {
         error: false,
