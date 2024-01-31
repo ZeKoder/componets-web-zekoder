@@ -6,13 +6,13 @@
   "scripts": {
     "build": "vite build",
     "build-storybook": "storybook build",
-    "coverage": "vitest run --coverage",
     "dev": "vite",
     "format": "prettier --write src/",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "test:unit": "vitest"
+    "test:unit": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@carbon/vue": "^3.0.11",
