@@ -31,6 +31,14 @@ export default {
     description: {
       control: { type: 'text' }
     },
+    type: {
+      control: { type: 'select' },
+      options: [
+        'buttons',
+        'plain',
+        'switches'
+      ]
+    },
     onInput: { control: 'action', action: 'input' }, 
     onChange: { control: 'action', action: 'change' },
   }
