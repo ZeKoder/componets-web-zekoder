@@ -24,6 +24,7 @@
           :class="customClass"
           :style="customStyle"
           :form="formID"
+          :selectSize="listSize"
           v-bind="customProps"
           v-on="customEvents"
           @change="change"
@@ -109,6 +110,10 @@
       labelClass: {
         type: String,
         default: ''
+      },
+      listSize: {
+        type: [String, Number],
+        default: 0
       },
       customProps: {
         type: Object,

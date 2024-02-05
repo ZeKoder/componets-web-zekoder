@@ -28,6 +28,9 @@ export default {
     size: {
       control: { type: 'text' }
     },
+    listSize: {
+      control: { type: 'text' }
+    },
     description: {
       control: { type: 'text' }
     },
