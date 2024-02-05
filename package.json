@@ -35,6 +35,7 @@
     "@storybook/vue3": "^7.6.12",
     "@storybook/vue3-vite": "^7.6.12",
     "@vitejs/plugin-vue": "^4.5.2",
+    "@vitest/coverage-v8": "^1.2.2",
     "@vue/eslint-config-prettier": "^8.0.0",
     "@vue/test-utils": "^2.4.3",
     "eslint": "^8.49.0",
