@@ -18,7 +18,11 @@ describe('ZekTextarea', () => {
 
   // Test case 2: Check if emitted events work
   it('emits input and change events when value changes', async () => {
-    const wrapper = mount(ZekBvDropdown)
+    const wrapper = mount(ZekBvDropdown, {
+      props: {
+        items: [{}, {}]
+      }
+    })
 
     // Simulate dropdown change
     // For select without multiple
@@ -35,7 +39,8 @@ describe('ZekTextarea', () => {
     const wrapper = mount(ZekBvDropdown, {
       props: {
         value: 'Test Value',
-        label: 'Test Label'
+        label: 'Test Label',
+        items: [{}, {}]
       }
     })
 
@@ -51,7 +56,8 @@ describe('ZekTextarea', () => {
     const wrapper = mount(ZekBvDropdown, {
       props: {
         label: 'Test Label',
-        required: true
+        required: true,
+        items: [{}, {}]
       }
     })
 
@@ -65,7 +71,8 @@ describe('ZekTextarea', () => {
     const wrapper = mount(ZekBvDropdown, {
       props: {
         error: true,
-        successMessage: 'success'
+        successMessage: 'success',
+        items: [{}, {}]
       }
     })
 
@@ -79,7 +86,8 @@ describe('ZekTextarea', () => {
     const wrapper = mount(ZekBvDropdown, {
       props: {
         error: false,
-        errorMessage: 'error'
+        errorMessage: 'error',
+        items: [{}, {}]
       }
     })
 

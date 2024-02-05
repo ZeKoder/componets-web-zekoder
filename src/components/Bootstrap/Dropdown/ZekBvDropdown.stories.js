@@ -34,8 +34,8 @@ export default {
     description: {
       control: { type: 'text' }
     },
-    onInput: { control: 'action', action: 'input' }, 
-    onChange: { control: 'action', action: 'change' },
+    onInput: { control: 'action', action: 'input' },
+    onChange: { control: 'action', action: 'change' }
   }
 }
 
@@ -50,24 +50,23 @@ const Template = (args, { argTypes }) => ({
 
 export const Default = Template.bind({})
 Default.args = {
-    value: null,
-    items: [
-      { value: null, text: 'Please select an option', disabled: true},
-      { value: 'a', text: 'This is First option' },
-      { value: 'b', text: 'Selected Option' },
-      {
-        label: 'Grouped options',
-        options: [
-          { value:  '3PO' , text: 'Option with object value' },
-          { value: { R: '2D2' }, text: 'Another option with object value' } //REVIEW - please check the handling when the value is object, I am not sure what to emit in this case
-        ]
-      }
-    ],
-    // items: ['a', 'b', 'c']
-    size: 'lg',
-    successMessage: 'success',
-    errorMessage: 'error',
-    label: 'dropdown',
-    required: true,
-    description: 'try it out '
+  items: [
+    { value: 'c', text: 'Please select an option', disabled: true },
+    { value: 'a', text: 'This is First option' },
+    { value: 'b', text: 'Selected Option' },
+    {
+      label: 'Grouped options',
+      options: [
+        { value: '3PO', text: 'Option with object value' },
+        { value: { R: '2D2' }, text: 'Another option with object value' }
+      ]
+    }
+  ],
+  // items: ['a', 'b', 'c']
+  size: 'lg',
+  successMessage: 'success',
+  errorMessage: 'error',
+  label: 'dropdown',
+  required: true,
+  description: 'try it out '
 }
