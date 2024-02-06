@@ -214,10 +214,3 @@ export default {
   }
 }
 </script>
-<style>
-.required::after {
-  content: '*';
-  color: red;
-  margin-left: 4px;
-}
-</style>
