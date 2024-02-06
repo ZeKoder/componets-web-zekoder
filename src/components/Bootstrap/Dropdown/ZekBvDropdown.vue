@@ -1,159 +1,223 @@
 <template>
-    <div :class="customClass ? customClass + '-container' : ''">
-      <b-form-group
-        :label="label"
-        :label-for="id"
-        :description="description"
-        :valid-feedback="successMessage"
-        :invalid-feedback="errorMessage"
-        :state="error"
-        :label-class="labelClass + (required ? ' required' : '')"
-      >
-        <b-form-select
-          ref="ZekBvDropdown"
-          :id="id"
-          v-model="selected"
-          :options="items"
-          :value="value"
-          :size="size"
-          :state="error"
-          :disabled="disabled"
-          :multiple="multiple"
-          :required="required"
-          :name="name"
-          :class="customClass"
-          :style="customStyle"
-          :form="formID"
-          :selectSize="listSize"
-          v-bind="customProps"
-          v-on="customEvents"
-          @change="change"
-          @input="input"
-        ></b-form-select>
-      </b-form-group>
-    </div>
-  </template>
-  
-  <script>
-  import { BFormSelect, BFormGroup } from 'bootstrap-vue-next'
-  export default {
-    name: 'ZekBvDropdown',
-    components: {
-      BFormSelect,
-      BFormGroup
+  <div :class="customClass ? customClass + '-container' : ''">
+    <b-dropdown
+      ref="ZekBvDropdown"
+      :id="id"
+      v-model="show"
+      :text="dropdownText"
+      :menuClass="menuClass"
+      :autoClose="autoClose"
+      :dropend="isDropend"
+      :dropstart="isDropstart"
+      :dropup="isDropup"
+      :start="isMenuStart"
+      :end="isMenuEnd"
+      :center="isMenuCenter"
+      :size="size"
+      :disabled="disabled"
+      :offset="offset"
+      :split="split"
+      :splitVariant="splitVariant"
+      :splitClass="splitClass"
+      :toggleClass="toggleClass"
+      :variant="variant"
+      :class="customClass"
+      :style="customStyle"
+      v-bind="customProps"
+      v-on="customEvents"
+      @click="buttonClick"
+    >
+      <b-dropdown-header v-if="header">{{ header }}</b-dropdown-header>
+      <template v-for="item in items" :key="item.id">
+        <b-dropdown-item
+          v-if="!item.groupHeader"
+          :href="item?.href"
+          :variant="item?.variant"
+          :active="item?.active"
+          :disabled="item?.disabled"
+          :linkClass="linkClass"
+          @click="linkClicked($event, item)"
+          >{{ item.text }}</b-dropdown-item
+        >
+        <b-dropdown-divider v-if="item.divider" />
+        <b-dropdown-group
+          v-else
+          :id="'group-header-' + item.id"
+          :header="item.groupHeader"
+          :headerClass="groupHeaderClass"
+          :headerVariant="item?.groupHeaderVariant"
+        >
+          <template v-for="subItem in item.options" :key="subItem.id">
+            <b-dropdown-item
+              :href="subItem?.href"
+              :variant="subItem?.variant"
+              :active="subItem?.active"
+              :disabled="subItem?.disabled"
+              :linkClass="linkClass"
+              :aria-describedby="'group-header-' + item.id"
+              @click="linkClicked($event, subItem)"
+              >{{ subItem.text }}</b-dropdown-item
+            >
+            <b-dropdown-divider v-if="subItem.divider" />
+          </template>
+        </b-dropdown-group>
+      </template>
+    </b-dropdown>
+  </div>
+</template>
+
+<script>
+import {
+  BDropdown,
+  BDropdownDivider,
+  BDropdownHeader,
+  BDropdownItem,
+  BDropdownGroup
+} from 'bootstrap-vue-next'
+export default {
+  name: 'ZekBvDropdown',
+  components: {
+    BDropdown,
+    BDropdownDivider,
+    BDropdownHeader,
+    BDropdownItem,
+    BDropdownGroup
+  },
+  props: {
+    items: {
+      type: Array,
+      default: () => []
     },
-    props: {
-      items: {
-        type: Array,
-        default: () => []
-      },
-      value: {
-        type: [String, Object, Array],
-        default: ''
-      },
-      id: {
-        type: String,
-        default: Math.floor(Math.random() * 10000).toString().padStart(4, '0')
-      },
-      size: {
-        type: String,
-        default: ''
-      },
-      error: {
-        type: Boolean,
-        default: undefined
-      },
-      description: {
-        type: String,
-        default: ''
-      },
-      label: {
-        type: String,
-        default: ''
-      },
-      disabled: {
-        type: Boolean,
-        default: false
-      },
-      multiple: {
-        type: Boolean,
-        default: false
-      },
-      required: {
-        type: Boolean,
-        default: false
-      },
-      customClass: {
-        type: String,
-        default: ''
-      },
-      name: {
-        type: String,
-        default: ''
-      },
-      customStyle: {
-        type: Object,
-        default: () => ({})
-      },
-      successMessage: {
-        type: String,
-        default: ''
-      },
-      errorMessage: {
-        type: String,
-        default: ''
-      },
-      formID: {
-        type: String,
-        default: ''
-      },
-      labelClass: {
-        type: String,
-        default: ''
-      },
-      listSize: {
-        type: [String, Number],
-        default: 0
-      },
-      customProps: {
-        type: Object,
-        default: () => ({})
-      },
-      customEvents: {
-        type: Object,
-        default: () => ({})
-      },
+    menuClass: {
+      type: String,
+      default: ''
     },
-    emits: ['input', 'change'],
-    data() {
-      return {
-        selected: null
-      }
+    linkClass: {
+      type: String,
+      default: ''
     },
-    created() {
-        if (this.value) {
-          this.selected = this.value
-        }
+    variant: {
+      type: String,
+      default: ''
     },
-    watch:{
-        value(val){
-          this.selected = val
-        },
+    splitVariant: {
+      type: String,
+      default: ''
     },
-    methods: {
-      input(event) {
-        this.$emit('input', event.target.value)
-      },
-      change(event) {
-        this.$emit('change', event.target.value)
-      }
+    splitClass: {
+      type: String,
+      default: ''
+    },
+    toggleClass: {
+      type: String,
+      default: ''
+    },
+    groupHeaderClass: {
+      type: String,
+      default: ''
+    },
+    header: {
+      type: String,
+      default: ''
+    },
+    id: {
+      type: String,
+      default: Math.floor(Math.random() * 10000)
+        .toString()
+        .padStart(4, '0')
+    },
+    autoClose: {
+      type: [Boolean, String],
+      default: true,
+      validator: (value) => ['inside', 'outside', true, false].includes(value)
+    },
+    dropType: {
+      type: String,
+      default: '',
+      validator: (value) => ['end', 'start', 'up', 'default'].includes(value)
+    },
+    menuAlignment: {
+      type: String,
+      default: '',
+      validator: (value) => ['end', 'start', 'center', 'default'].includes(value)
+    },
+    dropdownText: {
+      type: String,
+      default: 'Dropdown'
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    split: {
+      type: Boolean,
+      default: false
+    },
+    size: {
+      type: String,
+      default: 'md'
+    },
+    offset: {
+      type: [Number, String, Object], //NOTE - object should be like {mainAxis?: number; crossAxis?: number; alignmentAxis?: number}
+      default: 0
+    },
+    customClass: {
+      type: String,
+      default: ''
+    },
+    customStyle: {
+      type: Object,
+      default: () => ({})
+    },
+    customProps: {
+      type: Object,
+      default: () => ({})
+    },
+    customEvents: {
+      type: Object,
+      default: () => ({})
+    }
+  },
+  emits: ['input', 'change'],
+  data() {
+    return {
+      show: false
+    }
+  },
+  computed: {
+    isDropend() {
+      return this.dropType === 'end'
+    },
+    isDropstart() {
+      return this.dropType === 'start'
+    },
+    isDropup() {
+      return this.dropType === 'up'
+    },
+    isMenuEnd() {
+      return this.menuAlignment === 'end'
+    },
+    isMenuStart() {
+      return this.menuAlignment === 'start'
+    },
+    isMenuCenter() {
+      return this.menuAlignment === 'center'
+    }
+  },
+  methods: {
+    buttonClick(event) {
+      this.$emit('buttonClick', event, this.show) //REVIEW - this event doesn't trigger at all.
+    },
+    linkClicked(event, item) {
+      this.$emit('linkClick', event, item)
     }
   }
-  </script>
-   <style>
-   .required::after {
-     content: '*';
-     color: red;
-     margin-left: 4px;
-   }
-   </style>
+}
+</script>
+<style>
+.required::after {
+  content: '*';
+  color: red;
+  margin-left: 4px;
+}
+</style>

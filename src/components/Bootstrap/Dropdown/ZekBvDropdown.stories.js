@@ -5,37 +5,28 @@ export default {
   component: ZekBvDropdown,
   tags: ['autodocs'],
   argTypes: {
-    label: {
-      control: { type: 'text' }
-    },
     customClass: { type: 'text' },
     customStyle: { type: 'object' },
-    required: {
-      control: { type: 'boolean' }
-    },
     disabled: {
       control: { type: 'boolean' }
-    },
-    value: {
-      control: { type: 'text' }
-    },
-    name: {
-      control: { type: 'text' }
-    },
-    id: {
-      control: { type: 'text' }
     },
     size: {
       control: { type: 'text' }
     },
-    listSize: {
-      control: { type: 'text' }
+    autoClose: {
+      control: { type: 'select' },
+      options: ['inside', 'outside', true, false]
     },
-    description: {
-      control: { type: 'text' }
+    dropType: {
+      control: { type: 'select' },
+      options: ['end', 'start', 'up', 'default']
     },
-    onInput: { control: 'action', action: 'input' }, 
-    onChange: { control: 'action', action: 'change' },
+    menuAlignment: {
+      control: { type: 'select' },
+      options: ['end', 'start', 'center', 'default']
+    },
+    onButtonClick: { control: 'action', action: 'buttonClick' },
+    onLinkClick: { control: 'action', action: 'linkClick' }
   }
 }
 
@@ -50,24 +41,19 @@ const Template = (args, { argTypes }) => ({
 
 export const Default = Template.bind({})
 Default.args = {
-    value: null,
-    items: [
-      { value: null, text: 'Please select an option', disabled: true},
-      { value: 'a', text: 'This is First option' },
-      { value: 'b', text: 'Selected Option' },
-      {
-        label: 'Grouped options',
-        options: [
-          { value:  '3PO' , text: 'Option with object value' },
-          { value: { R: '2D2' }, text: 'Another option with object value' } //REVIEW - please check the handling when the value is object, I am not sure what to emit in this case
-        ]
-      }
-    ],
-    // items: ['a', 'b', 'c']
-    size: 'lg',
-    successMessage: 'success',
-    errorMessage: 'error',
-    label: 'dropdown',
-    required: true,
-    description: 'try it out '
+  items: [
+    { href: '/', text: 'go to page1', disabled: true },
+    { href: '/', text: 'go to page2', variant: 'primary', divider: true },
+    { text: 'action', active: true },
+    {
+      groupHeader: 'Grouped options',
+      groupHeaderVariant: 'primary',
+      options: [
+        { text: 'sub action', divider: true },
+        { href: '/', text: 'go to page3' }
+      ]
+    }
+  ],
+  variant: 'secondary',
+  header: 'Dropdown header'
 }
