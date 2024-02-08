@@ -25,42 +25,44 @@
       :style="customStyle"
       v-bind="customProps"
       v-on="customEvents"
-      @click="buttonClick"
+      @toggle="onToggle"
     >
-      <b-dropdown-header v-if="header">{{ header }}</b-dropdown-header>
-      <template v-for="item in items" :key="item.id">
-        <b-dropdown-item
-          v-if="!item.groupHeader"
-          :href="item?.href"
-          :variant="item?.variant"
-          :active="item?.active"
-          :disabled="item?.disabled"
-          :linkClass="linkClass"
-          @click="linkClicked($event, item)"
-          >{{ item.text }}</b-dropdown-item
-        >
-        <b-dropdown-divider v-if="item.divider" />
-        <b-dropdown-group
-          v-else
-          :id="'group-header-' + item.id"
-          :header="item.groupHeader"
-          :headerClass="groupHeaderClass"
-          :headerVariant="item?.groupHeaderVariant"
-        >
-          <template v-for="subItem in item.options" :key="subItem.id">
-            <b-dropdown-item
-              :href="subItem?.href"
-              :variant="subItem?.variant"
-              :active="subItem?.active"
-              :disabled="subItem?.disabled"
-              :linkClass="linkClass"
-              :aria-describedby="'group-header-' + item.id"
-              @click="linkClicked($event, subItem)"
-              >{{ subItem.text }}</b-dropdown-item
-            >
-            <b-dropdown-divider v-if="subItem.divider" />
-          </template>
-        </b-dropdown-group>
+      <b-dropdown-header v-if="header">{{ header }}</b-dropdown-header>  <!--//TODO - the section below need to be improved later on -->
+      <template v-for="(item, index) in items" :key="index">
+        <template v-if="Array.isArray(item?.options)">
+          <b-dropdown-group
+            :id="'group-header-' + index"
+            :header="item.groupHeader"
+            :headerClass="groupHeaderClass"
+            :headerVariant="item?.groupHeaderVariant"
+          >
+            <template v-for="(subItem, subIndex) in item.options" :key="subIndex">
+              <b-dropdown-item
+                :href="subItem?.href"
+                :variant="subItem?.variant"
+                :active="subItem?.active"
+                :disabled="subItem?.disabled"
+                :linkClass="linkClass"
+                :aria-describedby="'group-header-' + index"
+                @click="linkClicked($event, subItem)"
+                >{{ subItem.text }}</b-dropdown-item
+              >
+              <b-dropdown-divider v-if="subItem.divider" />
+            </template>
+          </b-dropdown-group>
+        </template>
+        <template v-else>
+          <b-dropdown-item
+            :href="item?.href"
+            :variant="item?.variant"
+            :active="item?.active"
+            :disabled="item?.disabled"
+            :linkClass="linkClass"
+            @click="linkClicked($event, item)"
+            >{{ item.text }}</b-dropdown-item
+          >
+          <b-dropdown-divider v-if="item.divider" />
+        </template>
       </template>
     </b-dropdown>
   </div>
@@ -131,14 +133,14 @@ export default {
       default: true,
       validator: (value) => ['inside', 'outside', true, false].includes(value)
     },
-    dropType: {
+    menuPosition: {
       type: String,
-      default: '',
+      default: 'default',
       validator: (value) => ['end', 'start', 'up', 'default'].includes(value)
     },
     menuAlignment: {
       type: String,
-      default: '',
+      default: 'default',
       validator: (value) => ['end', 'start', 'center', 'default'].includes(value)
     },
     dropdownText: {
@@ -186,13 +188,13 @@ export default {
   },
   computed: {
     isDropend() {
-      return this.dropType === 'end'
+      return this.menuPosition === 'end'
     },
     isDropstart() {
-      return this.dropType === 'start'
+      return this.menuPosition === 'start'
     },
     isDropup() {
-      return this.dropType === 'up'
+      return this.menuPosition === 'up'
     },
     isMenuEnd() {
       return this.menuAlignment === 'end'
@@ -205,8 +207,8 @@ export default {
     }
   },
   methods: {
-    buttonClick(event) {
-      this.$emit('buttonClick', event, this.show) //REVIEW - this event doesn't trigger at all.
+    onToggle() {
+      this.$emit('toggle', !this.show)
     },
     linkClicked(event, item) {
       this.$emit('linkClick', event, item)

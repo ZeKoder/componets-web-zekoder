@@ -26,18 +26,21 @@ describe('ZekBvDropdown', () => {
     expect(dropdownItems[2].text()).toBe('Item 3')
   })
 
-  // Test case: Check if clicking on dropdown button emits buttonClick event //NOTE - test fail because the event does not trigger.
-  //   it('emits buttonClick event when dropdown button is clicked', async () => {
-  //     const wrapper = mount(ZekBvDropdown)
+  // Test case: Check if clicking on dropdown button emits buttonClick event
+    it('emits toggle event when dropdown button is clicked', async () => {
+      const wrapper = mount(ZekBvDropdown)
 
-  //     // Simulate click on dropdown button
-  //     await wrapper.find('.dropdown-toggle').trigger('click')
+      // Initially, show is false, so onToggle should emit true
+    await wrapper.vm.onToggle();
+    expect(wrapper.emitted().toggle).toBeTruthy();
+    expect(wrapper.emitted().toggle[0]).toEqual([true]);
 
-  //     // Check if buttonClick event is emitted
-  //     expect(wrapper.emitted().buttonClick).toBeTruthy()
-  //     expect(wrapper.emitted().buttonClick.length).toBe(1)
-  //     expect(wrapper.emitted().buttonClick[0][0]).toBe(true) // Check if the emitted value is true
-  //   })
+    // Now, show is true, so onToggle should emit false
+    await wrapper.setData({ show: true });
+    await wrapper.vm.onToggle();
+    expect(wrapper.emitted().toggle).toBeTruthy();
+    expect(wrapper.emitted().toggle[1]).toEqual([false]);
+    })
 
   // Test case: Check if clicking on dropdown item emits linkClick event with correct item
   it('emits linkClick event with correct item when dropdown item is clicked', async () => {

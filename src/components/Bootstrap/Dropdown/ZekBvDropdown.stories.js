@@ -25,7 +25,7 @@ export default {
       control: { type: 'select' },
       options: ['end', 'start', 'center', 'default']
     },
-    onButtonClick: { control: 'action', action: 'buttonClick' },
+    onToggle: { control: 'action', action: 'toggle' },
     onLinkClick: { control: 'action', action: 'linkClick' }
   }
 }
