@@ -27,7 +27,8 @@
       v-on="customEvents"
       @toggle="onToggle"
     >
-      <b-dropdown-header v-if="header">{{ header }}</b-dropdown-header>  <!--//TODO - the section below need to be improved later on -->
+      <b-dropdown-header v-if="header">{{ header }}</b-dropdown-header>
+      <!--//TODO - the section below need to be improved later on -->
       <template v-for="(item, index) in items" :key="index">
         <template v-if="Array.isArray(item?.options)">
           <b-dropdown-group
@@ -178,9 +179,13 @@ export default {
     customEvents: {
       type: Object,
       default: () => ({})
+    },
+    toggleMenu: {
+      type: Boolean,
+      default: false
     }
   },
-  emits: ['input', 'change'],
+  emits: ['toggle', 'linkClick'],
   data() {
     return {
       show: false
@@ -204,6 +209,11 @@ export default {
     },
     isMenuCenter() {
       return this.menuAlignment === 'center'
+    }
+  },
+  watch: {
+    toggleMenu() {
+      this.show = this.toggleMenu
     }
   },
   methods: {
