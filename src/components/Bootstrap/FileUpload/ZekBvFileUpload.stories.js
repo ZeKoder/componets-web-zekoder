@@ -28,7 +28,8 @@ export default {
     description: {
       control: { type: 'text' }
     },
-    onChange: { control: 'action', action: 'change' },
+    onRemove: { control: 'action', action: 'remove' },
+    onUpdate: { control: 'action', action: 'update' }
   }
 }
 
@@ -38,9 +39,8 @@ const Template = (args, { argTypes }) => ({
   },
   props: Object.keys(argTypes),
   components: { ZekBvFileUpload },
-  template: '<ZekBvFileUpload v-bind="args" />' 
+  template: '<ZekBvFileUpload v-bind="args" />'
 })
 
 export const Default = Template.bind({})
-Default.args = {
-}
+Default.args = {}

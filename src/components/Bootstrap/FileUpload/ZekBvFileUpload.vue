@@ -1,5 +1,5 @@
 <template>
-  <div :class="customClass ? customClass + '-container' : ''">
+  <div class="position-relative" :class="customClass ? customClass + '-container' : ''">
     <b-form-group
       :description="description"
       :valid-feedback="successMessage"
@@ -9,11 +9,12 @@
       <b-form-file
         ref="ZekBvFileUpload"
         :id="id"
+        v-model="modelValue"
         :accept="accept"
         :size="size"
         :state="error"
         :disabled="disabled"
-        :directory="directory"
+        :directory="allowFolders"
         :required="required"
         :name="name"
         :label="label"
@@ -21,12 +22,13 @@
         :class="customClass"
         :style="customStyle"
         :form="formID"
-        :noDrop="noDrop"
+        :noDrop="disableDrop"
         :multiple="multiple"
         v-bind="customProps"
         v-on="customEvents"
-        @change="change"
+        @update:modelValue="handleUpdate"
       ></b-form-file>
+      <button v-if="modelValue" class="remove-btn" @click="removeFile"><i class="fa-solid fa-xmark"></i></button>
     </b-form-group>
   </div>
 </template>
@@ -69,7 +71,7 @@ export default {
       type: Boolean,
       default: false
     },
-    directory: {
+    allowFolders: {
       type: Boolean,
       default: false
     },
@@ -117,17 +119,24 @@ export default {
       type: Boolean,
       default: false
     },
-    noDrop: {
+    disableDrop: {
       type: Boolean,
       default: false
     }
   },
-  emits: ['change'],
+  emits: ['update', 'remove'],
+  data() {
+    return {
+      modelValue: null
+    }
+  },
   methods: {
-    change(event) {
-      const files = event.target.files
-      console.log(files)
-      this.$emit('change', files)
+    handleUpdate(files) {
+      this.$emit('update', files)
+    },
+    removeFile() {
+      this.modelValue = null
+      this.$emit('remove')
     }
   }
 }
@@ -137,5 +146,10 @@ export default {
   content: '*';
   color: red;
   margin-left: 4px;
+}
+.remove-file-btn {
+  position: absolute;
+  top: 13px;
+  right: 5px;
 }
 </style>
