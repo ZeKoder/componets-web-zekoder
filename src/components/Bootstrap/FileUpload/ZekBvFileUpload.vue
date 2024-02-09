@@ -28,7 +28,7 @@
         v-on="customEvents"
         @update:modelValue="handleUpdate"
       ></b-form-file>
-      <button v-if="modelValue" class="remove-btn" @click="removeFile"><i class="fa-solid fa-xmark"></i></button>
+      <button v-if="modelValue && allowRemove" class="remove-file-btn" @click="removeFile"><i :class="removeIcon"></i></button>
     </b-form-group>
   </div>
 </template>
@@ -122,7 +122,16 @@ export default {
     disableDrop: {
       type: Boolean,
       default: false
+    },
+    allowRemove: {
+      type: Boolean,
+      default: false
+    },
+    removeIcon: {
+      type: String,
+      default: 'fa-solid fa-xmark'
     }
+
   },
   emits: ['update', 'remove'],
   data() {
@@ -149,7 +158,7 @@ export default {
 }
 .remove-file-btn {
   position: absolute;
-  top: 13px;
-  right: 5px;
+  top: 35%;
+  right: 0.5%;
 }
 </style>

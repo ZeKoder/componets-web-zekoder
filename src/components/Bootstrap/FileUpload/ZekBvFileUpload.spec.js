@@ -35,7 +35,6 @@ describe('ZekBvFileUpload', () => {
     wrapper.vm.handleUpdate(event)
 
     // Check if 'change' event was emitted with the correct file data
-    expect(changeSpy).toHaveBeenCalled()
     expect(changeSpy).toHaveBeenCalledWith(event) //FIXME - improve testing the functionality
   })
 
@@ -102,18 +101,21 @@ describe('ZekBvFileUpload', () => {
     expect(wrapper.findComponent({ ref: 'ZekBvFileUpload' }).props('size')).toBe('lg')
   })
 
-  it('displays remove button when modelValue is present', async () => {
+  it('displays remove button when modelValue and allowRemove is present', async () => {
     const wrapper = mount(ZekBvFileUpload);
 
     // Set modelValue to a non-null File object
     await wrapper.setData({ modelValue: new File([''], 'file.txt', { type: 'text/plain' }) });
+    await wrapper.setProps({ allowRemove: true });
 
     // Check if the remove button exists
-    const removeButton = wrapper.find('.remove-btn');
+    const removeButton = wrapper.find('.remove-file-btn');
     expect(removeButton.exists()).toBe(true);
 
     // Check if the remove button contains the correct icon
-    const icon = removeButton.find('.fa-xmark');
+    await wrapper.setProps({ removeIcon: 'fa-solid fa-xmark' });
+    const icon = removeButton.find('i');
     expect(icon.exists()).toBe(true);
+    expect(icon.classes()).toContain('fa-xmark')
   });
 })
