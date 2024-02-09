@@ -19,7 +19,7 @@
       :split="split"
       :splitVariant="splitVariant"
       :splitClass="splitClass"
-      :toggleClass="toggleClass"
+      :toggleClass="toggleClass + icon"
       :variant="variant"
       :class="customClass"
       :style="customStyle"
@@ -183,6 +183,10 @@ export default {
     toggleMenu: {
       type: Boolean,
       default: false
+    },
+    icon: {
+      type: String,
+      default: ''
     }
   },
   emits: ['toggle', 'linkClick'],
