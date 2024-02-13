@@ -48,11 +48,9 @@ Default.args = {
     {
       groupHeader: 'Grouped options',
       groupHeaderVariant: 'primary',
-      options: [
-        { text: 'sub action', divider: true },
-        { href: '/', text: 'go to page3' }
-      ]
-    }
+      text: 'sub action'
+    },
+    {  text: 'sub action2' }
   ],
   variant: 'secondary',
   header: 'Dropdown header'

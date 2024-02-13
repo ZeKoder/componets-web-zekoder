@@ -28,42 +28,25 @@
       @toggle="onToggle"
     >
       <b-dropdown-header v-if="header">{{ header }}</b-dropdown-header>
-      <!--//TODO - the section below need to be improved later on -->
       <template v-for="(item, index) in items" :key="index">
-        <template v-if="Array.isArray(item?.options)">
           <b-dropdown-group
             :id="'group-header-' + index"
             :header="item.groupHeader"
-            :headerClass="groupHeaderClass"
+            :headerClass="groupHeaderClass + (item.groupHeader ? '' : ' d-none')"
             :headerVariant="item?.groupHeaderVariant"
           >
-            <template v-for="(subItem, subIndex) in item.options" :key="subIndex">
               <b-dropdown-item
-                :href="subItem?.href"
-                :variant="subItem?.variant"
-                :active="subItem?.active"
-                :disabled="subItem?.disabled"
+                :href="item?.href"
+                :variant="item?.variant"
+                :active="item?.active"
+                :disabled="item?.disabled"
                 :linkClass="linkClass"
                 :aria-describedby="'group-header-' + index"
-                @click="linkClicked($event, subItem)"
-                >{{ subItem.text }}</b-dropdown-item
+                @click="linkClicked($event, item)"
+                >{{ item.text }}</b-dropdown-item
               >
-              <b-dropdown-divider v-if="subItem.divider" />
-            </template>
+              <b-dropdown-divider v-if="item.divider" />
           </b-dropdown-group>
-        </template>
-        <template v-else>
-          <b-dropdown-item
-            :href="item?.href"
-            :variant="item?.variant"
-            :active="item?.active"
-            :disabled="item?.disabled"
-            :linkClass="linkClass"
-            @click="linkClicked($event, item)"
-            >{{ item.text }}</b-dropdown-item
-          >
-          <b-dropdown-divider v-if="item.divider" />
-        </template>
       </template>
     </b-dropdown>
   </div>
