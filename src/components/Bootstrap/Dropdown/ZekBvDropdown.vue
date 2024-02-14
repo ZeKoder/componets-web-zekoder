@@ -31,9 +31,9 @@
       <template v-for="(item, index) in items" :key="index">
           <b-dropdown-group
             :id="'group-header-' + index"
-            :header="item.groupHeader"
-            :headerClass="groupHeaderClass + (item.groupHeader ? '' : ' d-none')"
-            :headerVariant="item?.groupHeaderVariant"
+            :header="item.header"
+            :headerClass="headerClass + item?.headerClass + (item.groupHeader ? '' : ' d-none')"
+            :headerVariant="item?.headerVariant"
           >
               <b-dropdown-item
                 :href="item?.href"
@@ -98,7 +98,7 @@ export default {
       type: String,
       default: ''
     },
-    groupHeaderClass: {
+    headerClass: {
       type: String,
       default: ''
     },

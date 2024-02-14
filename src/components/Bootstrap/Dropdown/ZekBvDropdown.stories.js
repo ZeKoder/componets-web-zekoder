@@ -46,11 +46,11 @@ Default.args = {
     { href: '/', text: 'go to page2', variant: 'primary', divider: true },
     { text: 'action', active: true },
     {
-      groupHeader: 'Grouped options',
-      groupHeaderVariant: 'primary',
+      header: 'Grouped options',
+      headerVariant: 'primary',
       text: 'sub action'
     },
-    {  text: 'sub action2' }
+    {  text: 'sub action2', headerClass: 'custom' }
   ],
   variant: 'secondary',
   header: 'Dropdown header'
