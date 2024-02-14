@@ -4,7 +4,7 @@
       ref="ZekBvDropdown"
       :id="id"
       v-model="show"
-      :text="dropdownText"
+      :text="label"
       :menuClass="menuClass"
       :autoClose="autoClose"
       :dropend="isDropend"
@@ -19,34 +19,39 @@
       :split="split"
       :splitVariant="splitVariant"
       :splitClass="splitClass"
-      :toggleClass="toggleClass + icon"
+      :toggleClass="toggleClass"
       :variant="variant"
       :class="customClass"
       :style="customStyle"
+      :no-caret="noCaret"
       v-bind="customProps"
       v-on="customEvents"
+      @click="onClick"
       @toggle="onToggle"
     >
+      <template v-if="customToggle" #button-content>
+        <span v-html="customToggle" />
+      </template>
       <b-dropdown-header v-if="header">{{ header }}</b-dropdown-header>
       <template v-for="(item, index) in items" :key="index">
-          <b-dropdown-group
-            :id="'group-header-' + index"
-            :header="item.header"
-            :headerClass="headerClass + item?.headerClass + (item.groupHeader ? '' : ' d-none')"
-            :headerVariant="item?.headerVariant"
+        <b-dropdown-group
+          :id="'group-header-' + index"
+          :header="item.header"
+          :headerClass="headerClass + item?.headerClass + (item.groupHeader ? '' : ' d-none')"
+          :headerVariant="item?.headerVariant"
+        >
+          <b-dropdown-item
+            :href="item?.href"
+            :variant="item?.variant"
+            :active="item?.active"
+            :disabled="item?.disabled"
+            :linkClass="linkClass"
+            :aria-describedby="'group-header-' + index"
+            @click="linkClicked($event, item)"
+            >{{ item.text }}</b-dropdown-item
           >
-              <b-dropdown-item
-                :href="item?.href"
-                :variant="item?.variant"
-                :active="item?.active"
-                :disabled="item?.disabled"
-                :linkClass="linkClass"
-                :aria-describedby="'group-header-' + index"
-                @click="linkClicked($event, item)"
-                >{{ item.text }}</b-dropdown-item
-              >
-              <b-dropdown-divider v-if="item.divider" />
-          </b-dropdown-group>
+          <b-dropdown-divider v-if="item.divider" />
+        </b-dropdown-group>
       </template>
     </b-dropdown>
   </div>
@@ -127,7 +132,7 @@ export default {
       default: 'default',
       validator: (value) => ['end', 'start', 'center', 'default'].includes(value)
     },
-    dropdownText: {
+    label: {
       type: String,
       default: 'Dropdown'
     },
@@ -167,12 +172,16 @@ export default {
       type: Boolean,
       default: false
     },
-    icon: {
+    noCaret: {
+      type: Boolean,
+      default: false
+    },
+    customToggle: {
       type: String,
       default: ''
     }
   },
-  emits: ['toggle', 'linkClick'],
+  emits: ['toggle', 'linkClick', 'click'],
   data() {
     return {
       show: false
@@ -209,6 +218,9 @@ export default {
     },
     linkClicked(event, item) {
       this.$emit('linkClick', event, item)
+    },
+    onClick(event) {
+      this.$emit('click', event)
     }
   }
 }

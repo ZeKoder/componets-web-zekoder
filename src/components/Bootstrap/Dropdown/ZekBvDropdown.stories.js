@@ -5,8 +5,8 @@ export default {
   component: ZekBvDropdown,
   tags: ['autodocs'],
   argTypes: {
-    customClass: { type: 'text' },
-    customStyle: { type: 'object' },
+    customClass: {control: { type: 'text' }},
+    customStyle: {control: { type: 'object' }},
     disabled: {
       control: { type: 'boolean' }
     },
@@ -21,12 +21,17 @@ export default {
       control: { type: 'select' },
       options: ['end', 'start', 'up', 'default']
     },
+    menuPosition: {
+      control: { type: 'select' },
+      options: ['end', 'start', 'center', 'default']
+    },
     menuAlignment: {
       control: { type: 'select' },
       options: ['end', 'start', 'center', 'default']
     },
     onToggle: { control: 'action', action: 'toggle' },
-    onLinkClick: { control: 'action', action: 'linkClick' }
+    onLinkClick: { control: 'action', action: 'linkClick' },
+    onClick: { control: 'action', action: 'click' }
   }
 }
 
