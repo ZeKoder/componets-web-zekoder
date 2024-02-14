@@ -5,37 +5,33 @@ export default {
   component: ZekBvDropdown,
   tags: ['autodocs'],
   argTypes: {
-    label: {
-      control: { type: 'text' }
-    },
-    customClass: { type: 'text' },
-    customStyle: { type: 'object' },
-    required: {
-      control: { type: 'boolean' }
-    },
+    customClass: {control: { type: 'text' }},
+    customStyle: {control: { type: 'object' }},
     disabled: {
       control: { type: 'boolean' }
-    },
-    value: {
-      control: { type: 'text' }
-    },
-    name: {
-      control: { type: 'text' }
-    },
-    id: {
-      control: { type: 'text' }
     },
     size: {
       control: { type: 'text' }
     },
-    listSize: {
-      control: { type: 'text' }
+    autoClose: {
+      control: { type: 'select' },
+      options: ['inside', 'outside', true, false]
     },
-    description: {
-      control: { type: 'text' }
+    dropType: {
+      control: { type: 'select' },
+      options: ['end', 'start', 'up', 'default']
     },
-    onInput: { control: 'action', action: 'input' }, 
-    onChange: { control: 'action', action: 'change' },
+    menuPosition: {
+      control: { type: 'select' },
+      options: ['end', 'start', 'center', 'default']
+    },
+    menuAlignment: {
+      control: { type: 'select' },
+      options: ['end', 'start', 'center', 'default']
+    },
+    onToggle: { control: 'action', action: 'toggle' },
+    onLinkClick: { control: 'action', action: 'linkClick' },
+    onClick: { control: 'action', action: 'click' }
   }
 }
 
@@ -50,24 +46,17 @@ const Template = (args, { argTypes }) => ({
 
 export const Default = Template.bind({})
 Default.args = {
-    value: null,
-    items: [
-      { value: null, text: 'Please select an option', disabled: true},
-      { value: 'a', text: 'This is First option' },
-      { value: 'b', text: 'Selected Option' },
-      {
-        label: 'Grouped options',
-        options: [
-          { value:  '3PO' , text: 'Option with object value' },
-          { value: { R: '2D2' }, text: 'Another option with object value' } //REVIEW - please check the handling when the value is object, I am not sure what to emit in this case
-        ]
-      }
-    ],
-    // items: ['a', 'b', 'c']
-    size: 'lg',
-    successMessage: 'success',
-    errorMessage: 'error',
-    label: 'dropdown',
-    required: true,
-    description: 'try it out '
+  items: [
+    { href: '/', text: 'go to page1', disabled: true },
+    { href: '/', text: 'go to page2', variant: 'primary', divider: true },
+    { text: 'action', active: true },
+    {
+      header: 'Grouped options',
+      headerVariant: 'primary',
+      text: 'sub action'
+    },
+    {  text: 'sub action2', headerClass: 'custom' }
+  ],
+  variant: 'secondary',
+  header: 'Dropdown header'
 }

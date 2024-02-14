@@ -134,8 +134,8 @@
       },
       type: {
         type: String,
-        default: '',
-        validator: (value) => ['buttons', 'plain'].includes(value)
+        default: 'default',
+        validator: (value) => ['buttons', 'plain', 'default'].includes(value)
       }
     },
     emits: ['input', 'change'],

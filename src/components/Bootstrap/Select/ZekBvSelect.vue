@@ -9,8 +9,8 @@
       :state="error"
       :label-class="labelClass + (required ? ' required' : '')"
     >
-      <b-form-checkbox-group
-        ref="ZekBvCheckbox"
+      <b-form-select
+        ref="ZekBvSelect"
         :id="id"
         v-model="selected"
         :options="items"
@@ -18,32 +18,28 @@
         :size="size"
         :state="error"
         :disabled="disabled"
-        :buttons="isButtons"
+        :multiple="multiple"
         :required="required"
         :name="name"
         :class="customClass"
         :style="customStyle"
         :form="formID"
+        :selectSize="listSize"
         v-bind="customProps"
         v-on="customEvents"
-        :button-variant="buttonVariant"
-        :plain="isPlain"
-        :stacked="stacked"
-        :switches="isSwitches"
-        :validated="valid"
         @change="change"
         @input="input"
-      ></b-form-checkbox-group>
+      ></b-form-select>
     </b-form-group>
   </div>
 </template>
 
 <script>
-import { BFormCheckboxGroup, BFormGroup } from 'bootstrap-vue-next'
+import { BFormSelect, BFormGroup } from 'bootstrap-vue-next'
 export default {
-  name: 'ZekBvCheckbox',
+  name: 'ZekBvSelect',
   components: {
-    BFormCheckboxGroup,
+    BFormSelect,
     BFormGroup
   },
   props: {
@@ -52,8 +48,8 @@ export default {
       default: () => []
     },
     value: {
-      type: Array,
-      default: () => []
+      type: [String, Object, Array],
+      default: ''
     },
     id: {
       type: String,
@@ -78,6 +74,10 @@ export default {
       default: ''
     },
     disabled: {
+      type: Boolean,
+      default: false
+    },
+    multiple: {
       type: Boolean,
       default: false
     },
@@ -113,6 +113,10 @@ export default {
       type: String,
       default: ''
     },
+    listSize: {
+      type: [String, Number],
+      default: 0
+    },
     customProps: {
       type: Object,
       default: () => ({})
@@ -120,45 +124,17 @@ export default {
     customEvents: {
       type: Object,
       default: () => ({})
-    },
-    stacked: {
-      type: Boolean,
-      default: false
-    },
-    valid: {
-      type: Boolean,
-      default: false
-    },
-    buttonVariant: {
-      type: String,
-      default: 'primary'
-    },
-    type: {
-      type: String,
-      default: 'default',
-      validator: (value) => ['buttons', 'plain', 'switched', 'default'].includes(value)
     }
   },
   emits: ['input', 'change'],
   data() {
     return {
-      selected: []
+      selected: null
     }
   },
   created() {
     if (this.value) {
       this.selected = this.value
-    }
-  },
-  computed: {
-    isButtons() {
-      return this.type === 'buttons'
-    },
-    isPlain() {
-      return this.type === 'plain'
-    },
-    isSwitches() {
-      return this.type === 'switches'
     }
   },
   watch: {
@@ -168,10 +144,10 @@ export default {
   },
   methods: {
     input(event) {
-      this.$emit('input', event)
+      this.$emit('input', event.target.value)
     },
     change(event) {
-      this.$emit('change', event)
+      this.$emit('change', event.target.value)
     }
   }
 }

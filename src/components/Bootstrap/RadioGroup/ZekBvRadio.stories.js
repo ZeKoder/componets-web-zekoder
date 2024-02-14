@@ -32,7 +32,8 @@ export default {
       control: { type: 'select' },
       options: [
         'buttons',
-        'plain'
+        'plain',
+        'default'
       ]
     },
     onInput: { control: 'action', action: 'input' }, 
