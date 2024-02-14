@@ -36,7 +36,8 @@ export default {
       options: [
         'buttons',
         'plain',
-        'switches'
+        'switches',
+        'default'
       ]
     },
     onInput: { control: 'action', action: 'input' }, 
