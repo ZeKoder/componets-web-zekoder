@@ -22,6 +22,9 @@ export default {
         'default'
       ]
     },
+    pressed: {
+      control: { type: 'boolean' }
+    },
     onClick: { control: 'action', action: 'click' }, 
     onPressed: { control: 'action', action: 'pressed' },
   }
