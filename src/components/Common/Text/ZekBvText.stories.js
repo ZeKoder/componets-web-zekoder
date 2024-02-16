@@ -1,7 +1,7 @@
 import ZekBvText from './ZekBvText.vue'
 
 export default {
-  title: 'Bootstrap/ZekBvText',
+  title: 'Common/ZekBvText',
   component: ZekBvText,
   tags: ['autodocs'],
   argTypes: {
