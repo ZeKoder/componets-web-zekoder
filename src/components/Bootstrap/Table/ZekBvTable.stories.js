@@ -14,7 +14,9 @@ export default {
     data: {
       control: { type: 'array' }
     },
-    onUpdate: { control: 'action', action: 'update' }
+    onUpdate: { control: 'action', action: 'update' },
+    onRowClick: { control: 'action', action: 'rowClick' },
+    onCellClick: { control: 'action', action: 'cellClick' }
   }
 }
 

@@ -8,13 +8,14 @@
       </BTr>
     </BThead>
     <BTbody>
-      <BTr v-for="row in tableData" :key="row.id">
+      <BTr v-for="row in tableData" :key="row.id" @click="onRowClick(row)">
         <CustomCell
           v-for="(cell, cellIndex) in row.cells"
           :key="cellIndex"
           :cell="cell"
           :editable="editable"
           @cellUpdate="updateCellData(row, cellIndex, $event)"
+          @click="onCellClick(row, cellIndex)"
         />
       </BTr>
     </BTbody>
@@ -145,6 +146,7 @@ export default {
         this.convertRawDataToTableData()
       }
     },
+    // Convert from raw data (Array of Object) to table data (BootstrapVue Table Data format)
     convertRawDataToTableData() {
       this.tableData = this.rawData.map((row, index) => {
         return {
@@ -158,6 +160,7 @@ export default {
         }
       })
     },
+    // Convert from table data (BootstrapVue Table Data format) to raw data (Array of Object)
     convertTableDataToRawData() {
       return this.tableData.map((row) => {
         let obj = {}
@@ -170,6 +173,12 @@ export default {
     updateCellData(row, cellIndex, newValue) {
       row.cells[cellIndex].value = newValue
       this.$emit('update', this.convertTableDataToRawData())
+    },
+    onRowClick(row) {
+      this.$emit('rowClick', row)
+    },
+    onCellClick(row, cellIndex) {
+      this.$emit('cellClick', { row, cellIndex, cell: row.cells[cellIndex] })
     }
   },
   watch: {
