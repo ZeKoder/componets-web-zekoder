@@ -4,6 +4,7 @@ import ZekBvInput from './InputField/ZekBvInput.vue'
 import ZekBvRadio from './RadioGroup/ZekBvRadio.vue'
 import ZekBvTextArea from './Texarea/ZekBvTextarea.vue'
 import ZekBvFileUpload from './FileUpload/ZekBvFileUpload.vue'
+import ZekBvButton from './Button/ZekBvButton.vue'
 import ZekBvTable from './Table/ZekBvTable.vue'
 
 export {
@@ -13,6 +14,7 @@ export {
   ZekBvRadio,
   ZekBvTextArea,
   ZekBvFileUpload,
+  ZekBvButton,
   ZekBvTable
 }
 

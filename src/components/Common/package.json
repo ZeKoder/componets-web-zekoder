@@ -1,0 +1,26 @@
+{
+  "name": "@zekoder/zekoder-web-components-common",
+  "version": "0.0.1",
+  "private": false,
+  "type": "module",
+  "files": [
+    "*",
+    "!*.config.js",
+    "!node_modules",
+    "!dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "prepublishOnly": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "vue": "^3.4.15"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.3",
+    "vite": "^5.0.11",
+    "vitest": "^1.0.4"
+  }
+}
