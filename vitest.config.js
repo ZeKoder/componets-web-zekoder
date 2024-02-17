@@ -11,7 +11,11 @@ export default mergeConfig(
       include: ['src/**/*.spec.js'],
       root: fileURLToPath(new URL('./', import.meta.url)),
       globals: true,
-      clearMocks: true
-    }
+      clearMocks: true,
+      coverage: {
+        include: ['src/components/*'],
+        exclude: ['src/**/*.stories.js', '**/index.js']
+      }
+    },
   })
 )

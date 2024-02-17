@@ -5,7 +5,17 @@ import ZekBvRadio from './RadioGroup/ZekBvRadio.vue'
 import ZekBvTextArea from './Texarea/ZekBvTextarea.vue'
 import ZekBvFileUpload from './FileUpload/ZekBvFileUpload.vue'
 import ZekBvButton from './Button/ZekBvButton.vue'
+import ZekBvTable from './Table/ZekBvTable.vue'
 
-export { ZekBvCheckbox, ZekBvDropdown, ZekBvInput, ZekBvRadio, ZekBvTextArea, ZekBvFileUpload, ZekBvButton }
+export {
+  ZekBvCheckbox,
+  ZekBvDropdown,
+  ZekBvInput,
+  ZekBvRadio,
+  ZekBvTextArea,
+  ZekBvFileUpload,
+  ZekBvButton,
+  ZekBvTable
+}
 
 export default new Error('Only named exports are supported')
