@@ -14,6 +14,7 @@
           :key="cellIndex"
           :cell="cell"
           :editable="editable"
+          :row="row"
           @cellUpdate="updateCellData(row, cellIndex, $event)"
           @click="onCellClick(row, cellIndex)"
         />
@@ -41,6 +42,10 @@ const CustomCell = {
     editable: {
       type: Boolean,
       default: false
+    },
+    row: {
+      type: Object,
+      required: true
     }
   },
   data() {
@@ -55,7 +60,7 @@ const CustomCell = {
     },
     exitEditMode() {
       this.isEditing = false
-      this.$emit('cellUpdate', this.editedValue)
+      this.$emit('cellUpdate', this.row, this.editedValue)
     }
   },
   components: {
@@ -67,7 +72,8 @@ const CustomCell = {
       @click="enterEditMode"
       v-if="!isEditing || !editable"
     >
-      {{ cell.value }}
+      <component v-if="cell.html" :is="{props: ['row'], template: cell.html}" :row="row" />
+      <span v-else>{{ cell.value }}</span>
     </BTd>
     <BTd
       :variant="cell.variant"
