@@ -112,47 +112,18 @@
             />
           </RouterLink>
         </li>
-        <section
-          v-show="sec.title ? sec.title.isExpanded : true"
-          :class="!isCollapsed && sec.title ? 'nested' : ''"
-          :style="isCollapsed ? '' : sec.style"
-        >
-          <li
-            v-for="(link, i) in sec.links"
-            :key="i"
-            class="link-container link-container-child"
-            :class="link.isHovering ? 'hovering' : link.isActive ? 'active-link' : ''"
-            @mouseover="link.isHovering = true"
-            @mouseout="link.isHovering = false"
-            @click="linkClicked(sec, link)"
-            :style="(link.isActive || link.isHovering) && activeColor ? { color: activeColor } : ''"
-          >
-            <RouterLink
-              :to="link.url"
-              :title="link.tooltip"
-              class="link"
-              :style="
-                (link.isActive || link.isHovering) && activeColor ? { color: activeColor } : ''
-              "
-              @click="$emit('onRoute', link.url)"
-            >
-              <i v-if="link.icon && link.iconType !== 'custom'" class="icon" :class="link.icon"></i>
-              <img
-                v-else-if="link.icon && link.iconType === 'custom'"
-                class="icon"
-                :src="link.icon"
-              />
-              <span v-show="link.label && !isCollapsed">
-                {{ link.label }}
-              </span>
-            </RouterLink>
-          </li>
-        </section>
+        <SectionLinks
+          :sec="sec"
+          :isCollapsed="isCollapsed"
+          :activeColor="activeColor"
+          @linkClicked="linkClicked($event.sec, $event.link)"
+          @onRoute="$emit('onRoute', $event)"
+        ></SectionLinks>
       </div>
     </div>
     <div v-if="footer" class="sidebar-footer" :style="footer.style">
       <div v-if="!isCollapsed || showFooterOnCollapse" class="footer-links-container">
-        <RouterLink
+        <a
           v-for="(link, i) in footer.links"
           :key="i"
           :to="link.url"
@@ -163,7 +134,7 @@
         >
           <i v-if="link.icon && link.iconType !== 'custom'" class="icon" :class="link.icon"></i>
           <img v-else-if="link.icon && link.iconType === 'custom'" class="icon" :src="link.icon" />
-        </RouterLink>
+        </a>
       </div>
       <div
         v-if="footer.darkmode"
@@ -212,8 +183,12 @@
 </template>
 
 <script>
+import SectionLinks from './SectionLinks.vue'
 export default {
   name: 'ZekSidebar',
+  components: {
+    SectionLinks
+  },
   props: {
     title: {
       type: [String, Object],
@@ -316,14 +291,15 @@ export default {
     },
     linkClicked(sec, link) {
       this.sections.forEach((section) => {
-        section.isExpanded = false
+        // section.title.isExpanded = false
+        section.title.isActive = false
         if (section.links && section.links.length) {
           section.links.forEach((_link) => {
             _link.isActive = false
           })
         }
       })
-      sec.isExpanded = sec.isActive = true
+      sec.title.isExpanded = sec.title.isActive = true
       link.isActive = true
 
       this.$emit('linkClicked', link)
@@ -347,7 +323,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .zek-sidebar {
   height: 100%;
   overflow-y: auto;

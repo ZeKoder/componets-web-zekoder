@@ -113,7 +113,7 @@ Default.args = {
         icon: 'fa fa-home',
         url: '#',
         tooltip: 'Home',
-        isActive: true,
+        isActive: false,
         isHovering: false,
         showArrow: true
       },
