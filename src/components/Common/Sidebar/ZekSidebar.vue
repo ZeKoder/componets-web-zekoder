@@ -262,7 +262,7 @@ export default {
       justifyContent: this.alignItems === 'center' ? 'center' : 'flex-start',
       styleObject: {},
       refreshKey: 0,
-      enableDarkmood: this.footer.darkmode.enabled || false
+      enableDarkmood: this.footer.darkmode?.enabled || false
     }
   },
   created() {
