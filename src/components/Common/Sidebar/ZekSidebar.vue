@@ -7,15 +7,15 @@
         :class="{ titlePresent: title }"
       >
         <a :title="isCollapsed ? 'Expand' : 'Collapse'" class="link sidebar-title-link">
-          <RouterLink
-            @click="$emit('onRoute', title.url)"
-            :to="title.url ? title.url : ''"
+          <a
+            @click.prevent="$emit('onRoute', title.url)"
+            :href="title.url ? title.url : ''"
             v-if="title && !isCollapsed"
             class="sidebar-title"
             :style="title.style ? title.style : { cursor: 'default' }"
           >
             {{ title.label ? title.label : title }}
-          </RouterLink>
+          </a>
           <i
             v-if="expandIcon.icon && expandIcon.iconType !== 'custom'"
             class="icon"
@@ -79,9 +79,9 @@
               v-if="sec.title.showArrow && !isCollapsed"
             />
           </a>
-          <RouterLink
+          <a
             v-else
-            :to="sec.title.url"
+            :href="sec.title.url"
             :title="sec.title.tooltip"
             class="link title"
             @click.prevent="sec.title.isExpanded = !sec.title.isExpanded"
@@ -110,7 +110,7 @@
               :class="sec.title.isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'"
               v-if="sec.title.showArrow && !isCollapsed"
             />
-          </RouterLink>
+          </a>
         </li>
         <SectionLinks
           :sec="sec"
