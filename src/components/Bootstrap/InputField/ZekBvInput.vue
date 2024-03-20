@@ -13,7 +13,7 @@
         ref="ZekBvInput"
         :id="id"
         :value="value"
-       
+        v-model="modelValue"
         :placeholder="placeholder"
         :type="type"
         :min="min"
@@ -140,16 +140,19 @@ export default {
     },
   },
   emits: ['input', 'change'],
-  // watch: {
-  //   value(val) {
-  //     this.getValue = val
-  //   }
-  // },
-  // data() {
-  //   return {
-  //     getValue: ''
-  //   }
-  // },
+  watch: {
+    value(val) {
+      this.modelValue = val
+    }
+  },
+  data() {
+    return {
+      modelValue: ''
+    }
+  },
+  created() {
+    this.modelValue = this.value
+  },
   methods: {
     input(event) {
       this.$emit('input', event.target.value)

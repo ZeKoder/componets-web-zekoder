@@ -13,6 +13,7 @@
           ref="ZekBvTextarea"
           :id="id"
           :value="value"
+          v-model="modelValue"
           :placeholder="placeholder"
           :formatter="formatter"
           :state="error"
@@ -140,6 +141,19 @@
       },
     },
     emits: ['input', 'change'],
+    watch: {
+    value(val) {
+      this.modelValue = val
+    }
+  },
+  data() {
+    return {
+      modelValue: ''
+    }
+  },
+  created() {
+    this.modelValue = this.value
+  },
     methods: {
       input(event) {
         this.$emit('input', event.target.value)

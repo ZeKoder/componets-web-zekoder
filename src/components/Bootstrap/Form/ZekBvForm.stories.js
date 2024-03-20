@@ -21,62 +21,108 @@ const Template = (args, { argTypes }) => ({
 
 export const Default = Template.bind({})
 Default.args = {
+    customClass: 'container bg-white p-3 rounded',
     inputs: [
         {
             component: 'input',
             name: 'email',
             type: 'email',
             require: true,
-            label: 'enter email',
-            width: 6,
+            label: 'Enter email',
+            width: 12,
             errorMessage: 'something wrong',
+            placeholder: 'Enter your email',
             description: 'please enter correct email format',
+        },
+        {
+            component: 'input',
+            name: 'first_name',
+            type: 'text',
+            label: 'First name',
+            placeholder: 'Enter your first name',
+            require: true,
+            width: '6 mt-4'
+        },
+        {
+            component: 'input',
+            name: 'last_name',
+            type: 'text',
+            label: 'Last name',
+            placeholder: 'Enter your last name',
+            require: true,
+            width: '6 mt-4'
+        },
+        {
+            component: 'label',
+            text: 'Date of birth',
+            width: 'auto mt-4'
         },
         {
             component: 'input',
             name: 'date',
             type: 'date',
             require: true,
-            label: 'enter date',
-            width: 6
-        },
-        {
-            component: 'label',
-            label: 'custom label',
-            width: 6
-        },
-        {
-            component: 'input',
-            name: 'text',
-            type: 'text',
-            value: 'balbal',
-            require: true,
-            width: '6'
+            label: '',
+            width: 'auto mt-4'
         },
         {
             component: 'select',
+            placeholder: 'Enter your last name',
+            value: null,
             items: [
-                'one', 'two'
+                { value: null, text: 'Please select an option', disabled: true },
+                { value: 'male', text: 'Male' },
+                { value: 'female', text: 'Female' },
             ],
             require: true,
             name: 'select',
-            label: 'choose',
-            width: '12'
+            label: 'Gender',
+            width: '12 mt-4'
         },
+        {
+            component: 'checkbox',
+            name: 'checkbox',
+            require: true,
+            label: '',
+            items: [
+                {text: 'First Check', value: 'first'},
+                {text: 'Second Check', value: 'second'},
+            ],
+            width: '12 mt-4'
+        },
+        {
+            component: 'textarea',
+            name: 'textarea',
+            require: true,
+            label: 'details',
+            value: 'balbal',
+            width: 'auto me-auto mt-4'
+        },
+        {
+            component: 'radio',
+            name: 'radio',
+            require: true,
+            label: '',
+            items: [
+                {text: 'First choice', value: 'first'},
+                {text: 'Second choice', value: 'second'},
+            ],
+            width: '12 mt-4'
+        },
+      
     ],
     buttons: [
         {
             label: 'Reset',
             type: 'reset',
-            width: 'auto',
+            width: 'auto mt-4',
             variant: 'danger'
-           
         },
         {
             label: 'Submit',
             type: 'submit',
-            width: 'auto',
-            variant: 'primary'
+            width: 'auto mt-4',
+            variant: 'primary',
         },
     ]
    

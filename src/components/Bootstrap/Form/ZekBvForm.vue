@@ -7,26 +7,25 @@
       :style="customStyle"
       v-bind="customProps"
       v-on="customEvents"
+      v-if="show"
       @submit.prevent="onSubmit"
       @reset.prevent="onReset"
     >
       <div class="row">
         <template v-for="input in inputs" :key="input.id">
           <div :class="`col-${input.width ?? 12}`">
-            <!-- <component
+            <component
               :is="type[input.component]"
-              :name="input.name"
               :error="input.validation"
-              :value="input.value"
               :customClass="input.class"
-              :required="input.required"
-              :label="input.label"
+              :value="formData.name"
               :formID="id"
-              :type="input?.type"
               v-bind="input"
-              v-if="input.condition"
-            ></component> -->
-            <ZekBvInput
+              :key="key"
+              v-if="input.condition || true"
+              @input="formData[input.name] = $event"
+            ></component>
+            <!-- <ZekBvInput
               v-if="input.component == 'input'"
               :error="input.validation"
               :customClass="input.class"
@@ -71,12 +70,14 @@
               :formID="id"
               v-bind="input"
               @input="formData[input.name] = $event"
-            ></ZekBvTextarea>
+            ></ZekBvTextarea> -->
           </div>
         </template>
-        <div :class="`col-${button.width ?? 6}`" v-for="button in buttons" :key="button.id">
-          <ZekBvButton :label="button.label" :type="button.type" v-bind="button"></ZekBvButton>
-        </div>
+        <ZekBvButton label="Reset" type="reset" variant="danger" @click="onReset"></ZekBvButton>
+        <ZekBvButton label="Submit" type="submit" variant="primary" @click="onSubmit"></ZekBvButton>
+        <!-- <div :class="`col-${button.width ?? 6}`" v-for="button in buttons" :key="button.id">
+          <ZekBvButton :label="button.label" :type="button.type" :variant="button.variant" v-bind="button" @click=" onReset "></ZekBvButton>
+        </div> -->
       </div>
     </b-form>
   </div>
@@ -132,18 +133,23 @@ export default {
       default: Math.floor(Math.random() * 10000)
         .toString()
         .padStart(4, '0')
+    },
+    show: {
+      type: Boolean,
+      default: true
     }
   },
   emits: ['submit', 'reset'],
   data() {
     return {
-      // type: {
-      //   input: 'ZekBvInput',
-      //   checkbox: 'ZekBvCheckbox',
-      //   radio: 'ZekBvRadio',
-      //   textarea: 'ZekBvTextarea',
-      //   select: 'ZekBvSelect'
-      // }
+      type: {
+        input: 'ZekBvInput',
+        checkbox: 'ZekBvCheckbox',
+        radio: 'ZekBvRadio',
+        textarea: 'ZekBvTextarea',
+        select: 'ZekBvSelect',
+        label: 'ZekBvText'
+      },
       formData: {
         get() {
           let obj = {}
@@ -152,11 +158,11 @@ export default {
               obj[input.name] = input.value
             }
           })
-          console.log(obj)
           return { ...obj }
         },
         set() {}
-      }
+      },
+      key: 0
     }
   },
   methods: {
@@ -166,6 +172,7 @@ export default {
     onReset() {
       this.$emit('reset', this.formData)
       this.formData = {}
+      this.key++
     }
   }
 }
