@@ -7,6 +7,7 @@ export default {
   argTypes: {
     onSubmit: { control: 'action', action: 'submit' }, 
     onReset: { control: 'action', action: 'reset' },
+    onCancel: { control: 'action', action: 'cancel' },
   }
 }
 
@@ -111,19 +112,5 @@ Default.args = {
         },
       
     ],
-    buttons: [
-        {
-            label: 'Reset',
-            type: 'reset',
-            width: 'auto mt-4',
-            variant: 'danger'
-        },
-        {
-            label: 'Submit',
-            type: 'submit',
-            width: 'auto mt-4',
-            variant: 'primary',
-        },
-    ]
    
 }
