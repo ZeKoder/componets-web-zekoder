@@ -56,7 +56,6 @@ describe('ZekBvForm', () => {
         ],
       },
     });
-    console.log(wrapper.findAll('input[type="text"]'))
 
     expect(wrapper.findAll('input[type="text"]').length).toBe(1); // One text input
     expect(wrapper.findAll('input[type="password"]').length).toBe(1); // One password input
