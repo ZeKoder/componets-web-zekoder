@@ -6,6 +6,7 @@ import ZekBvTextArea from './Texarea/ZekBvTextarea.vue'
 import ZekBvFileUpload from './FileUpload/ZekBvFileUpload.vue'
 import ZekBvButton from './Button/ZekBvButton.vue'
 import ZekBvTable from './Table/ZekBvTable.vue'
+import ZekBvNavbar from './Navbar/ZekBvNavbar.vue'
 
 export {
   ZekBvCheckbox,
@@ -15,7 +16,8 @@ export {
   ZekBvTextArea,
   ZekBvFileUpload,
   ZekBvButton,
-  ZekBvTable
+  ZekBvTable,
+  ZekBvNavbar
 }
 
 export default new Error('Only named exports are supported')

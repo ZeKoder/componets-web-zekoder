@@ -5,9 +5,9 @@ export default {
   component: ZekBvNavbar,
   tags: ['autodocs'],
   argTypes: {
-    customClass: {control: { type: 'text' }},
-    customStyle: {control: { type: 'object' }},
-   
+    customClass: { control: { type: 'text' } },
+    customStyle: { control: { type: 'object' } },
+    onSubmit: { control: 'action', action: 'submit' }
   }
 }
 
@@ -26,7 +26,25 @@ Default.args = {
     { type: 'text', text: 'navbar text' },
     { type: 'tab', text: 'home', href: '#' },
     { type: 'tab', text: 'about', href: '#', disabled: true },
-    
+    {
+      type: 'dropdown',
+      text: 'lang',
+      navClass: 'ms-auto',
+      href: '#',
+      options: [{ text: 'en', link: '#' }]
+    }
   ],
-  
+  toggleable: 'sm',
+  variant: 'primary',
+  colorMode: 'dark',
+  container: 'fluid',
+  inputProps: {
+    customClass: 'me-2',
+    placeholder: 'Search'
+  },
+  buttonProps: {
+    type: 'submit',
+    variant: 'outline-success',
+    label: 'Search'
+  }
 }
