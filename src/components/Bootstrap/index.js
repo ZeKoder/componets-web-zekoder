@@ -18,7 +18,7 @@ export {
   ZekBvFileUpload,
   ZekBvButton,
   ZekBvTable,
-  ZekBvNavbar
+  ZekBvNavbar,
   ZekBvCard
 }
 
