@@ -9,10 +9,11 @@
       :toggleable="toggleable"
       :class="customClass"
       :style="customStyle"
+      v-bind="customProps"
       v-b-color-mode="colorMode"
     >
-      <BNavbarBrand :tag="brandSettings.brandTag" :class="brandSettings.brandClass" :href="brandSettings.brandLink"
-        >{{ brandSettings.brandTitle }} <img v-if="brandSettings.brandImg" :src="brandSettings.brandImgUrl" class="logo" alt="Logo"
+      <BNavbarBrand :tag="brand.brandTag" :class="brand.brandClass" :href="brand.brandLink"
+        >{{ brand.brandTitle }} <img v-if="brand.brandImg" :src="brand.brandImgUrl" class="logo" alt="Logo"
       /></BNavbarBrand>
       <BNavbarToggle target="nav-collapse" />
       <BCollapse id="nav-collapse" is-nav>
@@ -29,9 +30,9 @@
             >
           </component>
         </BNavbarNav>
-        <BNavForm class="d-flex nav-form">
-          <ZekBvInput v-bind="inputProps" @input="inputValue = $event"/>
-          <ZekBvButton customClass="submit-btn" v-bind="buttonProps" @click.prevent="submit" ></ZekBvButton>
+        <BNavForm v-if="allowInput || allowButton" class="d-flex nav-form">
+          <ZekBvInput v-if="allowInput" v-bind="inputProps" @input="inputValue = $event"/>
+          <ZekBvButton v-if="allowButton" customClass="submit-btn" v-bind="buttonProps" @click.prevent="submit" ></ZekBvButton>
         </BNavForm>
       </BCollapse>
     </BNavbar>
@@ -94,7 +95,7 @@ export default {
       type: String,
       default: ''
     },
-    brandSettings: {
+    brand: {
       type: Object,
       default: () => ({
         brandTag: 'h1',
@@ -128,20 +129,35 @@ export default {
       type: Object,
       default: () => ({})
     },
+    customProps: {
+      type: Object,
+      default: () => ({})
+    },
+    allowInput: {
+      type: Boolean,
+      default: false
+    },
+    allowButton: {
+      type: Boolean,
+      default: false
+    },
   },
   emits: ['submit'],
-  setup() {
-    const tabType = {
-      text: 'BNavText',
-      tab: 'BNavItem',
-      dropdown: 'BNavItemDropdown'
+  data() {
+    return {
+      tabType: {
+        text: 'BNavText',
+        tab: 'BNavItem',
+        dropdown: 'BNavItemDropdown'
+      },
+      inputValue: ''
     }
-    let inputValue = ''
-    return { tabType, inputValue }
   },
   methods: {
     submit() {
-      this.$emit('submit', this.inputValue)
+      if (this.inputValue) {
+        this.$emit('submit', this.inputValue)
+      }
     }
   }
 }

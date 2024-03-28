@@ -46,5 +46,7 @@ Default.args = {
     type: 'submit',
     variant: 'outline-success',
     label: 'Search'
-  }
+  },
+  allowInput: true,
+  allowButton: true
 }

@@ -41,4 +41,21 @@ describe('ZekBvNavbar', () => {
     expect(navItemDropdowns.length).toBe(1)
     expect(navItemDropdowns[0].text()).toBe('Dropdown')
   })
+  
+  it('renders input and button when allowInput and allowButton are true', async () => {
+    const wrapper = mount(ZekBvNavbar, {
+      props: {
+        allowInput: true,
+        allowButton: true,
+        inputProps: { placeholder: 'Search...' },
+        buttonProps: { label: 'Submit' },
+      },
+    });
+
+    const input = wrapper.find('input');
+    expect(input.exists()).toBe(true);
+
+    const button = wrapper.find('.submit-btn');
+    expect(button.exists()).toBe(true);
+  });
 })
