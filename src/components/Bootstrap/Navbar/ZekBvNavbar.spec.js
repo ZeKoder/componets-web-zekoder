@@ -6,6 +6,8 @@ describe('ZekBvNavbar', () => {
   it('emits "submit" event with input value when the submit button is clicked', async () => {
     const wrapper = mount(ZekBvNavbar, {
       props: {
+        allowInput: true,
+        allowButton: true,
         inputProps: { placeholder: 'Search...', label: 'Search' }
       }
     })
