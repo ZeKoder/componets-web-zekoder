@@ -1,6 +1,6 @@
 <template>
   <component
-    ref="ZekBvText"
+    ref="ZekText"
     :is="tagTypes[type] ?? 'span'"
     @click="$emit('click', $event)"
     :style="customStyle"
@@ -39,7 +39,7 @@ const tagTypes = {
 };
 
 export default {
-  name: 'ZekBvText',
+  name: 'ZekText',
   props: {
     text: {
       type: String,

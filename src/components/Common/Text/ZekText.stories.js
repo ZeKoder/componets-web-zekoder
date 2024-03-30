@@ -1,8 +1,8 @@
-import ZekBvText from './ZekBvText.vue'
+import ZekText from './ZekText.vue'
 
 export default {
-  title: 'Common/ZekBvText',
-  component: ZekBvText,
+  title: 'Common/ZekText',
+  component: ZekText,
   tags: ['autodocs'],
   argTypes: {
     type: {
@@ -41,8 +41,8 @@ const Template = (args, { argTypes }) => ({
     return { args }
   },
   props: Object.keys(argTypes),
-  components: { ZekBvText },
-  template: '<ZekBvText v-bind="args" />'
+  components: { ZekText },
+  template: '<ZekText v-bind="args" />'
 })
 
 export const Default = Template.bind({})
