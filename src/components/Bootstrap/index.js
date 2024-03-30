@@ -8,6 +8,8 @@ import ZekBvButton from './Button/ZekBvButton.vue'
 import ZekBvTable from './Table/ZekBvTable.vue'
 import ZekBvNavbar from './Navbar/ZekBvNavbar.vue'
 import ZekBvCard from './Card/ZekBvCard.vue'
+import ZekBvForm from './Form/ZekBvForm.vue'
+import ZekBvSelect from './Select/ZekBvSelect.vue'
 
 export {
   ZekBvCheckbox,
@@ -19,7 +21,9 @@ export {
   ZekBvButton,
   ZekBvTable,
   ZekBvNavbar,
-  ZekBvCard
+  ZekBvCard,
+  ZekBvForm,
+  ZekBvSelect
 }
 
 export default new Error('Only named exports are supported')
