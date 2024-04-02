@@ -13,7 +13,6 @@
     "build": "vite build",
     "prepublishOnly": "vite build",
     "preview": "vite preview",
-    "publish": "npm publish --access public",
     "test": "vitest run"
   },
   "dependencies": {
@@ -23,5 +22,8 @@
     "@vitejs/plugin-vue": "^5.0.3",
     "vite": "^5.0.11",
     "vitest": "^1.0.4"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
