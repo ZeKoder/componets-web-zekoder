@@ -1,4 +1,5 @@
 import ZekFooter from './ZekFooter.vue'
+import ZekText from '../Text/ZekText.vue'
 
 export default {
   title: 'Common/ZekFooter',
@@ -46,6 +47,17 @@ export const Default = Template.bind({})
 Default.args = {
     height: 'fit-content',
     columns: [
+        {
+            component: 'h1',
+            text: 'native html tag'
+        },
+        {
+            component: ZekText,
+            props: {
+                text: 'text component',
+                type: 'h2'
+            }
+        },
         {
             links: [
                 {
@@ -145,5 +157,6 @@ Default.args = {
         "letterSpacing": "0.1rem",
         "textDecoration": "none",
         "color": "#fff",
-    }
+    },
+    copyRigths: 'cyberntic'
 }

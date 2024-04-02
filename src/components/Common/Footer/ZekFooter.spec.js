@@ -1,6 +1,7 @@
 import { mount } from '@vue/test-utils';
 import ZekFooter from './ZekFooter.vue';
 import { describe, it, expect } from 'vitest';
+import ZekText from '../Text/ZekText.vue'
 
 describe('ZekFooter', () => {
   it('renders links correctly', () => {
@@ -78,5 +79,67 @@ describe('ZekFooter', () => {
     const footer = wrapper.find('footer');
     expect(footer.attributes('style')).toContain('background-color: blue');
     expect(footer.attributes('style')).toContain('color: white');
+  });
+
+  it('renders native component tag with correct attributes', () => {
+    const columns = [
+      {
+        component: 'h1',
+        text: 'hello',
+        props: {
+          style: {color: 'red'},
+        }
+      }
+    ];
+
+    const wrapper = mount(ZekFooter, {
+      props: {
+        height: '100px',
+        columns
+      },
+    });
+
+    const componentTag = wrapper.find('.component-stub');
+    expect(componentTag.exists()).toBe(true);
+    expect(componentTag.attributes('style')).toBe('color: red;');
+  });
+
+  it('renders vue component tag with correct props', () => {
+    const columns = [
+      {
+        component: ZekText,
+        props: {
+          text: 'text component',
+          type: 'h2'
+        }
+      }
+    ];
+
+    const wrapper = mount(ZekFooter, {
+      props: {
+        height: '100px',
+        columns
+      },
+    });
+
+    const componentTag = wrapper.find('.component-stub');
+    expect(componentTag.exists()).toBe(true);
+    expect(componentTag.text()).toBe('text component');
+  });
+
+  it('renders copyright section with current year and provided rights', () => {
+    const copyRights = 'Some rights reserved';
+
+    const wrapper = mount(ZekFooter, {
+      props: {
+        height: '100px',
+        copyRigths: copyRights
+      }
+    });
+
+    const currentYear = new Date().getFullYear();
+    const copyrightText = wrapper.find('.copyright-text');
+    expect(copyrightText.exists()).toBe(true);
+    expect(wrapper.text()).toContain(`© ${currentYear} ${copyRights}`);
   });
 });

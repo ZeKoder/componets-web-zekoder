@@ -1,21 +1,26 @@
 <template>
-  <footer :style="styleObject">
-    <ul v-for="(column, index) in columns" :key="index">
-      <li v-for="(link, index) in column.links" :key="index">
-        <a :href="link.href" :style="textStyle">{{ link.text }}</a>
+  <footer :style="styleObject" :class="customClass">
+    <ul v-for="(column, index) in columns" :key="index" class="footer-column">
+      <component v-if="column.component" :is="column.component" v-bind="column.props" class="component-stub" > {{ column.text }}</component>
+      <li v-for="(link, index) in column.links" :key="index" class="footer-item">
+        <a :href="link.href" :style="textStyle" class="footer-link">{{ link.text }}</a>
       </li>
     </ul>
     <div
       style="display: flex; align-items: center; position: absolute; bottom: 0"
       :style="socialLinksPosition == 'right' || 'left' ? `${socialLinksPosition}:0` : ''"
+      class="social-links-container"
     >
-      <a v-for="(link, i) in socialLinks" :key="i" :href="link.href">
+      <a v-for="(link, i) in socialLinks" :key="i" :href="link.href" class="social-link">
         <i
           :class="`fab fa-${link.icon}`"
           style="margin: 0 5px"
           :style="{ color: textStyle.color }"
         />
       </a>
+    </div>
+    <div v-if="copyRigths" class="copyright-section">
+      <p class="copyright-text">© {{ currentYear }} {{ copyRigths }}</p>
     </div>
   </footer>
 </template>
@@ -56,6 +61,14 @@ export default {
     customStyle: {
       type: Object,
       default: () => ({})
+    },
+    customCalss: {
+      type: Object,
+      default: () => ({})
+    },
+    copyRigths: {
+      type: String,
+      default: ''
     }
   },
   computed: {
@@ -67,6 +80,9 @@ export default {
         backgroundImage: `url(${this.image})` || this.customStyle.backgroundImage || '',
         backgroundPosition: this.imagePosition || this.customStyle.backgroundPosition || ''
       }
+    },
+    currentYear() {
+      return new Date().getFullYear()
     }
   }
 }
@@ -77,5 +93,29 @@ ul {
   list-style: none;
   padding: 0;
   margin: 0;
+}
+.footer-column {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.footer-item {
+  margin-bottom: 10px;
+}
+
+.footer-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.copyright-section {
+  position: absolute;
+  bottom: 0;
+  right: 50%;
+}
+
+.copyright-text {
+  font-size: 14px;
 }
 </style>
