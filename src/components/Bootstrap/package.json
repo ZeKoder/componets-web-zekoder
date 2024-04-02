@@ -13,6 +13,7 @@
     "build": "vite build",
     "prepublishOnly": "vite build",
     "preview": "vite preview",
+    "publish": "npm publish --access public",
     "test": "vitest run"
   },
   "dependencies": {
