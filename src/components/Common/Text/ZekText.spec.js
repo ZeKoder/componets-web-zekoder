@@ -1,10 +1,10 @@
 import { mount } from '@vue/test-utils';
 import { describe, it, expect, vi } from 'vitest';
-import ZekBvText from './ZekBvText.vue';
+import ZekText from './ZekText.vue';
 
-describe('ZekBvText', () => {
+describe('ZekText', () => {
   it('renders text inside a <span> element by default', () => {
-    const wrapper = mount(ZekBvText, {
+    const wrapper = mount(ZekText, {
       props: {
         text: 'Hello World'
       }
@@ -16,7 +16,7 @@ describe('ZekBvText', () => {
   });
 
   it('renders text inside a custom HTML tag based on the type prop', () => {
-    const wrapper = mount(ZekBvText, {
+    const wrapper = mount(ZekText, {
       props: {
         text: 'Hello World',
         type: 'h2'
@@ -29,13 +29,13 @@ describe('ZekBvText', () => {
   });
 
   it('emits click event when clicked', async () => {
-    const wrapper = mount(ZekBvText, {
+    const wrapper = mount(ZekText, {
       props: {
         text: 'Click me'
       }
     });
 
-    const component = wrapper.findComponent(ZekBvText);
+    const component = wrapper.findComponent(ZekText);
     await component.trigger('click');
     expect(wrapper.emitted().click).toBeTruthy();
   });
@@ -44,7 +44,7 @@ describe('ZekBvText', () => {
     const customClass = 'custom-class';
     const customStyle = { color: 'red' };
 
-    const wrapper = mount(ZekBvText, {
+    const wrapper = mount(ZekText, {
       props: {
         text: 'Custom Text',
         customClass,
@@ -63,7 +63,7 @@ describe('ZekBvText', () => {
     const customEvents = {  click: vi.fn() };
 
     // Mount the component with customProps and customEvents
-    const wrapper = mount(ZekBvText, {
+    const wrapper = mount(ZekText, {
       props: {
         customProps,
         customEvents,

@@ -45,7 +45,7 @@ import ZekBvButton from '../Button/ZekBvButton.vue'
 import ZekBvRadio from '../RadioGroup/ZekBvRadio.vue'
 import ZekBvSelect from '../Select/ZekBvSelect.vue'
 import ZekBvTextarea from '../Textarea/ZekBvTextarea.vue'
-import ZekBvText from '../../Common/Text/ZekBvText.vue'
+import ZekText from '../../Common/Text/ZekText.vue'
 export default {
   name: 'ZekBvForm',
   components: {
@@ -56,7 +56,7 @@ export default {
     ZekBvRadio,
     ZekBvSelect,
     ZekBvTextarea,
-    ZekBvText
+    ZekText
   },
   props: {
     customClass: {
@@ -116,7 +116,7 @@ export default {
         radio: 'ZekBvRadio',
         textarea: 'ZekBvTextarea',
         select: 'ZekBvSelect',
-        label: 'ZekBvText'
+        label: 'ZekText'
       },
       formData: {},
       resetKey: 0,
