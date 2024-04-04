@@ -1,10 +1,18 @@
 <template>
   <footer :style="styleObject" :class="customClass">
     <ul v-for="(column, index) in columns" :key="index" class="footer-column">
-      <component v-if="column.component" :is="column.component" v-bind="column.props" class="component-stub" > {{ column.text }}</component>
-      <li v-for="(link, index) in column.links" :key="index" class="footer-item">
-        <a :href="link.href" :style="textStyle" class="footer-link">{{ link.text }}</a>
-      </li>
+      <component
+        v-if="column.component"
+        :is="column.component"
+        v-bind="column.props"
+        v-on="column.events || {}"
+        :class="`footer-custom-component-${index}`"
+      />
+      <template v-else>
+        <li v-for="(link, index) in column.links" :key="index" :class="`footer-item-${index}`">
+          <a :href="link.href" :style="textStyle" class="footer-link">{{ link.text }}</a>
+        </li>
+      </template>
     </ul>
     <div
       style="display: flex; align-items: center; position: absolute; bottom: 0"
@@ -19,8 +27,8 @@
         />
       </a>
     </div>
-    <div v-if="copyRigths" class="copyright-section">
-      <p class="copyright-text">© {{ currentYear }} {{ copyRigths }}</p>
+    <div v-if="copyrights" class="copyright-section">
+      <p class="copyright-text">{{ copyrights }}</p>
     </div>
   </footer>
 </template>
@@ -58,6 +66,10 @@ export default {
       type: Object,
       default: () => ({})
     },
+    customClass: {
+      type: String,
+      default: ''
+    },
     customStyle: {
       type: Object,
       default: () => ({})
@@ -66,7 +78,7 @@ export default {
       type: Object,
       default: () => ({})
     },
-    copyRigths: {
+    copyrights: {
       type: String,
       default: ''
     }
@@ -80,9 +92,6 @@ export default {
         backgroundImage: `url(${this.image})` || this.customStyle.backgroundImage || '',
         backgroundPosition: this.imagePosition || this.customStyle.backgroundPosition || ''
       }
-    },
-    currentYear() {
-      return new Date().getFullYear()
     }
   }
 }

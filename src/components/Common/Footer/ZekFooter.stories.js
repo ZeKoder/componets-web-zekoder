@@ -1,5 +1,6 @@
 import ZekFooter from './ZekFooter.vue'
 import ZekText from '../Text/ZekText.vue'
+import { shallowRef } from 'vue'
 
 export default {
   title: 'Common/ZekFooter',
@@ -48,11 +49,12 @@ Default.args = {
     height: 'fit-content',
     columns: [
         {
-            component: 'h1',
-            text: 'native html tag'
+            component: shallowRef({
+                template: '<h1>hello</h1>'
+            })
         },
         {
-            component: ZekText,
+            component: shallowRef(ZekText),
             props: {
                 text: 'text component',
                 type: 'h2'
@@ -158,5 +160,5 @@ Default.args = {
         "textDecoration": "none",
         "color": "#fff",
     },
-    copyRigths: 'cyberntic'
+    copyrights: 'cyberntic'
 }

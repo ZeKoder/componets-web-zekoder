@@ -2,6 +2,8 @@ import { mount } from '@vue/test-utils';
 import ZekFooter from './ZekFooter.vue';
 import { describe, it, expect } from 'vitest';
 import ZekText from '../Text/ZekText.vue'
+import { shallowRef } from 'vue';
+
 
 describe('ZekFooter', () => {
   it('renders links correctly', () => {
@@ -84,10 +86,14 @@ describe('ZekFooter', () => {
   it('renders native component tag with correct attributes', () => {
     const columns = [
       {
-        component: 'h1',
-        text: 'hello',
+        component: shallowRef({
+          template: '<h1 class="component-stub" :style="style">Native Component</h1>',
+          props: ['style'],
+        }),
         props: {
-          style: {color: 'red'},
+          style: {
+            color: 'red'
+          }
         }
       }
     ];
@@ -101,13 +107,13 @@ describe('ZekFooter', () => {
 
     const componentTag = wrapper.find('.component-stub');
     expect(componentTag.exists()).toBe(true);
-    expect(componentTag.attributes('style')).toBe('color: red;');
+    expect(componentTag.attributes('style')).toContain('color: red');
   });
 
   it('renders vue component tag with correct props', () => {
     const columns = [
       {
-        component: ZekText,
+        component: shallowRef(ZekText),
         props: {
           text: 'text component',
           type: 'h2'
@@ -122,24 +128,23 @@ describe('ZekFooter', () => {
       },
     });
 
-    const componentTag = wrapper.find('.component-stub');
+    const componentTag = wrapper.find('.footer-custom-component-0');
     expect(componentTag.exists()).toBe(true);
     expect(componentTag.text()).toBe('text component');
   });
 
   it('renders copyright section with current year and provided rights', () => {
-    const copyRights = 'Some rights reserved';
+    const copyrights = `© ${new Date().getFullYear()} Cybernetic`;
 
     const wrapper = mount(ZekFooter, {
       props: {
         height: '100px',
-        copyRigths: copyRights
+        copyrights: copyrights
       }
     });
 
-    const currentYear = new Date().getFullYear();
     const copyrightText = wrapper.find('.copyright-text');
     expect(copyrightText.exists()).toBe(true);
-    expect(wrapper.text()).toContain(`© ${currentYear} ${copyRights}`);
+    expect(wrapper.text()).toBe(copyrights);
   });
 });
