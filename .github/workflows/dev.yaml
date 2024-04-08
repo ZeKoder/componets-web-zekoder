@@ -4,7 +4,9 @@ on:
   push:
     branches:
       - dev
-
+      
+env:
+  NPM_TOKEN: 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
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,5 +23,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Set up npm token
+        run: echo "//registry.npmjs.org/:_authToken=${{ env.NPM_TOKEN }}" > ~/.npmrc
+
       - name: Run Lerna Publish Prepatch
-        run: npx lerna publish prepatch
+        run: npx lerna publish prepatch --yes
