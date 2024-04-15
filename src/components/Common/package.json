@@ -2,7 +2,11 @@
   "name": "@zekoder/zekoder-web-components-common",
   "version": "0.0.3-alpha.0",
   "private": false,
+  "description": "Zekoder Web Components Common Library is a collection of common components for Zekoder Web Components.",
+  "license": "ISC",
+  "author": "Zekoder",
   "type": "module",
+  "main": "index.js",
   "files": [
     "*",
     "!*.config.js",
