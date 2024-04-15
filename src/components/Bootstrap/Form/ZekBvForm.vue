@@ -29,6 +29,7 @@
         <div class="row form-btn-container">
           <ZekBvButton
             v-bind="customButton"
+            v-if="customButton.label"
             @click.prevent="onReset(customButton.action)"
           ></ZekBvButton>
           <ZekBvButton v-bind="submitButton"></ZekBvButton>
@@ -99,12 +100,7 @@ export default {
     },
     customButton: {
       type: Object,
-      default: () => ({
-        label: 'reset',
-        variant: 'danger',
-        customClass: 'col-auto me-3',
-        action: 'reset'
-      })
+      default: () => ({})
     }
   },
   emits: ['submit', 'reset'],
