@@ -2,7 +2,15 @@
   "name": "@zekoder/componets-web-zekoder",
   "version": "0.0.0",
   "private": true,
+  "description": "Zekoder Web Components Parent Library for Vue 3",
+  "license": "ISC",
+  "author": "Zekoder",
   "type": "module",
+  "workspaces": [
+    "src/components/Bootstrap",
+    "src/components/Common",
+    ""
+  ],
   "scripts": {
     "build": "vite build",
     "build-storybook": "storybook build",
@@ -11,11 +19,13 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "test:unit": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:unit": "vitest"
   },
   "dependencies": {
     "@carbon/vue": "^3.0.11",
+    "@zekoder/zekoder-web-components-bootstrap": "file:src/components/Bootstrap",
+    "@zekoder/zekoder-web-components-common": "file:src/components/Common",
     "bootstrap": "^5.3.2",
     "bootstrap-vue-next": "^0.16.0",
     "primevue": "^3.46.0",

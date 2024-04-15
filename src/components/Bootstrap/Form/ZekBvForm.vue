@@ -45,7 +45,8 @@ import ZekBvButton from '../Button/ZekBvButton.vue'
 import ZekBvRadio from '../RadioGroup/ZekBvRadio.vue'
 import ZekBvSelect from '../Select/ZekBvSelect.vue'
 import ZekBvTextarea from '../Textarea/ZekBvTextarea.vue'
-import ZekText from '../../Common/Text/ZekText.vue'
+import { ZekText } from '@zekoder/zekoder-web-components-common'
+
 export default {
   name: 'ZekBvForm',
   components: {
