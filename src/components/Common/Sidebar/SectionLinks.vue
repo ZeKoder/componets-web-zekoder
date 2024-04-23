@@ -19,7 +19,7 @@
         :title="link.tooltip"
         class="link"
         :style="(link.isActive || link.isHovering) && activeColor ? { color: activeColor } : ''"
-        @click.prevent="$emit('onRoute', link.url)"
+        @click="$emit('onRoute', link.url)"
       >
         <i v-if="link.icon && link.iconType !== 'custom'" class="icon" :class="link.icon"></i>
         <img v-else-if="link.icon && link.iconType === 'custom'" class="icon" :src="link.icon" />

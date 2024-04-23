@@ -10,7 +10,7 @@
           <a
             @click.prevent="$emit('onRoute', title.url)"
             :href="title.url ? title.url : ''"
-            v-if="title && !isCollapsed"
+            v-show="title && !isCollapsed"
             class="sidebar-title"
             :style="title.style ? title.style : { cursor: 'default' }"
           >
@@ -76,7 +76,7 @@
             <i
               class="icon section-expand fa"
               :class="sec.title.isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'"
-              v-if="sec.title.showArrow && !isCollapsed"
+              v-show="sec.title.showArrow && !isCollapsed"
             />
           </a>
           <a
@@ -108,7 +108,7 @@
             <i
               class="icon section-expand fa"
               :class="sec.title.isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'"
-              v-if="sec.title.showArrow && !isCollapsed"
+              v-show="sec.title.showArrow && !isCollapsed"
             />
           </a>
         </li>
@@ -122,7 +122,7 @@
       </div>
     </div>
     <div v-if="footer" class="sidebar-footer" :style="footer.style">
-      <div v-if="!isCollapsed || showFooterOnCollapse" class="footer-links-container">
+      <div v-show="!isCollapsed || showFooterOnCollapse" class="footer-links-container">
         <a
           v-for="(link, i) in footer.links"
           :key="i"
@@ -331,10 +331,11 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  -webkit-transition: width 0.3s;
-  transition: 0.3s;
+  // -webkit-transition: width 0.2s;
+  transition: width 0.2s ease-out 0s, box-shadow 0.15s cubic-bezier(0.47, 0.03, 0.49, 1.38) 0s;
   overflow-x: hidden;
   &.collapsed {
+    width: v-bind(collapsedWidth);
     .link-container {
       text-align: center;
       padding: 0;
@@ -369,6 +370,7 @@ export default {
   text-align: left;
   width: 100%;
   padding: 5px 10px;
+
   &.sidebar-title {
     text-decoration: none;
     border-radius: inherit;
@@ -402,6 +404,7 @@ export default {
 }
 .link {
   cursor: pointer;
+  transition: 0.3s ease-out;
   color: #fff;
   font-size: 1.2rem;
   font-weight: bold;
@@ -409,12 +412,15 @@ export default {
   transition: all 0.2s ease-in-out;
   width: 100%;
   height: 100%;
-  display: inline-block;
+  // display: inline-block;
+  display: flex;
+    flex-wrap: nowrap;
+    // justify-content: space-between;
+    align-items: center;
   &.title {
     .icon {
       &.section-expand {
-        float: right;
-        margin-top: 0.3rem;
+        margin-left: auto;
       }
     }
   }

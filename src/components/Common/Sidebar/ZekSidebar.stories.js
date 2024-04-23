@@ -70,7 +70,7 @@ const Template = (args, { argTypes }) => ({
 
 export const Default = Template.bind({})
 Default.args = {
-  title: 'Zekoder Sidebar',
+  title: 'Zekoder',
   footer: {
     links: [
       {
@@ -124,7 +124,30 @@ Default.args = {
           tooltip: 'Home',
           icon: 'fa fa-home',
           isActive: false,
-          isHovering: false
+          isHovering: false,
+          // sections: [
+          //   {
+          //     title: {
+          //       label: 'Dashboard',
+          //       icon: 'fa fa-home',
+          //       url: '#',
+          //       tooltip: 'Home',
+          //       isActive: false,
+          //       isHovering: false,
+          //       showArrow: true
+          //     },
+          //     links: [
+          //       {
+          //         label: 'About',
+          //         url: '#',
+          //         tooltip: 'About',
+          //         icon: 'fa fa-info',
+          //         isActive: false,
+          //         isHovering: false
+          //       }
+          //     ]
+          //   }
+          // ]
         },
         {
           label: 'About',
