@@ -8,7 +8,10 @@
       v-bind="customProps"
       v-on="customEvents"
       v-if="show"
+      :key="resetKey"
       @submit.prevent="onSubmit"
+      :novalidate="novalidate"
+      :validated="customValidation"
     >
       <div class="row form-container">
         <template v-for="input in inputs" :key="input.id">
@@ -90,6 +93,10 @@ export default {
       type: Boolean,
       default: true
     },
+    customValidation: {
+      type: Boolean,
+      default: true
+    },
     submitButton: {
       type: Object,
       default: () => ({
@@ -121,7 +128,8 @@ export default {
       },
       formData: {},
       resetKey: 0,
-      defaultData: {}
+      defaultData: {},
+      novalidate: false
     }
   },
   created() {
@@ -133,20 +141,46 @@ export default {
     })
     this.formData = { ...obj }
     this.defaultData = { ...obj }
+   
   },
-  methods: {
-    onSubmit() {
-      this.$emit('submit', this.formData)
+  watch: {
+    formData: {
+      handler(val) {
+        if (this.customValidation) {
+          this.inputs.forEach((input) => {
+            input.validation = input.required && !val[input.name] ? false : true
+          })
+        }
+      },
+      deep: true
     },
-    onReset(action) {
-      if (action == 'reset') {
-        this.formData = { ...this.defaultData }
-        this.resetKey++
-        this.$emit('reset', this.formData)
-      } else {
-        this.$emit(action, this.formData)
+  },
+    methods: {
+      onSubmit() {
+        if (this.customValidation) {
+          this.novalidate = this.customValidation ? true : false
+          let allValid = true
+          this.inputs.forEach((input) => {
+            if (!input.validation) {
+              allValid = false
+            }
+          })
+          if (allValid) {
+            this.$emit('submit', this.formData)
+          }
+        } else {
+          this.$emit('submit', this.formData)
+        }
+      },
+      onReset(action) {
+        if (action == 'reset') {
+          this.formData = { ...this.defaultData }
+          this.resetKey++
+          this.$emit('reset', this.formData)
+        } else {
+          this.$emit(action, this.formData)
+        }
       }
     }
-  }
 }
 </script>
