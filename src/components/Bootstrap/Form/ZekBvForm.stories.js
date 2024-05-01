@@ -40,6 +40,7 @@ Default.args = {
             component: 'input',
             name: 'first_name',
             type: 'text',
+            min: '10',
             label: 'First name',
             placeholder: 'Enter your first name',
             required: true,
@@ -92,8 +93,8 @@ Default.args = {
         {
             component: 'checkbox',
             name: 'checkbox',
-            required: true,
-            label: '',
+            numberOfRequiredChecks: 1,
+            label: 'checkbox',
             errorMessage: 'something wrong',
             successMessage: 'looks good',
             items: [
@@ -116,9 +117,9 @@ Default.args = {
             component: 'radio',
             name: 'radio',
             required: true,
+            label: 'radio',
             errorMessage: 'something wrong',
             successMessage: 'looks good',
-            label: '',
             items: [
                 {text: 'First choice', value: 'first'},
                 {text: 'Second choice', value: 'second'},

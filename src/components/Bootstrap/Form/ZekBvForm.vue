@@ -10,9 +10,10 @@
       v-if="show"
       :key="resetKey"
       @submit.prevent="onSubmit"
-      :novalidate="novalidate"
-      :validated="customValidation"
+      :novalidate="false"     
+      :validated="validate"
     >
+    <!-- //FIXME - fix validation to hide native browser validtion styles -->
       <div class="row form-container">
         <template v-for="input in inputs" :key="input.id">
           <div :class="`col-${input.width ?? 12}`">
@@ -93,9 +94,9 @@ export default {
       type: Boolean,
       default: true
     },
-    customValidation: {
+    validate: {
       type: Boolean,
-      default: true
+      default: false
     },
     submitButton: {
       type: Object,
@@ -129,7 +130,7 @@ export default {
       formData: {},
       resetKey: 0,
       defaultData: {},
-      novalidate: false
+      allValid: true
     }
   },
   created() {
@@ -146,9 +147,16 @@ export default {
   watch: {
     formData: {
       handler(val) {
-        if (this.customValidation) {
+        if (this.validate) {
           this.inputs.forEach((input) => {
-            input.validation = input.required && !val[input.name] ? false : true
+            if (input.type !== 'email' || input.type !== 'url') {
+              input.requireValid = input.required && !val[input.name] ? false : true
+            }
+            if (!input.requireValid) {
+              this.allValid = false
+            } else {
+              this.allValid = true
+            }
           })
         }
       },
@@ -157,15 +165,8 @@ export default {
   },
     methods: {
       onSubmit() {
-        if (this.customValidation) {
-          this.novalidate = this.customValidation ? true : false
-          let allValid = true
-          this.inputs.forEach((input) => {
-            if (!input.validation) {
-              allValid = false
-            }
-          })
-          if (allValid) {
+        if (this.validate) {
+          if (this.allValid) {
             this.$emit('submit', this.formData)
           }
         } else {
