@@ -22,9 +22,10 @@ const Template = (args, { argTypes }) => ({
 
 export const Default = Template.bind({})
 Default.args = {
-    value: '50',
+    value: '33.333333',
     max: '100',
-    label: {
-        text: 'Progress: 50%'
-      }
+    label: "Progress: 50%",
+    customBar: {
+      label: `${((33.333333 / 50) * 100).toFixed(2)}%`
+    }
 }

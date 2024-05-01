@@ -1,6 +1,6 @@
 <template>
     <div class="zek-progress-bar" :class="customClass">
-      <span v-if="label" :style="label.style">{{ label.text || label }}</span>
+      <span v-if="label" :class="labelClass" :style="labelStyle">{{ label }}</span>
       <b-progress
         :value="value"
         :max="max"
@@ -8,8 +8,7 @@
         :show-value="showValue"
         v-bind="extraProps"
       >
-        <b-progress-bar v-if="customBar" :value="value">
-          <span :class="customBar.class"> {{ customBar.text }} </span>
+         <b-progress-bar v-if="customBar" :value="value" :label="customBar.label"> <!--//NOTE - for label to render showValue should be flase  -->
           <component
             v-if="customBar.component"
             :class="customBar.class"
@@ -68,6 +67,20 @@
               type: Object,
               required: false,
           },
+          labelStyle: {
+            type: Object,
+            default: () => ({})
+          },
+          labelClass: {
+              type: String,
+              required: false,
+              default: ''
+          },
+          color: {
+            type: String,
+            required: false,
+            default: '#ffffff'
+          }
       },
   };
   </script>
@@ -75,6 +88,7 @@
   <style scoped>
   :deep([role=progressbar]){
       background-color: v-bind(backgroundColor);
+      color: v-bind(color)
   }
   </style>
   
