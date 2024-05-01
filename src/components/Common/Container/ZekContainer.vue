@@ -9,7 +9,7 @@
       v-on="row.events || {}"
       :id="row.id || generateRandom(i)"
       v-show="row.condition != undefined ? row.condition : true"
-      @click.stop="emitClick('rowClick', { column: column, row: row, index: i })"
+      @click.stop="$emit('rowClick', { column: column, row: row, index: i })"
     >
       <div
         v-for="(col, index) in row.columns"
@@ -19,26 +19,26 @@
         v-bind="col.props || {}"
         v-on="col.events || {}"
         v-show="col.condition != undefined ? col.condition : true"
-        @click.stop="emitClick('colClick', { column: col, row: row, index: index })"
+        @click.stop="$emit('colClick', { column: col, row: row, index: index })"
       >
         <zek-container
           :column="col"
-          @rowClick="emitClick('rowClick', $event)"
-          @colClick="emitClick('colClick', $event)"
+          @rowClick="$emit('rowClick', $event)"
+          @colClick="$emit('colClick', $event)"
         ></zek-container>
       </div>
     </div>
   </template>
-  <template v-else-if="column && !column.rows && column.type && !column.type">
+  <template v-else-if="column && !column.rows">
     <component
-      v-if="!column.type && column.component"
-      :is="getZekBVComponent(column.component)"
+      v-if="column.type == 'custom' && column.component"
+      :is="column.component"
       v-bind="column.data || {}"
       v-on="column.events || {}"
     ></component>
     <component
-      v-else-if="column.type == 'custom' && column.component"
-      :is="column.component"
+      v-else-if="column.component"
+      :is="getZekBVComponent(column.component)"
       v-bind="column.data || {}"
       v-on="column.events || {}"
     ></component>
@@ -46,6 +46,7 @@
   </template>
 </template>
 <script>
+import { defineAsyncComponent } from 'vue'
 export default {
   name: 'ZekContainer',
   emits: ['rowClick', 'colClick'],
@@ -64,7 +65,7 @@ export default {
                 {
                   component: "ZekBvButton",
                   data: {
-                    template: 'Hello World'
+                    label: 'Hello World'
                   }
                 }
               ]
@@ -85,11 +86,15 @@ export default {
     }
   },
   methods: {
-    async getZekBVComponent(component) {
-      // Dynamic import component from @zekoder/web-components-bootstrap with names
-      import('@zekoder/zekoder-web-components-bootstrap').then((components) => {
-        console.log(components)
-        return components[component]
+    getZekBVComponent(c) {
+      return defineAsyncComponent(async () => {
+        const component = (await import("@zekoder/zekoder-web-components-bootstrap"))[c]
+        if (!component) {
+          return {
+            template: '<span style="color: red">Component not found...</span>'
+          }
+        }
+        return component
       })
     },
     generateRandom(i) {
