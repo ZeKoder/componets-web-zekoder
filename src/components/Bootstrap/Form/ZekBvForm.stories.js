@@ -28,10 +28,11 @@ Default.args = {
             component: 'input',
             name: 'email',
             type: 'email',
-            require: true,
+            required: true,
             label: 'Enter email',
             width: 12,
             errorMessage: 'something wrong',
+            successMessage: 'looks good',
             placeholder: 'Enter your email',
             description: 'please enter correct email format',
         },
@@ -39,9 +40,12 @@ Default.args = {
             component: 'input',
             name: 'first_name',
             type: 'text',
+            min: '10',
             label: 'First name',
             placeholder: 'Enter your first name',
-            require: true,
+            required: true,
+            errorMessage: 'something wrong',
+            successMessage: 'looks good',
             width: '6 mt-4'
         },
         {
@@ -50,7 +54,9 @@ Default.args = {
             type: 'text',
             label: 'Last name',
             placeholder: 'Enter your last name',
-            require: true,
+            required: true,
+            errorMessage: 'something wrong',
+            successMessage: 'looks good',
             width: '6 mt-4'
         },
         {
@@ -62,29 +68,35 @@ Default.args = {
             component: 'input',
             name: 'date',
             type: 'date',
-            require: true,
+            required: true,
             label: '',
-            width: 'auto mt-4'
+            width: 'auto mt-4',
+            errorMessage: 'something wrong',
+            successMessage: 'looks good',
         },
         {
             component: 'select',
             placeholder: 'Enter your last name',
-            value: null,
+         
             items: [
-                { value: null, text: 'Please select an option', disabled: true },
+                { value: '1', text: 'Please select an option', disabled: true },
                 { value: 'male', text: 'Male' },
                 { value: 'female', text: 'Female' },
             ],
-            require: true,
+            required: true,
             name: 'select',
             label: 'Gender',
+            errorMessage: 'something wrong',
+            successMessage: 'looks good',
             width: '12 mt-4'
         },
         {
             component: 'checkbox',
             name: 'checkbox',
-            require: true,
-            label: '',
+            numberOfRequiredChecks: 1,
+            label: 'checkbox',
+            errorMessage: 'something wrong',
+            successMessage: 'looks good',
             items: [
                 {text: 'First Check', value: 'first'},
                 {text: 'Second Check', value: 'second'},
@@ -94,7 +106,9 @@ Default.args = {
         {
             component: 'textarea',
             name: 'textarea',
-            require: true,
+            required: true,
+            errorMessage: 'something wrong',
+            successMessage: 'looks good',
             label: 'details',
             value: 'balbal',
             width: 'auto me-auto mt-4'
@@ -102,8 +116,10 @@ Default.args = {
         {
             component: 'radio',
             name: 'radio',
-            require: true,
-            label: '',
+            required: true,
+            label: 'radio',
+            errorMessage: 'something wrong',
+            successMessage: 'looks good',
             items: [
                 {text: 'First choice', value: 'first'},
                 {text: 'Second choice', value: 'second'},

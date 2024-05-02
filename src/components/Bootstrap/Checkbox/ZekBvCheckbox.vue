@@ -7,7 +7,7 @@
       :valid-feedback="successMessage"
       :invalid-feedback="errorMessage"
       :state="error"
-      :label-class="labelClass + (required ? ' required' : '')"
+      :label-class="labelClass + (numberOfRequiredChecks > 0 ? ' required' : '')"
     >
       <b-form-checkbox-group
         ref="ZekBvCheckbox"
@@ -19,7 +19,7 @@
         :state="error"
         :disabled="disabled"
         :buttons="isButtons"
-        :required="required"
+        :required="!(selected.length == numberOfRequiredChecks)"
         :name="name"
         :class="customClass"
         :style="customStyle"
@@ -81,9 +81,9 @@ export default {
       type: Boolean,
       default: false
     },
-    required: {
-      type: Boolean,
-      default: false
+    numberOfRequiredChecks: {
+      type: Number,
+      default: 0
     },
     customClass: {
       type: String,

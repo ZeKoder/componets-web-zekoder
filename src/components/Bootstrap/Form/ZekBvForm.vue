@@ -8,8 +8,12 @@
       v-bind="customProps"
       v-on="customEvents"
       v-if="show"
+      :key="resetKey"
       @submit.prevent="onSubmit"
+      :novalidate="false"     
+      :validated="validate"
     >
+    <!-- //FIXME - fix validation to hide native browser validtion styles -->
       <div class="row form-container">
         <template v-for="input in inputs" :key="input.id">
           <div :class="`col-${input.width ?? 12}`">
@@ -91,6 +95,10 @@ export default {
       type: Boolean,
       default: true
     },
+    validate: {
+      type: Boolean,
+      default: false
+    },
     submitButton: {
       type: Object,
       default: () => ({
@@ -117,7 +125,8 @@ export default {
       },
       formData: {},
       resetKey: 0,
-      defaultData: {}
+      defaultData: {},
+      allValid: true
     }
   },
   created() {
@@ -129,20 +138,46 @@ export default {
     })
     this.formData = { ...obj }
     this.defaultData = { ...obj }
+   
   },
-  methods: {
-    onSubmit() {
-      this.$emit('submit', this.formData)
+  watch: {
+    formData: {
+      handler(val) {
+        if (this.validate) {
+          this.inputs.forEach((input) => {
+            if (input.type !== 'email' || input.type !== 'url') {
+              input.requireValid = input.required && !val[input.name] ? false : true
+            }
+            if (!input.requireValid) {
+              this.allValid = false
+            } else {
+              this.allValid = true
+            }
+          })
+        }
+      },
+      deep: true
     },
-    onReset(action) {
-      if (action == 'reset') {
-        this.formData = { ...this.defaultData }
-        this.resetKey++
-        this.$emit('reset', this.formData)
-      } else {
-        this.$emit(action, this.formData)
+  },
+    methods: {
+      onSubmit() {
+        if (this.validate) {
+          if (this.allValid) {
+            this.$emit('submit', this.formData)
+          }
+        } else {
+          this.$emit('submit', this.formData)
+        }
+      },
+      onReset(action) {
+        if (action == 'reset') {
+          this.formData = { ...this.defaultData }
+          this.resetKey++
+          this.$emit('reset', this.formData)
+        } else {
+          this.$emit(action, this.formData)
+        }
       }
     }
-  }
 }
 </script>
