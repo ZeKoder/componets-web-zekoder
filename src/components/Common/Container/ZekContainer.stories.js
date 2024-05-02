@@ -21,23 +21,43 @@ Simple.args = {
     rows: [
       {
         columns: [
-          {
-            columnWidth: 12,
-            class: "text-center",
-            component: "ZekBvButton",
-            data: {
-              label: 'Hello World'
-            }
-          },
-          {
-            columnWidth: 12,
-            component: "ZekBSelect",
-            data: {
-              label: 'Hello World'
-            }
-          }
+          { id: 1 }
         ]
       }
     ]
+  // }
+  // column: {
+  //   rows: [
+  //     {
+  //       id: 1,
+  //       column: []
+  //     },
+  //     {
+  //       columns: [
+  //         {
+  //           columnWidth: 12,
+  //           class: "text-center",
+  //           component: "ZekBvButton",
+  //           data: {
+  //             label: 'Hello World'
+  //           }
+  //         },
+  //         {
+  //           columnWidth: 12,
+  //           component: "ZekBvSelect",
+  //           data: {
+  //             label: 'Hello World'
+  //           }
+  //         },
+  //         {
+  //           columnWidth: 12,
+  //           component: "ZekText",
+  //           data: {
+  //             label: 'Hello World'
+  //           }
+  //         }
+  //       ]
+  //     }
+  //   ]
   }
 };

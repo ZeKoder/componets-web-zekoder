@@ -38,7 +38,7 @@
     ></component>
     <component
       v-else-if="column.component"
-      :is="getZekBVComponent(column.component)"
+      :is="getZekBVComponent(column.component) || getZekCommonComponent(column.component) || errorComponent"
       v-bind="column.data || {}"
       v-on="column.events || {}"
     ></component>
@@ -57,22 +57,7 @@ export default {
     },
     column: {
       type: Object,
-      default: () => {
-        return {
-          rows: [
-            {
-              columns: [
-                {
-                  component: "ZekBvButton",
-                  data: {
-                    label: 'Hello World'
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      }
+      default: () => {}
     },
     customClass: {
       type: String,
@@ -85,17 +70,19 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      errorComponent: {
+        template: '<span style="color: red">Component not found...</span>'
+      }
+    }
+  },
   methods: {
     getZekBVComponent(c) {
-      return defineAsyncComponent(async () => {
-        const component = (await import("@zekoder/zekoder-web-components-bootstrap"))[c]
-        if (!component) {
-          return {
-            template: '<span style="color: red">Component not found...</span>'
-          }
-        }
-        return component
-      })
+      return defineAsyncComponent(async () => (await import("@zekoder/zekoder-web-components-bootstrap"))[c])
+    },
+    getZekCommonComponent(c) {
+      return defineAsyncComponent(async () => (await import("@zekoder/zekoder-web-components-common"))[c])
     },
     generateRandom(i) {
       i = i || 0
