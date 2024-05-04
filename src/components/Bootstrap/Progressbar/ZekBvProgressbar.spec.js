@@ -37,9 +37,7 @@ describe('ZekBvProgressbar', () => {
       props: {
         value: '50',
         max: '100',
-        label: {
-          text: 'Progress: 50%'
-        }
+        label: 'Progress: 50%'
       }
     });
 
@@ -49,7 +47,6 @@ describe('ZekBvProgressbar', () => {
   it('renders progress bar with custom bar', async () => {
     const customBar = {
       class: 'custom-class',
-      text: 'Custom Bar',
       component: 'span',
       props: {
         style: {
@@ -70,7 +67,6 @@ describe('ZekBvProgressbar', () => {
     });
 
     expect(wrapper.find('.custom-class').exists()).toBe(true);
-    expect(wrapper.find('.custom-class').text()).toBe('Custom Bar');
   });
 
   it('applies custom class to progress bar container', () => {

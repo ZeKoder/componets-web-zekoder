@@ -49,11 +49,11 @@ describe('ZekBvCheckbox', () => {
   });
 
   // Test case 4: Check if the label has a red asterisk when required
-  it('displays a red asterisk for the label when required', () => {
+  it('displays a red asterisk for the label when numberOfRequiredChecks > 0', () => {
     const wrapper = mount(ZekBvCheckbox, {
       props: {
         label: 'Test Label',
-        required: true,
+        numberOfRequiredChecks: 1,
       },
     });
 
