@@ -1,19 +1,32 @@
 <template>
   <div>
-    <ZekBvButton v-bind="collapseBtnProps" v-b-toggle="collapseId"></ZekBvButton>
-    <BCollapse :id="collapseId" :horizontal="horizontal" :class="customClass">
+    <component
+      v-if="customToggle?.component"
+      :is="customToggle?.component"
+      v-bind="customToggle.props"
+      v-on="customToggle.event"
+      v-b-toggle="collapseId"
+    ></component>
+    <ZekBvButton
+      v-else
+      :label="label"
+      :customClass="buttonClass"
+      v-bind="collapseBtnProps"
+      v-b-toggle="collapseId"
+    ></ZekBvButton>
+    <BCollapse
+      :id="collapseId"
+      :horizontal="horizontal"
+      :class="customClass"
+      @hide="$emit('toggle', false)"
+      @show="$emit('toggle', true)"
+    >
       <ZekContainer
         :column="column"
         :customClass="containerClass"
         @rowClick="$emit('rowClick', $event)"
         @colClick="$emit('colClick', $event)"
       ></ZekContainer>
-      <!-- <ZekBvCollapse />  //FIXME - if needed fix requirsivness
-        v-if="showInnerCollapse"
-        :collapseBtnProps="{ label: 'toggle inner', variant: 'secondary' }"
-        :column="{ rows: [{ columns: [{ id: '1' }] }] }"
-        :collapseId="innerCollapseId"
-      ></ZekBvCollapse> -->
     </BCollapse>
   </div>
 </template>
@@ -21,7 +34,7 @@
 <script>
 import { BCollapse } from 'bootstrap-vue-next'
 import ZekBvButton from '../Button/ZekBvButton.vue'
-import ZekContainer from '../../Common/Container/ZekContainer.vue' //FIXME - export component form npm to be able to import 
+import ZekContainer from '../../Common/Container/ZekContainer.vue' //FIXME - export component form npm to be able to import
 export default {
   name: 'ZekBvCollapse',
   components: {
@@ -36,19 +49,22 @@ export default {
     collapseBtnProps: {
       type: Object
     },
+    customToggle: {
+      type: Object
+    },
     collapseId: {
       type: String,
       default: 'collapse-1'
     },
-    innerCollapseId: {
-      type: String,
-      default: 'collapse-2'
-    },
-    showInnerCollapse: {
-      type: Boolean,
-      default: false
-    },
     customClass: {
+      type: String,
+      default: ''
+    },
+    label: {
+      type: String,
+      default: 'Toggle'
+    },
+    buttonClass: {
       type: String,
       default: ''
     },
@@ -59,8 +75,14 @@ export default {
     horizontal: {
       type: Boolean,
       default: false
-    },
-  }
+    }
+  },
+  data() {
+    return {
+      visible: false
+    }
+  },
+  emits: ['toggle', 'rowClick', 'colClick']
 }
 </script>
 

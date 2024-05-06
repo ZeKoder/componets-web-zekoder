@@ -4,6 +4,9 @@ export default {
   title: 'Bootstrap/ZekBvCollapse',
   component: ZekBvCollapse,
   tags: ['autodocs'],
+  argTypes: {
+    onToggle: { control: 'action', action: 'toggle' }, 
+  }
 };
 
 const Template = (args, { argTypes }) => ({
@@ -18,7 +21,6 @@ const Template = (args, { argTypes }) => ({
 export const Default = Template.bind({});
 Default.args = { 
 collapseBtnProps: {
-    label: "toggle",
     variant: "primary"
 },
   column: {
@@ -54,5 +56,5 @@ collapseBtnProps: {
         ]
       }
     ]
-  }
+  },
 };
