@@ -118,7 +118,7 @@ export default {
       default: () => ({})
     },
     validation: {
-      type: String,
+      type: [String, Boolean],
       default: undefined
     },
     successMessage: {

@@ -51,7 +51,7 @@
               default: '1rem',
           },
           label: {
-              type: Object,
+              type: String,
               required: false,
           },
           customBar: {

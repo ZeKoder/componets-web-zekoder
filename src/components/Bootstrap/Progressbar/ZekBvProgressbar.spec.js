@@ -1,6 +1,7 @@
 import { mount } from '@vue/test-utils';
 import ZekBvProgressbar from './ZekBvProgressbar.vue';
 import { describe, it, expect, vi } from 'vitest';
+import { shallowRef } from 'vue';
 
 describe('ZekBvProgressbar', () => {
   it('renders progress bar with default props', () => {
@@ -37,9 +38,7 @@ describe('ZekBvProgressbar', () => {
       props: {
         value: '50',
         max: '100',
-        label: {
-          text: 'Progress: 50%'
-        }
+        label: 'Progress: 50%'
       }
     });
 
@@ -49,8 +48,10 @@ describe('ZekBvProgressbar', () => {
   it('renders progress bar with custom bar', async () => {
     const customBar = {
       class: 'custom-class',
-      text: 'Custom Bar',
-      component: 'span',
+      label: 'Custom Bar',
+      component: shallowRef({
+        template: '<div>Custom Bar</div>'
+      }),
       props: {
         style: {
           color: 'green'
