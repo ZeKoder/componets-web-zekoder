@@ -17,19 +17,23 @@
       <div class="row form-container">
         <template v-for="input in inputs" :key="input.id">
           <div :class="`col-${input.width ?? 12}`">
+            <div v-if="input.component == 'custom'" :class="input.class" v-html="input.html" />
             <component
-              :is="type[input.component]"
+              :is="type[input.component ?? 'input']"
               :error="input.validation"
               :customClass="input.class"
               :value="formData[input.name]"
               :formID="id"
               v-bind="input"
               :key="resetKey"
-              v-if="input.condition || true"
+              v-else-if="input.condition || true"
               @input="formData[input.name] = $event"
-            ></component>
+            >
+          </component>
           </div>
         </template>
+        <BFormInvalidFeedback :state="validation"> {{ errorMessage }} </BFormInvalidFeedback>
+        <BFormValidFeedback :state="validation"> {{successMessage}} </BFormValidFeedback>
         <div class="row form-btn-container">
           <ZekBvButton
             v-bind="customButton"
@@ -43,7 +47,7 @@
   </div>
 </template>
 <script>
-import { BForm } from 'bootstrap-vue-next'
+import { BForm, BFormInvalidFeedback, BFormValidFeedback } from 'bootstrap-vue-next'
 import ZekBvInput from '../InputField/ZekBvInput.vue'
 import ZekBvCheckbox from '../Checkbox/ZekBvCheckbox.vue'
 import ZekBvButton from '../Button/ZekBvButton.vue'
@@ -56,6 +60,8 @@ export default {
   name: 'ZekBvForm',
   components: {
     BForm,
+    BFormInvalidFeedback,
+    BFormValidFeedback,
     ZekBvInput,
     ZekBvCheckbox,
     ZekBvButton,
@@ -110,6 +116,18 @@ export default {
     customButton: {
       type: Object,
       default: () => ({})
+    },
+    validation: {
+      type: String,
+      default: undefined
+    },
+    successMessage: {
+      type: String,
+      default: 'Submission successful!'
+    },
+    errorMessage: {
+      type: String,
+      default: 'Submission failed! Please try again. If the problem persists, contact support.'
     }
   },
   emits: ['submit', 'reset'],
@@ -121,7 +139,7 @@ export default {
         radio: 'ZekBvRadio',
         textarea: 'ZekBvTextarea',
         select: 'ZekBvSelect',
-        label: 'ZekText'
+        label: 'ZekText',
       },
       formData: {},
       resetKey: 0,
