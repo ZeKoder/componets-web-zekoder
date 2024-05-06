@@ -53,7 +53,7 @@ describe('ZekBvCheckbox', () => {
     const wrapper = mount(ZekBvCheckbox, {
       props: {
         label: 'Test Label',
-        required: true,
+        numberOfRequiredChecks: 1,
       },
     });
 

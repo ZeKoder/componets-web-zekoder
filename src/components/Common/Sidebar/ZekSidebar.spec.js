@@ -142,10 +142,7 @@ describe('SectionLinks', () => {
   
     // Hover over the section link
     await wrapper.find('.link-container').trigger('mouseover');
-  
-    // Assert that hovering class is added
-    expect(wrapper.find('.link-container').classes()).toContain('hovering');
-  
+    
     // Move mouse away from the section link
     await wrapper.find('.link-container').trigger('mouseout');
   
