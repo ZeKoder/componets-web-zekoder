@@ -10,6 +10,9 @@ export default mergeConfig(
       exclude: [...configDefaults.exclude, 'e2e/*'],
       include: ['src/**/*.spec.js'],
       root: fileURLToPath(new URL('./', import.meta.url)),
+      alias: {
+        '@zekoder': fileURLToPath(new URL('./node_modules/@zekoder', import.meta.url))
+      },
       globals: true,
       clearMocks: true,
       coverage: {
