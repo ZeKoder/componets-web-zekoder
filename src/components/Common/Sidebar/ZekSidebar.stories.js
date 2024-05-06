@@ -53,10 +53,10 @@ export default {
         type: 'object'
       }
     },
-    onOnExpandCollapse: { control: 'action', action: 'onExpandCollapse' },
+    onExpandCollapse: { control: 'action', action: 'onExpandCollapse' },
     onDarkModeToggle: { control: 'action', action: 'darkModeToggle' },
     onLinkClicked: { control: 'action', action: 'linkClicked' },
-    onOnRoute: { control: 'action', action: 'onRoute' }
+    onRoute: { control: 'action', action: 'onRoute' }
   }
 }
 const Template = (args, { argTypes }) => ({
@@ -79,7 +79,6 @@ Default.args = {
         tooltip: 'Settings',
         icon: 'fa fa-cog',
         isActive: false,
-        isHovering: false
       }
     ],
     // ! This should changed outside the component as it is reactive
@@ -111,88 +110,45 @@ Default.args = {
       title: {
         label: 'Dashboard',
         icon: 'fa fa-home',
-        url: '#',
-        tooltip: 'Home',
-        isActive: false,
-        isHovering: false,
+        url: '/iframe.html',
+        tooltip: 'YES',
         showArrow: true
       },
       links: [
         {
           label: 'Home',
           url: '/iframe.html',
-          tooltip: 'Home',
           icon: 'fa fa-home',
-          isActive: false,
-          isHovering: false,
-          // sections: [
-          //   {
-          //     title: {
-          //       label: 'Dashboard',
-          //       icon: 'fa fa-home',
-          //       url: '#',
-          //       tooltip: 'Home',
-          //       isActive: false,
-          //       isHovering: false,
-          //       showArrow: true
-          //     },
-          //     links: [
-          //       {
-          //         label: 'About',
-          //         url: '#',
-          //         tooltip: 'About',
-          //         icon: 'fa fa-info',
-          //         isActive: false,
-          //         isHovering: false
-          //       }
-          //     ]
-          //   }
-          // ]
         },
         {
           label: 'About',
-          url: '#',
-          tooltip: 'About',
+          url: '/about',
           icon: 'fa fa-info',
-          isActive: false,
-          isHovering: false
         },
         {
           label: 'Contact',
-          url: '#',
-          tooltip: 'Contact',
+          url: '/contact',
           icon: 'fa fa-phone',
-          isActive: false,
-          isHovering: false
         }
       ]
     },
     {
       title: {
         label: 'Utils',
-        url: '#',
-        tooltip: 'Settings',
+        url: '/utils',
         icon: 'fa fa-cog',
-        isActive: false,
-        isHovering: false,
         showArrow: true
       },
       links: [
         {
           label: 'Settings',
-          url: '#',
-          tooltip: 'Settings',
+          url: '/settings',
           icon: 'fa fa-cog',
-          isActive: false,
-          isHovering: false
         },
         {
           label: 'Logout',
-          url: '#',
-          tooltip: 'Logout',
+          url: '/logout',
           icon: 'fa fa-arrow-left',
-          isActive: false,
-          isHovering: false
         }
       ]
     }

@@ -35,30 +35,19 @@
       <div class="sidebar-logo-container" v-if="logo && logo.src">
         <img v-bind="logo" class="sidebar-logo" />
       </div>
-      <div v-for="(sec, i) in sections" :key="i + refreshKey" @click="refreshKey++">
+      <div v-for="(sec, i) in sections" :key="i + sec?.title">
         <li
           v-if="sec.title"
           class="link-container"
-          :class="sec.title.isHovering ? 'hovering' : sec.title.isActive ? 'active-link' : ''"
-          @mouseover="sec.title.isHovering = true"
-          @mouseout="sec.title.isHovering = false"
-          :style="
-            (sec.title.isActive || sec.title.isHovering) && activeColor
-              ? { color: activeColor }
-              : ''
-          "
+          :style="sec.title.isActive && activeColor ? { color: activeColor } : ''"
         >
           <a
             v-if="sec.links && sec.links.length"
             href="javascript:"
-            :title="sec.title.tooltip"
+            :title="sec.title.tooltip || sec.title.label"
             class="link title"
             @click="sec.title.isExpanded = !sec.title.isExpanded"
-            :style="
-              (sec.title.isActive || sec.title.isHovering) && activeColor
-                ? { color: activeColor }
-                : ''
-            "
+            :style="(sec.title.isActive || sec.title.isExpanded) && activeColor ? { color: activeColor } : ''"
           >
             <i
               v-if="sec.title.icon && sec.title.iconType !== 'custom'"
@@ -82,15 +71,11 @@
           <a
             v-else
             :href="sec.title.url"
-            :title="sec.title.tooltip"
+            :title="sec.title.tooltip || sec.title.label"
             class="link title"
             @click.prevent="sec.title.isExpanded = !sec.title.isExpanded"
             @click="$emit('onRoute', sec.title.url)"
-            :style="
-              (sec.title.isActive || sec.title.isHovering) && activeColor
-                ? { color: activeColor }
-                : ''
-            "
+            :style="sec.title.isActive && activeColor ? { color: activeColor } : ''"
           >
             <i
               v-if="sec.title.icon && sec.title.iconType !== 'custom'"
@@ -127,9 +112,9 @@
           v-for="(link, i) in footer.links"
           :key="i"
           :to="link.url"
-          :title="link.tooltip"
+          :title="link.tooltip || link.label"
           class="link"
-          :style="(link.isActive || link.isHovering) && activeColor ? { color: activeColor } : ''"
+          :style="link.isActive && activeColor ? { color: activeColor } : ''"
           @click="$emit('onRoute', link.url)"
         >
           <i v-if="link.icon && link.iconType !== 'custom'" class="icon" :class="link.icon"></i>
@@ -189,6 +174,7 @@ export default {
   components: {
     SectionLinks
   },
+  emits: ['onRoute', 'onExpandCollapse', 'linkClicked', 'darkModeToggle'],
   props: {
     title: {
       type: [String, Object],
@@ -290,29 +276,19 @@ export default {
       this.$emit('onExpandCollapse', this.isCollapsed)
     },
     linkClicked(sec, link) {
-      this.sections.forEach((section) => {
-        // section.title.isExpanded = false
-        section.title.isActive = false
-        if (section.links && section.links.length) {
-          section.links.forEach((_link) => {
-            _link.isActive = false
-          })
-        }
-      })
-      sec.title.isExpanded = sec.title.isActive = true
-      link.isActive = true
+      this.checkActiveLink()
 
       this.$emit('linkClicked', link)
     },
     checkActiveLink() {
       const path = window.location.pathname
       this.sections.forEach((sec) => {
-        if (path === sec.url) {
+        if (path == sec.url) {
           sec.isActive = true
         }
         if (sec.links && sec.links.length) {
           sec.links.forEach((link) => {
-            if (path === link.url) {
+            if (path == link.url) {
               link.isActive = true
             }
           })
@@ -324,15 +300,19 @@ export default {
 </script>
 
 <style lang="scss">
+$backgroundColor: v-bind(backgroundColor);
+$activeColor: v-bind(activeColor);
 .zek-sidebar {
   height: 100%;
   overflow-y: auto;
-  background-color: v-bind(backgroundColor);
+  background-color: $backgroundColor;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   // -webkit-transition: width 0.2s;
-  transition: width 0.2s ease-out 0s, box-shadow 0.15s cubic-bezier(0.47, 0.03, 0.49, 1.38) 0s;
+  transition:
+    width 0.2s ease-out 0s,
+    box-shadow 0.15s cubic-bezier(0.47, 0.03, 0.49, 1.38) 0s;
   overflow-x: hidden;
   &.collapsed {
     width: v-bind(collapsedWidth);
@@ -370,6 +350,12 @@ export default {
   text-align: left;
   width: 100%;
   padding: 5px 10px;
+
+  &:hover {
+    * {
+      color: $activeColor;
+    }
+  }
 
   &.sidebar-title {
     text-decoration: none;
@@ -414,9 +400,9 @@ export default {
   height: 100%;
   // display: inline-block;
   display: flex;
-    flex-wrap: nowrap;
-    // justify-content: space-between;
-    align-items: center;
+  flex-wrap: nowrap;
+  // justify-content: space-between;
+  align-items: center;
   &.title {
     .icon {
       &.section-expand {
