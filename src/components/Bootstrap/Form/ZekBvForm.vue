@@ -16,7 +16,7 @@
     <!-- //FIXME - fix validation to hide native browser validtion styles -->
       <div class="row form-container">
         <template v-for="input in inputs" :key="input.id">
-          <div :class="`col-${input.width ?? 12}`">
+          <div :class="`pb-2 col-${input.width ?? 12}`">
             <div v-if="input.component == 'custom'" :class="input.class" v-html="input.html" />
             <component
               :is="type[input.component ?? 'input']"
@@ -32,9 +32,9 @@
           </component>
           </div>
         </template>
-        <BFormInvalidFeedback :state="validation"> {{ errorMessage }} </BFormInvalidFeedback>
-        <BFormValidFeedback :state="validation"> {{successMessage}} </BFormValidFeedback>
-        <div class="row form-btn-container">
+        <BFormInvalidFeedback class="col-12 mt-0 mb-3" :state="validation"> {{ errorMessage }} </BFormInvalidFeedback>
+        <BFormValidFeedback class="col-12 mt-0 mb-3" :state="validation"> {{successMessage}} </BFormValidFeedback>
+        <div class="row mx-auto form-btn-container">
           <ZekBvButton
             v-bind="customButton"
             v-if="customButton.label"
@@ -130,7 +130,7 @@ export default {
       default: 'Submission failed! Please try again. If the problem persists, contact support.'
     }
   },
-  emits: ['submit', 'reset'],
+  emits: ['submit', 'reset', 'error'],
   data() {
     return {
       type: {
@@ -150,13 +150,15 @@ export default {
   created() {
     let obj = {}
     this.inputs.forEach((input) => {
+      if (localStorage.getItem(input.save)) {
+        input.value = localStorage.getItem(input.save)
+      }
       if (input.component != 'label' && input.value) {
         obj[input.name] = input.value
       }
     })
     this.formData = { ...obj }
     this.defaultData = { ...obj }
-   
   },
   watch: {
     formData: {
@@ -178,7 +180,34 @@ export default {
     },
   },
     methods: {
+      checkSpecialFields(val) {
+        let check = true;
+        this.inputs.forEach((input) => {
+          if (input?.save) {
+            localStorage.setItem(input.save, val[input.name])
+          }
+          if (input?.match) {
+            if (val[input.name] !== val[input.match]) {
+              const matchedInput = this.inputs.find(i => i.name === input.match)
+              const matchLabel = matchedInput?.label || matchedInput?.name
+              const label = input?.label || input?.name
+              const error = {
+                input: input.name,
+                description: `${label} does not match ${matchLabel}`
+              }
+              console.error(error)
+              this.$emit("error", error);
+              check = false
+            }
+          }
+          if (input?.exclude) {
+            delete val[input.name];
+          }
+        });
+        return check;
+      },
       onSubmit() {
+        if (!this.checkSpecialFields(this.formData)) return;
         if (this.validate) {
           if (this.allValid) {
             this.$emit('submit', this.formData)
