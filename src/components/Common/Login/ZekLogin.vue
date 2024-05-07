@@ -84,6 +84,7 @@ export default {
           id: `email-${Date.now()}`,
           type: 'email',
           label: 'Email',
+          save: 'login-email',
           placeholder: 'Email',
           required: true,
           customProps: {
@@ -132,6 +133,7 @@ export default {
             component: 'checkbox',
             name: 'rememberMe',
             type: 'default',
+            exclude: true,
             items: [{ text: 'Remember me', value: 'rememberMe' }]
           })
         }
@@ -165,15 +167,6 @@ export default {
         this.submitButton = this.loginButton
       }
     },
-    handleRememberMe(data) {
-      if (data.rememberMe?.length) {
-        localStorage.setItem('rememberMe', data.email)
-      } else {
-        localStorage.removeItem('rememberMe')
-      }
-      delete data.rememberMe
-      return { ...data }
-    },
     handleSuccess(data) {
       this.validation = true
       this.$emit('onLoginSuccess', data)
@@ -189,7 +182,6 @@ export default {
     },
     async login(data) {
       this.$emit('beforeLogin', data)
-      data = this.handleRememberMe(data)
       if (!this.email?.error && !this.password?.error) {
         try {
           if (this.webAuth) {
