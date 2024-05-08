@@ -15,10 +15,13 @@ export default mergeConfig(
       },
       globals: true,
       clearMocks: true,
+      css: true,
+      mockReset: true,
+      restoreMocks: true,
       coverage: {
         include: ['src/components/*'],
         exclude: ['src/**/*.stories.js', '**/index.js']
       }
-    },
+    }
   })
 )
