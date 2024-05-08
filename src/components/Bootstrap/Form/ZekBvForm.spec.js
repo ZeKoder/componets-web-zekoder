@@ -28,6 +28,7 @@ describe('ZekBvForm', () => {
           { name: 'username', label: 'Username', value: 'testuser' },
           { name: 'password', label: 'Password', value: 'testpassword' },
         ],
+        customButton: { label: 'Reset', customClass: 'reset-button', action: 'reset'}
       },
     });
 
@@ -39,7 +40,7 @@ describe('ZekBvForm', () => {
       },
     });
 
-    await wrapper.find('button[action="reset"]').trigger('click.prevent');
+    await wrapper.find('.reset-button').trigger('click.prevent');
     expect(wrapper.emitted('reset')).toBeTruthy();
     expect(wrapper.vm.formData).toEqual({
       username: 'testuser',

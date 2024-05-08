@@ -25,6 +25,7 @@ Default.args = {
     value: '33.333333',
     max: '100',
     label: "Progress: 50%",
+    showValue: false,
     customBar: {
       label: `${((33.333333 / 50) * 100).toFixed(2)}%`
     }
