@@ -10,7 +10,7 @@
           <a
             @click.prevent="$emit('onRoute', title.url)"
             :href="title.url ? title.url : ''"
-            v-if="title && !isCollapsed"
+            v-show="title && !isCollapsed"
             class="sidebar-title"
             :style="title.style ? title.style : { cursor: 'default' }"
           >
@@ -35,30 +35,19 @@
       <div class="sidebar-logo-container" v-if="logo && logo.src">
         <img v-bind="logo" class="sidebar-logo" />
       </div>
-      <div v-for="(sec, i) in sections" :key="i + refreshKey" @click="refreshKey++">
+      <div v-for="(sec, i) in sections" :key="i + sec?.title">
         <li
           v-if="sec.title"
           class="link-container"
-          :class="sec.title.isHovering ? 'hovering' : sec.title.isActive ? 'active-link' : ''"
-          @mouseover="sec.title.isHovering = true"
-          @mouseout="sec.title.isHovering = false"
-          :style="
-            (sec.title.isActive || sec.title.isHovering) && activeColor
-              ? { color: activeColor }
-              : ''
-          "
+          :style="sec.title.isActive && activeColor ? { color: activeColor } : ''"
         >
           <a
             v-if="sec.links && sec.links.length"
             href="javascript:"
-            :title="sec.title.tooltip"
+            :title="sec.title.tooltip || sec.title.label"
             class="link title"
             @click="sec.title.isExpanded = !sec.title.isExpanded"
-            :style="
-              (sec.title.isActive || sec.title.isHovering) && activeColor
-                ? { color: activeColor }
-                : ''
-            "
+            :style="(sec.title.isActive || sec.title.isExpanded) && activeColor ? { color: activeColor } : ''"
           >
             <i
               v-if="sec.title.icon && sec.title.iconType !== 'custom'"
@@ -76,21 +65,17 @@
             <i
               class="icon section-expand fa"
               :class="sec.title.isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'"
-              v-if="sec.title.showArrow && !isCollapsed"
+              v-show="sec.title.showArrow && !isCollapsed"
             />
           </a>
           <a
             v-else
             :href="sec.title.url"
-            :title="sec.title.tooltip"
+            :title="sec.title.tooltip || sec.title.label"
             class="link title"
             @click.prevent="sec.title.isExpanded = !sec.title.isExpanded"
             @click="$emit('onRoute', sec.title.url)"
-            :style="
-              (sec.title.isActive || sec.title.isHovering) && activeColor
-                ? { color: activeColor }
-                : ''
-            "
+            :style="sec.title.isActive && activeColor ? { color: activeColor } : ''"
           >
             <i
               v-if="sec.title.icon && sec.title.iconType !== 'custom'"
@@ -108,7 +93,7 @@
             <i
               class="icon section-expand fa"
               :class="sec.title.isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'"
-              v-if="sec.title.showArrow && !isCollapsed"
+              v-show="sec.title.showArrow && !isCollapsed"
             />
           </a>
         </li>
@@ -122,14 +107,14 @@
       </div>
     </div>
     <div v-if="footer" class="sidebar-footer" :style="footer.style">
-      <div v-if="!isCollapsed || showFooterOnCollapse" class="footer-links-container">
+      <div v-show="!isCollapsed || showFooterOnCollapse" class="footer-links-container">
         <a
           v-for="(link, i) in footer.links"
           :key="i"
           :to="link.url"
-          :title="link.tooltip"
+          :title="link.tooltip || link.label"
           class="link"
-          :style="(link.isActive || link.isHovering) && activeColor ? { color: activeColor } : ''"
+          :style="link.isActive && activeColor ? { color: activeColor } : ''"
           @click="$emit('onRoute', link.url)"
         >
           <i v-if="link.icon && link.iconType !== 'custom'" class="icon" :class="link.icon"></i>
@@ -189,6 +174,7 @@ export default {
   components: {
     SectionLinks
   },
+  emits: ['onRoute', 'onExpandCollapse', 'linkClicked', 'darkModeToggle'],
   props: {
     title: {
       type: [String, Object],
@@ -290,29 +276,19 @@ export default {
       this.$emit('onExpandCollapse', this.isCollapsed)
     },
     linkClicked(sec, link) {
-      this.sections.forEach((section) => {
-        // section.title.isExpanded = false
-        section.title.isActive = false
-        if (section.links && section.links.length) {
-          section.links.forEach((_link) => {
-            _link.isActive = false
-          })
-        }
-      })
-      sec.title.isExpanded = sec.title.isActive = true
-      link.isActive = true
+      this.checkActiveLink()
 
       this.$emit('linkClicked', link)
     },
     checkActiveLink() {
       const path = window.location.pathname
       this.sections.forEach((sec) => {
-        if (path === sec.url) {
+        if (path == sec.url) {
           sec.isActive = true
         }
         if (sec.links && sec.links.length) {
           sec.links.forEach((link) => {
-            if (path === link.url) {
+            if (path == link.url) {
               link.isActive = true
             }
           })
@@ -324,17 +300,22 @@ export default {
 </script>
 
 <style lang="scss">
+$backgroundColor: v-bind(backgroundColor);
+$activeColor: v-bind(activeColor);
 .zek-sidebar {
   height: 100%;
   overflow-y: auto;
-  background-color: v-bind(backgroundColor);
+  background-color: $backgroundColor;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  -webkit-transition: width 0.3s;
-  transition: 0.3s;
+  // -webkit-transition: width 0.2s;
+  transition:
+    width 0.2s ease-out 0s,
+    box-shadow 0.15s cubic-bezier(0.47, 0.03, 0.49, 1.38) 0s;
   overflow-x: hidden;
   &.collapsed {
+    width: v-bind(collapsedWidth);
     .link-container {
       text-align: center;
       padding: 0;
@@ -369,6 +350,13 @@ export default {
   text-align: left;
   width: 100%;
   padding: 5px 10px;
+
+  &:hover {
+    * {
+      color: $activeColor;
+    }
+  }
+
   &.sidebar-title {
     text-decoration: none;
     border-radius: inherit;
@@ -402,6 +390,7 @@ export default {
 }
 .link {
   cursor: pointer;
+  transition: 0.3s ease-out;
   color: #fff;
   font-size: 1.2rem;
   font-weight: bold;
@@ -409,12 +398,15 @@ export default {
   transition: all 0.2s ease-in-out;
   width: 100%;
   height: 100%;
-  display: inline-block;
+  // display: inline-block;
+  display: flex;
+  flex-wrap: nowrap;
+  // justify-content: space-between;
+  align-items: center;
   &.title {
     .icon {
       &.section-expand {
-        float: right;
-        margin-top: 0.3rem;
+        margin-left: auto;
       }
     }
   }
