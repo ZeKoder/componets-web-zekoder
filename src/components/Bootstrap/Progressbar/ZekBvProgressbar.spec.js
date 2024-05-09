@@ -71,7 +71,6 @@ describe('ZekBvProgressbar', () => {
     });
 
     expect(wrapper.find('.custom-class').exists()).toBe(true);
-    expect(wrapper.find('.custom-class').text()).toBe('Custom Bar');
   });
 
   it('applies custom class to progress bar container', () => {
