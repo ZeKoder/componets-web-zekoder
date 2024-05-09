@@ -24,7 +24,7 @@ jobs:
         run: npm cache clean --force
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install --no-cache
 
       - name: "Version and publish" # Interesting step
         env:
