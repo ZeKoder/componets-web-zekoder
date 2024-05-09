@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { ZekBvForm } from '@zekoder/zekoder-web-components-bootstrap'
+import ZekBvForm from '../Form/ZekBvForm.vue'
 import auth0 from 'auth0-js'
 import axios from 'axios'
 import { initializeApp } from 'firebase/app'

@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { ZekBvForm } from '@zekoder/zekoder-web-components-bootstrap'
+import ZekBvForm from '../Form/ZekBvForm.vue'
 import axios from 'axios'
 export default {
   name: 'ZekSignup',
