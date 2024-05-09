@@ -1,8 +1,8 @@
-import ZekLogin from './ZekLogin.vue'
+import ZekBvLogin from './ZekBvLogin.vue'
 
 export default {
-  title: 'Auth/ZekLogin',
-  component: ZekLogin,
+  title: 'Bootstrap/Auth/ZekBvLogin',
+  component: ZekBvLogin,
   tags: ['autodocs'],
   argTypes: {
     onBeforeLogin: { control: 'action', action: 'beforeLogin' },
@@ -17,8 +17,8 @@ const Template = (args, { argTypes }) => ({
     return { args }
   },
   props: Object.keys(argTypes),
-  components: { ZekLogin },
-  template: '<ZekLogin v-bind="args" />'
+  components: { ZekBvLogin },
+  template: '<ZekBvLogin v-bind="args" />'
 })
 
 export const Default = Template.bind({})

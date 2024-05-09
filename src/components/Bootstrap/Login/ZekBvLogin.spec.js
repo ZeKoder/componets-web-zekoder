@@ -1,10 +1,10 @@
 import { mount } from '@vue/test-utils'
-import ZekLogin from './ZekLogin.vue'
-import { describe, it, expect, vi } from 'vitest'
+import ZekBvLogin from './ZekBvLogin.vue'
+import { describe, it, expect } from 'vitest'
 
-describe('ZekLogin', () => {
+describe('ZekBvLogin', () => {
   it('renders the component', () => {
-    const wrapper = mount(ZekLogin, {
+    const wrapper = mount(ZekBvLogin, {
       props: {
         url: '/'
       }
@@ -13,7 +13,7 @@ describe('ZekLogin', () => {
   })
 
   it('emits the "beforeLogin" event when the form is submitted', async () => {
-    const wrapper = mount(ZekLogin, {
+    const wrapper = mount(ZekBvLogin, {
       props: {
         url: '/'
       }
@@ -30,14 +30,14 @@ describe('ZekLogin', () => {
   //       accessToken
   //     }})
   //   })
-  //   const wrapper = mount(ZekLogin)
+  //   const wrapper = mount(ZekBvLogin)
   //   await wrapper.findComponent({ name: 'ZekBvForm' }).vm.$emit('submit', { email: 'test@example.com', password: 'password123' })
   //   expect(wrapper.emitted('onLoginSuccess')).toBeTruthy()
   //   expect(wrapper.emitted('onLoginSuccess')[0][0]).toEqual({ email: 'test@example.com', password: 'password123' })
   // })
 
   it('emits the "onLoginError" event when login fails', async () => {
-    const wrapper = mount(ZekLogin, {
+    const wrapper = mount(ZekBvLogin, {
       props: {
         url: '/'
       }
@@ -52,7 +52,7 @@ describe('ZekLogin', () => {
 
   // FIXME: This test is failing because it relies on a mock that is not working as expected
   // it('redirects to the specified URL after successful login', async () => {
-  //   const wrapper = mount(ZekLogin, {
+  //   const wrapper = mount(ZekBvLogin, {
   //     props: {
   //       url: '/',
   //       redirectUrl: '/dashboard'
