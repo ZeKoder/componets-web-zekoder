@@ -31,4 +31,5 @@ jobs:
           git config user.email "${{ github.actor}}@users.noreply.github.com"
           npm set "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}"
 
+          npx lerna clean --yes
           npx lerna publish prepatch --yes

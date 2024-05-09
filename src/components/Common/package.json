@@ -1,6 +1,6 @@
 {
   "name": "@zekoder/zekoder-web-components-common",
-  "version": "0.0.9-alpha.0",
+  "version": "0.0.8-alpha.0",
   "private": false,
   "description": "Zekoder Web Components Common Library is a collection of common components for Zekoder Web Components.",
   "license": "ISC",
@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "build": "vite build",
-    "prepublishOnly": "npm install --no-cache && vite build",
+    "prepublishOnly": "vite build",
     "preview": "vite preview",
     "test": "vitest run"
   },
