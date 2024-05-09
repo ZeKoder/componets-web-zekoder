@@ -20,11 +20,8 @@ jobs:
         with:
           node-version: 18
 
-      - name: Clear cache
-        run: npm cache clean --force
-
       - name: Install dependencies
-        run: npm install --no-cache
+        run: npm install --force
 
       - name: "Version and publish" # Interesting step
         env:
