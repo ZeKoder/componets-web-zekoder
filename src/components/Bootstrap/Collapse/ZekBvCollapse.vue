@@ -85,5 +85,3 @@ export default {
   emits: ['toggle', 'rowClick', 'colClick']
 }
 </script>
-
-<style lang="scss" scoped></style>
