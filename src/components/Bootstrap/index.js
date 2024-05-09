@@ -12,6 +12,8 @@ import ZekBvForm from './Form/ZekBvForm.vue'
 import ZekBvSelect from './Select/ZekBvSelect.vue'
 import ZekBvProgressbar from './Progressbar/ZekBvProgressbar.vue'
 import ZekBvCollapse from './Collapse/ZekBvCollapse.vue'
+import ZekBvLogin from './Login/ZekBvLogin.vue'
+import ZekBvSignup from './Signup/ZekBvSignup.vue'
 
 export {
   ZekBvCheckbox,
@@ -27,7 +29,9 @@ export {
   ZekBvForm,
   ZekBvSelect,
   ZekBvProgressbar,
-  ZekBvCollapse
+  ZekBvCollapse,
+  ZekBvLogin,
+  ZekBvSignup
 }
 
 export default new Error('Only named exports are supported')
