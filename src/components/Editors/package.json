@@ -1,0 +1,36 @@
+{
+  "name": "@zekoder/zekoder-web-components-editors",
+  "version": "0.0.0",
+  "private": false,
+  "description": "Zekoder Web Components Editors Library is a collection of editors that can be used with Vue 3.",
+  "license": "ISC",
+  "author": "Zekoder",
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "*",
+    "!*.config.js",
+    "!node_modules",
+    "!dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "prepublishOnly": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "ace-builds": "^1.32.6",
+    "vue": "^3.4.15",
+    "vue3-ace-editor": "^2.2.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.3",
+    "sass": "^1.71.0",
+    "vite": "^5.0.11",
+    "vitest": "^1.0.4"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
