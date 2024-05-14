@@ -34,7 +34,7 @@
 <script>
 import { BCollapse } from 'bootstrap-vue-next'
 import ZekBvButton from '../Button/ZekBvButton.vue'
-import { ZekContainer } from '@zekoder/zekoder-web-components-common'
+import ZekContainer from '../../Common/Container/ZekContainer.vue' //FIXME - change import to npm package afrer you finish review 
 export default {
   name: 'ZekBvCollapse',
   components: {

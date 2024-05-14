@@ -40,7 +40,6 @@ export default {
         'default'
       ]
     },
-    onInput: { control: 'action', action: 'input' }, 
     onChange: { control: 'action', action: 'change' },
   }
 }
