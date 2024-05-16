@@ -1,32 +1,31 @@
-import ZekContainer from './ZekContainer.vue'
+import ZekBvOffCanvas from './ZekBvOffCanvas.vue'
 
 export default {
-  title: 'Common/ZekContainter',
-  component: ZekContainer,
-  tags: ['autodocs']
+  title: 'Bootstrap/ZekBvOffCanvas',
+  component: ZekBvOffCanvas,
+  tags: ['autodocs'],
+  argTypes: {
+    show: {
+      control: { type: 'boolean' }
+    },
+    onToggle: { control: 'action', action: 'toggle' },
+    onRowClick: { control: 'action', action: 'rowClick' },
+    onColClick: { control: 'action', action: 'colClick' }
+  }
 }
 
 const Template = (args, { argTypes }) => ({
-  components: { ZekContainer },
+  components: { ZekBvOffCanvas },
   props: Object.keys(argTypes),
   setup() {
     return { args }
   },
-  template: '<ZekContainer v-bind="args"/>'
+  template: '<ZekBvOffCanvas v-bind="args"/>'
 })
 
-export const Error = Template.bind({})
-Error.args = {
-  column: {
-    rows: [
-      {
-        columns: [{ id: 1 }]
-      }
-    ]
-  }
-}
-export const Simple = Template.bind({})
-Simple.args = {
+export const Default = Template.bind({})
+Default.args = {
+  show: true,
   column: {
     rows: [
       {

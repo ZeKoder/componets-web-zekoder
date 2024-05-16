@@ -34,8 +34,8 @@ export default {
     readonly: {
       control: { type: 'boolean' }
     },
-    onInput: { control: 'action', action: 'input' }, 
-    onChange: { control: 'action', action: 'change' },
+    onInput: { control: 'action', action: 'input' },
+    onChange: { control: 'action', action: 'change' }
   }
 }
 
@@ -49,6 +49,4 @@ const Template = (args, { argTypes }) => ({
 })
 
 export const Default = Template.bind({})
-Default.args = {
- 
-}
+Default.args = {}

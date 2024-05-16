@@ -8,7 +8,7 @@ export default {
     onBeforeLogin: { control: 'action', action: 'beforeLogin' },
     onOnLoginSuccess: { control: 'action', action: 'onLoginSuccess' },
     onOnLoginError: { control: 'action', action: 'onLoginError' },
-    onOnSocialClick: { control: 'action', action: 'onSocialClick' },
+    onOnSocialClick: { control: 'action', action: 'onSocialClick' }
   }
 }
 
@@ -23,6 +23,6 @@ const Template = (args, { argTypes }) => ({
 
 export const Default = Template.bind({})
 Default.args = {
-    loginButton: 'fit-content',
-    url: 'https://auth.dev.zekoder.net/login',
+  loginButton: 'fit-content',
+  url: 'https://auth.dev.zekoder.net/login'
 }

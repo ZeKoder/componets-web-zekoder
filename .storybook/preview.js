@@ -35,7 +35,6 @@ import DocumentationTemplate from './DocumentationTemplate.mdx';
 /** @type { import('@storybook/vue3').Preview } */
 const preview = {
   parameters: {
-    actions: { argTypesRegex: '^on[A-Z].*' },
     backgrounds: {
       default: 'Dimmed',
       values: [

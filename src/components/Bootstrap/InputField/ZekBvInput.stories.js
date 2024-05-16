@@ -23,7 +23,6 @@ export default {
         'datetime-local',
         'month',
         'week'
-
       ],
       defaultValue: 'text'
     },
@@ -68,8 +67,8 @@ export default {
     readonly: {
       control: { type: 'boolean' }
     },
-    onInput: { control: 'action', action: 'input' }, 
-    onChange: { control: 'action', action: 'change' },
+    onInput: { control: 'action', action: 'input' },
+    onChange: { control: 'action', action: 'change' }
   }
 }
 
@@ -79,7 +78,7 @@ const Template = (args, { argTypes }) => ({
   },
   props: Object.keys(argTypes),
   components: { ZekBvInput },
-  template: '<ZekBvInput v-bind="args" />' 
+  template: '<ZekBvInput v-bind="args" />'
 })
 
 export const Default = Template.bind({})

@@ -30,8 +30,7 @@
           :plain="isPlain"
           :stacked="stacked"
           :validated="valid"
-          @change="change"
-          @input="input"
+          @update:modelValue="change"
         ></b-form-radio-group>
       </b-form-group>
     </div>
@@ -51,7 +50,7 @@
         default: () => []
       },
       value: {
-        type: String,
+        type: [String, Boolean, Array, Number],
         default: ''
       },
       id: {
@@ -138,15 +137,10 @@
         validator: (value) => ['buttons', 'plain', 'default'].includes(value)
       }
     },
-    emits: ['input', 'change'],
+    emits: ['change'],
     data() {
       return {
-        selected: []
-      }
-    },
-    created() {
-      if (this.value) {
-        this.selected = this.value
+        selected: this.value
       }
     },
     computed: {
@@ -163,9 +157,6 @@
       }
     },
     methods: {
-      input(event) {
-        this.$emit('input', event)
-      },
       change(event) {
         this.$emit('change', event)
       }
