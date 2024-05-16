@@ -7,7 +7,7 @@ export default {
   argTypes: {
     height: {
       control: { type: 'text' }
-    },
+    }
   }
 }
 
@@ -22,11 +22,11 @@ const Template = (args, { argTypes }) => ({
 
 export const Default = Template.bind({})
 Default.args = {
-    value: '33.333333',
-    max: '100',
-    label: "Progress: 50%",
-    showValue: false,
-    customBar: {
-      label: `${((33.333333 / 50) * 100).toFixed(2)}%`
-    }
+  value: '33.333333',
+  max: '100',
+  label: 'Progress: 50%',
+  showValue: false,
+  customBar: {
+    label: `${((33.333333 / 50) * 100).toFixed(2)}%`
+  }
 }

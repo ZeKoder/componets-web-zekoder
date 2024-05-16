@@ -78,7 +78,7 @@ Default.args = {
         url: '#',
         tooltip: 'Settings',
         icon: 'fa fa-cog',
-        isActive: false,
+        isActive: false
       }
     ],
     // ! This should changed outside the component as it is reactive
@@ -118,17 +118,17 @@ Default.args = {
         {
           label: 'Home',
           url: '/iframe.html',
-          icon: 'fa fa-home',
+          icon: 'fa fa-home'
         },
         {
           label: 'About',
           url: '/about',
-          icon: 'fa fa-info',
+          icon: 'fa fa-info'
         },
         {
           label: 'Contact',
           url: '/contact',
-          icon: 'fa fa-phone',
+          icon: 'fa fa-phone'
         }
       ]
     },
@@ -143,12 +143,12 @@ Default.args = {
         {
           label: 'Settings',
           url: '/settings',
-          icon: 'fa fa-cog',
+          icon: 'fa fa-cog'
         },
         {
           label: 'Logout',
           url: '/logout',
-          icon: 'fa fa-arrow-left',
+          icon: 'fa fa-arrow-left'
         }
       ]
     }

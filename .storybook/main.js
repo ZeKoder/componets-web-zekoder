@@ -5,15 +5,16 @@ const config = {
     '@storybook/addon-links',
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
-    '@storybook/addon-mdx-gfm'
+    '@chromatic-com/storybook'
   ],
   framework: {
     name: '@storybook/vue3-vite',
-    options: {}
+    options: {
+      docgen: "vue-component-meta"
+    },
   },
   docs: {
-    autodocs: 'tag',
-    defaultName: 'Documentation',
+    defaultName: 'Documentation'
   },
 }
 export default config

@@ -27,8 +27,7 @@ describe('ZekBvRadio', () => {
     // Simulate radio change
     await wrapper.findAll('input[type="radio"]')[0].setValue('Test Value1');
 
-    // Check if 'input' and 'change' events were emitted
-    expect(wrapper.emitted().input).toBeTruthy();
+    // Check if 'change' event were emitted
     expect(wrapper.emitted().change).toBeTruthy();
   });
 

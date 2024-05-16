@@ -7,26 +7,17 @@ export default {
   argTypes: {
     type: {
       control: { type: 'select' },
-      options: [
-        'button',
-        'submit',
-        'reset'
-      ]
+      options: ['button', 'submit', 'reset']
     },
     styleType: {
       control: { type: 'select' },
-      options: [
-        'pill',
-        'squared',
-        'block',
-        'default'
-      ]
+      options: ['pill', 'squared', 'block', 'default']
     },
     pressed: {
       control: { type: 'boolean' }
     },
-    onClick: { control: 'action', action: 'click' }, 
-    onPressed: { control: 'action', action: 'pressed' },
+    onClick: { control: 'action', action: 'click' },
+    onPressed: { control: 'action', action: 'pressed' }
   }
 }
 
@@ -40,6 +31,4 @@ const Template = (args, { argTypes }) => ({
 })
 
 export const Default = Template.bind({})
-Default.args = {
-   
-}
+Default.args = {}
