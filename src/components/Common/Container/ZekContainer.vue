@@ -38,7 +38,7 @@
     ></component>
     <component
       v-else-if="column.component"
-      :is="getZekBVComponent(column.component) || getZekCommonComponent(column.component) || errorComponent"
+      :is="getComponent(column.component) || errorComponent"
       v-bind="column.data || {}"
       v-on="column.events || {}"
     ></component>
@@ -78,11 +78,16 @@ export default {
     }
   },
   methods: {
-    getZekBVComponent(c) {
-      return defineAsyncComponent(async () => (await import("@zekoder/zekoder-web-components-bootstrap"))[c])
-    },
-    getZekCommonComponent(c) {
-      return defineAsyncComponent(async () => (await import("@zekoder/zekoder-web-components-common"))[c])
+    getComponent(c) {
+      if (!c) return null;
+
+      // NOTE: A dictionary of components can be created to avoid multiple imports
+      let component = async () => (await import("@zekoder/zekoder-web-components-common"))[c]
+      if (c.startsWith('ZekBv')) {
+        component = async () => (await import("@zekoder/zekoder-web-components-bootstrap"))[c]
+      }
+      // FIXME: Handle if undefined
+      return defineAsyncComponent(component)
     },
     generateRandom(i) {
       i = i || 0
