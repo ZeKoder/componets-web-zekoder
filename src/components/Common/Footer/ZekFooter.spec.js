@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils';
 import ZekFooter from './ZekFooter.vue';
 import { describe, it, expect } from 'vitest';
 import ZekText from '../Text/ZekText.vue'
-import { shallowRef } from 'vue';
+import { markRaw } from 'vue';
 
 
 describe('ZekFooter', () => {
@@ -86,7 +86,7 @@ describe('ZekFooter', () => {
   it('renders native component tag with correct attributes', () => {
     const columns = [
       {
-        component: shallowRef({
+        component: markRaw({
           template: '<h1 class="component-stub" :style="style">Native Component</h1>',
           props: ['style'],
         }),
@@ -106,6 +106,7 @@ describe('ZekFooter', () => {
     });
 
     const componentTag = wrapper.find('.component-stub');
+    console.log(componentTag.attributes('style'));
     expect(componentTag.exists()).toBe(true);
     expect(componentTag.attributes('style')).toContain('color: red');
   });
@@ -113,7 +114,7 @@ describe('ZekFooter', () => {
   it('renders vue component tag with correct props', () => {
     const columns = [
       {
-        component: shallowRef(ZekText),
+        component: markRaw(ZekText),
         props: {
           text: 'text component',
           type: 'h2'
