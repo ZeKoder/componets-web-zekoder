@@ -7,7 +7,7 @@ export default {
   argTypes: {
     onOnInput: { control: 'action', action: 'onInput' },
     onOnError: { control: 'action', action: 'onError' },
-    onOnSendPrompt: { control: 'action', action: 'onSendPrompt' },
+    onOnSendPrompt: { control: 'action', action: 'onSendPrompt' }
   }
 }
 

@@ -33,14 +33,9 @@ export default {
     },
     type: {
       control: { type: 'select' },
-      options: [
-        'buttons',
-        'plain',
-        'switches',
-        'default'
-      ]
+      options: ['buttons', 'plain', 'switches', 'default']
     },
-    onChange: { control: 'action', action: 'change' },
+    onChange: { control: 'action', action: 'change' }
   }
 }
 
@@ -55,17 +50,17 @@ const Template = (args, { argTypes }) => ({
 
 export const Default = Template.bind({})
 Default.args = {
-    value: ['first'],
-    items: [
-        {text: 'First Check', value: 'first', disabled: true},
-        {text: 'Second Check', value: 'second'},
-        {text: 'Third Check', value: 'third'},
-    ],
-    // items: ['a', 'b', 'c'],
-    // size: 'md',
-    // successMessage: 'success',
-    // errorMessage: 'error',
-    // label: 'checkbox',
-    // required: true,
-    // description: 'please select two',
+  value: ['first'],
+  items: [
+    { text: 'First Check', value: 'first', disabled: true },
+    { text: 'Second Check', value: 'second' },
+    { text: 'Third Check', value: 'third' }
+  ]
+  // items: ['a', 'b', 'c'],
+  // size: 'md',
+  // successMessage: 'success',
+  // errorMessage: 'error',
+  // label: 'checkbox',
+  // required: true,
+  // description: 'please select two',
 }

@@ -5,8 +5,8 @@ export default {
   component: ZekBvDropdown,
   tags: ['autodocs'],
   argTypes: {
-    customClass: {control: { type: 'text' }},
-    customStyle: {control: { type: 'object' }},
+    customClass: { control: { type: 'text' } },
+    customStyle: { control: { type: 'object' } },
     disabled: {
       control: { type: 'boolean' }
     },
@@ -55,7 +55,7 @@ Default.args = {
       headerVariant: 'primary',
       text: 'sub action'
     },
-    {  text: 'sub action2', headerClass: 'custom' }
+    { text: 'sub action2', headerClass: 'custom' }
   ],
   variant: 'secondary',
   header: 'Dropdown header'

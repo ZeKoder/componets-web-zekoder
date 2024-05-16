@@ -10,7 +10,7 @@ export default {
     },
     onToggle: { control: 'action', action: 'toggle' },
     onRowClick: { control: 'action', action: 'rowClick' },
-    onColClick: { control: 'action', action: 'colClick' },
+    onColClick: { control: 'action', action: 'colClick' }
   }
 }
 

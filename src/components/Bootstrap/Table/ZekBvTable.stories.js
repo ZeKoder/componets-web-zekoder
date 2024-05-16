@@ -99,7 +99,7 @@ Detailed.args = {
         { value: 45 },
         { value: 12 },
         { value: 65 },
-        { html: '<a href="#">Link {{row}}</a>'}
+        { html: '<a href="#">Link {{row}}</a>' }
       ]
     }
     // Add more rows...
