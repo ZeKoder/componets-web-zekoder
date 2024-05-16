@@ -1,6 +1,5 @@
 <template>
     <div>
-      <BButton @click="showModel = !showModel" class="m-2">show </BButton> <!-- //FIXME - remove this button after you finish reviewing  -->
       <BOffcanvas
         v-model="showModel"
         :placement="placement"
@@ -30,13 +29,12 @@
   </template>
   
   <script>
-  import { BOffcanvas, BButton } from 'bootstrap-vue-next'
-  import ZekContainer from '../../Common/Container/ZekContainer.vue' //FIXME - change import to npm package afrer you finish review 
+  import { BOffcanvas } from 'bootstrap-vue-next'
+  import { ZekContainer } from '@zekoder/zekoder-web-components-common'
   export default {
     name: 'ZekBvOffCanvas',
     components: {
       BOffcanvas,
-      BButton,
       ZekContainer
     },
     props: {
