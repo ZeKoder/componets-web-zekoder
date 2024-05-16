@@ -34,6 +34,7 @@
           <ZekBvInput v-if="allowInput" v-bind="inputProps" @input="inputValue = $event"/>
           <ZekBvButton v-if="allowButton" customClass="submit-btn" v-bind="buttonProps" @click.prevent="submit" ></ZekBvButton>
         </BNavForm>
+        <!-- <ZekUserInfo v-if="userInfo" v-bind="userInfo.props || {}" v-on="userInfo.events || {}"/> -->
       </BCollapse>
     </BNavbar>
   </div>
@@ -54,6 +55,7 @@ import {
 } from 'bootstrap-vue-next'
 import ZekBvInput from '../InputField/ZekBvInput.vue'
 import ZekBvButton from '../Button/ZekBvButton.vue'
+// import ZekUserInfo from '../../Common/UserInfo/ZekUserInfo.vue' //FIXME - change to npm import
 export default {
   name: 'ZekBvNavbar',
   components: {
@@ -68,7 +70,8 @@ export default {
     BDropdownItem,
     BNavForm,
     ZekBvInput,
-    ZekBvButton
+    ZekBvButton,
+    // ZekUserInfo
   },
   props: {
     container: {
@@ -140,6 +143,10 @@ export default {
     allowButton: {
       type: Boolean,
       default: false
+    },
+    userInfo: {
+      type: Object,
+      default: () => ({})
     },
   },
   emits: ['submit'],

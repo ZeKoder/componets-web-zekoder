@@ -48,5 +48,38 @@ Default.args = {
     label: 'Search'
   },
   allowInput: true,
-  allowButton: true
+  allowButton: true,
+  userInfo: {
+    props: {
+      firstName: 'John',
+    lastName: 'Doe',
+    avatar: 'https://avatars3.githubusercontent.com/u/1234?s=460&v=4',
+    status: 'online',
+    showName: true,
+    namePosition: 'left',
+    dropdownLinks: [
+        {
+            label: 'Link 1',
+            url: 'https://google.com',
+            icon: 'fas fa-link'
+        },
+        {
+            label: 'Link 2',
+            url: 'https://google.com'
+        },
+        {
+            label: 'Link 3',
+            url: 'https://google.com'
+        }
+    ],
+    customStyle: {
+        "fontSize": "24px",
+        "textTransform": "capitalize",
+        "backgroundColor": "yellow",
+        "borderRadius": "10px",
+    },
+    dropdownCustomStyle: {
+    }
+    }
+  }
 }

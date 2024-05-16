@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
 import ZekBvProgressbar from './ZekBvProgressbar.vue';
 import { describe, it, expect, vi } from 'vitest';
-import { shallowRef } from 'vue';
+import { markRaw } from 'vue';
 
 describe('ZekBvProgressbar', () => {
   it('renders progress bar with default props', () => {
@@ -49,7 +49,7 @@ describe('ZekBvProgressbar', () => {
     const customBar = {
       class: 'custom-class',
       label: 'Custom Bar',
-      component: shallowRef({
+      component: markRaw({
         template: '<div>Custom Bar</div>'
       }),
       props: {
