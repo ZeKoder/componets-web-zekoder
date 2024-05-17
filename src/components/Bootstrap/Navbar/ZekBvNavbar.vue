@@ -34,7 +34,7 @@
           <ZekBvInput v-if="allowInput" v-bind="inputProps" @input="inputValue = $event"/>
           <ZekBvButton v-if="allowButton" customClass="submit-btn" v-bind="buttonProps" @click.prevent="submit" ></ZekBvButton>
         </BNavForm>
-        <!-- <ZekUserInfo v-if="userInfo" v-bind="userInfo.props || {}" v-on="userInfo.events || {}"/> -->
+        <ZekUserInfo v-if="userInfo" v-bind="userInfo.props || {}" v-on="userInfo.events || {}"/>
       </BCollapse>
     </BNavbar>
   </div>
@@ -55,7 +55,7 @@ import {
 } from 'bootstrap-vue-next'
 import ZekBvInput from '../InputField/ZekBvInput.vue'
 import ZekBvButton from '../Button/ZekBvButton.vue'
-// import ZekUserInfo from '../../Common/UserInfo/ZekUserInfo.vue' //FIXME - change to npm import
+import { ZekUserInfo } from '@zekoder/zekoder-web-components-common'
 export default {
   name: 'ZekBvNavbar',
   components: {
@@ -71,7 +71,7 @@ export default {
     BNavForm,
     ZekBvInput,
     ZekBvButton,
-    // ZekUserInfo
+    ZekUserInfo
   },
   props: {
     container: {
