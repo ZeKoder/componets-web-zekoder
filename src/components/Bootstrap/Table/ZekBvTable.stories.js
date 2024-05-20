@@ -5,18 +5,10 @@ export default {
   component: ZekBvTable,
   tags: ['autodocs'],
   argTypes: {
-    headers: {
-      control: { type: 'array' }
-    },
-    rawData: {
-      control: { type: 'array' }
-    },
-    data: {
-      control: { type: 'array' }
-    },
     onUpdate: { control: 'action', action: 'update' },
     onRowClick: { control: 'action', action: 'rowClick' },
-    onCellClick: { control: 'action', action: 'cellClick' }
+    onCellClick: { control: 'action', action: 'cellClick' },
+    onRowSelect: { control: 'action', action: 'rowSelect' },
   }
 }
 
@@ -41,7 +33,52 @@ Simple.args = {
       Dresses: 43,
       Bracelets: 72,
       Rings: 23
-    }
+    },
+    {
+      Country: 'Belgium',
+      City: 'Antwerp',
+      Trousers: 56,
+      Skirts: 22,
+      Dresses: 43,
+      Bracelets: 72,
+      Rings: 23
+    },
+    {
+      Country: 'Belgium',
+      City: 'Antwerp',
+      Trousers: 56,
+      Skirts: 22,
+      Dresses: 43,
+      Bracelets: 72,
+      Rings: 23
+    },
+    {
+      Country: 'Belgium',
+      City: 'Antwerp',
+      Trousers: 56,
+      Skirts: 22,
+      Dresses: 43,
+      Bracelets: 72,
+      Rings: 23
+    },
+    {
+      Country: 'Belgium',
+      City: 'Antwerp',
+      Trousers: 56,
+      Skirts: 22,
+      Dresses: 43,
+      Bracelets: 72,
+      Rings: 23
+    },
+    {
+      Country: 'Belgium',
+      City: 'Antwerp',
+      Trousers: 56,
+      Skirts: 22,
+      Dresses: 43,
+      Bracelets: 72,
+      Rings: 23
+    },
   ]
 }
 

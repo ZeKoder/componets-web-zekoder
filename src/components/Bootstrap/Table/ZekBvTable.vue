@@ -1,28 +1,37 @@
 <template>
-  <BTableSimple hover small caption-top responsive :class="tableClass">
-    <BThead head-variant="dark">
-      <BTr>
-        <BTh v-for="header in tableHeaders" :key="header.key ? header.key : header">{{
+  <BTableSimple class="zek-bv-table" hover small caption-top responsive :class="tableClass">
+    <BThead class="zek-bv-thead" head-variant="dark">
+      <BTr class="zek-bv-tr">
+        <BTd v-if="selectable" class="zek-bv-td">
+          <BFormCheckbox class="zek-bv-form-checkbox" @input="selectAll" />
+        </BTd>
+        <BTh v-for="header in tableHeaders" :key="header.key ? header.key : header" class="zek-bv-th">{{
           header.label ? header.label : header
         }}</BTh>
       </BTr>
     </BThead>
     <BTbody>
-      <BTr v-for="row in tableData" :key="row.id" @click="onRowClick(row)">
-        <CustomCell
+      <BTr v-for="(row, i) in tableData" :key="i" @click="onRowClick(row)" class="zek-bv-tr">
+        <BTd v-if="selectable" class="zek-bv-td">
+          <BFormCheckboxGroup v-model="selectedRows">
+            <BFormCheckbox :value="i" @input="onRowSelect(i, row)" class="zek-bv-form-checkbox"/>
+          </BFormCheckboxGroup>
+        </BTd>
+        <ZekBvTableCell
           v-for="(cell, cellIndex) in row.cells"
           :key="cellIndex"
           :cell="cell"
           :editable="editable"
           :row="row"
-          @cellUpdate="updateCellData(row, cellIndex, $event)"
+          @cellUpdate="updateCellData(cell, $event)"
           @click="onCellClick(row, cellIndex)"
+          class="zek-bv-table-cell"
         />
       </BTr>
     </BTbody>
     <BTfoot v-if="showFooter">
-      <BTr>
-        <BTd :colspan="tableHeaders.length" variant="secondary" class="text-end">
+      <BTr class="zek-bv-tr">
+        <BTd :colspan="tableHeaders.length" variant="secondary" class="text-end zek-bv-td">
           Total Rows: <b>{{ tableData.length }}</b>
         </BTd>
       </BTr>
@@ -31,82 +40,33 @@
 </template>
 
 <script>
-// FIXME: Move to a separate file
 // Custom Cell component 
-const CustomCell = {
-  props: {
-    cell: {
-      type: Object,
-      required: true
-    },
-    editable: {
-      type: Boolean,
-      default: false
-    },
-    row: {
-      type: Object,
-      required: true
-    }
-  },
-  data() {
-    return {
-      isEditing: false,
-      editedValue: this.cell.value
-    }
-  },
-  methods: {
-    enterEditMode() {
-      this.isEditing = true
-    },
-    exitEditMode() {
-      this.isEditing = false
-      this.$emit('cellUpdate', this.row, this.editedValue)
-    }
-  },
-  components: {
-    BTd
-  },
-  template: `
-    <BTd
-      :variant="cell.variant"
-      @click="enterEditMode"
-      v-if="!isEditing || !editable"
-    >
-      <component v-if="cell.html" :is="{props: ['row'], template: cell.html}" :row="row" />
-      <span v-else>{{ cell.value }}</span>
-    </BTd>
-    <BTd
-      :variant="cell.variant"
-      v-else
-    >
-      <input
-        class="cell-form-control"
-        type="text"
-        :value="editedValue"
-        @input="editedValue = $event.target.value"
-        @blur="exitEditMode"
-        ref="input"
-      />
-    </BTd>
-  `
-}
-import { BTableSimple, BThead, BTr, BTh, BTbody, BTfoot, BTd } from 'bootstrap-vue-next'
+import ZekBvTableCell from './ZekBvTableCell.vue'
+
+import { BTableSimple, BThead, BTr, BTh, BTbody, BTfoot, BTd, BFormCheckbox, BFormCheckboxGroup } from 'bootstrap-vue-next'
 export default {
   name: 'ZekBvTable',
+  emits: ['update', 'rowClick', 'cellClick', 'rowSelect'],
   components: {
-    CustomCell,
+    ZekBvTableCell,
     BTableSimple,
     BThead,
     BTr,
     BTh,
     BTbody,
     BTfoot,
-    BTd
+    BTd,
+    BFormCheckbox,
+    BFormCheckboxGroup
   },
   props: {
     editable: {
       type: Boolean,
       default: false
+    },
+    selectable: {
+      type: Boolean,
+      default: true
     },
     rawData: {
       type: Array,
@@ -132,7 +92,8 @@ export default {
   data() {
     return {
       tableData: this.data || [],
-      tableHeaders: this.headers || []
+      tableHeaders: this.headers || [],
+      selectedRows: []
     }
   },
   created() {
@@ -176,8 +137,8 @@ export default {
         return obj
       })
     },
-    updateCellData(row, cellIndex, newValue) {
-      row.cells[cellIndex].value = newValue
+    updateCellData(cell, newValue) {
+      cell.value = newValue
       this.$emit('update', this.convertTableDataToRawData())
     },
     onRowClick(row) {
@@ -185,6 +146,20 @@ export default {
     },
     onCellClick(row, cellIndex) {
       this.$emit('cellClick', { row, cellIndex, cell: row.cells[cellIndex] })
+    },
+    onRowSelect(rowIndex, row) {
+      console.log('Selected Rows:', this.selectedRows)
+      this.$nextTick(() => {
+        this.$emit('rowSelect', rowIndex, row, this.selectedRows)
+      })
+    },
+    selectAll(e) {
+      if (e.target.checked === false) {
+        this.selectedRows = []
+      } else {
+        this.selectedRows = this.tableData.map((_, index) => index)
+      }
+      this.$emit('rowSelect', null, null, this.selectedRows)
     }
   },
   watch: {
