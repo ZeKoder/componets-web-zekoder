@@ -20,6 +20,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "click-outside-vue3": "^4.0.1",
     "vue": "^3.4.15"
   },
   "devDependencies": {
