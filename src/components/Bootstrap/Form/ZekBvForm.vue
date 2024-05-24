@@ -28,8 +28,7 @@
               :key="resetKey"
               v-else-if="input.condition || true"
               @input="formData[input.name] = $event"
-            >
-          </component>
+            />
           </div>
         </template>
         <BFormInvalidFeedback class="col-12 mt-0 mb-3" :state="validation"> {{ errorMessage }} </BFormInvalidFeedback>
@@ -71,6 +70,10 @@ export default {
     ZekText
   },
   props: {
+    initialData: {
+      type: Object,
+      default: () => ({})
+    },
     customClass: {
       type: String,
       default: ''
@@ -147,18 +150,8 @@ export default {
       allValid: true
     }
   },
-  created() {
-    let obj = {}
-    this.inputs.forEach((input) => {
-      if (localStorage.getItem(input.save)) {
-        input.value = localStorage.getItem(input.save)
-      }
-      if (input.component != 'label' && input.value) {
-        obj[input.name] = input.value
-      }
-    })
-    this.formData = { ...obj }
-    this.defaultData = { ...obj }
+  async created() {
+    await this.init();
   },
   watch: {
     formData: {
@@ -180,6 +173,31 @@ export default {
     },
   },
     methods: {
+      async init() {
+        let obj = {}
+        const excludedComponents = ['label', 'custom', 'html'];
+        this.inputs.forEach((input) => {
+          // Retrieve saved data from localStorage
+          if (localStorage.getItem(input.save)) {
+            input.value = localStorage.getItem(input.save)
+          }
+
+          // NOTE: Form Level - Set default values for form
+          if (this.initialData[input.name]) {
+            input.value = this.initialData[input.name]
+            obj = { ...this.initialData }
+          }
+
+          //NOTE: Input Level - Set default values for inputs
+          if (!excludedComponents.includes(input.component) && input.value) {
+            obj[input.name] = input.value
+          }
+        })
+
+        // Set form data
+        this.formData = { ...obj }
+        this.defaultData = { ...obj }
+      },
       checkSpecialFields(val) {
         let check = true;
         this.inputs.forEach((input) => {

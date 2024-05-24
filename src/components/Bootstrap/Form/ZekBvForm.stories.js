@@ -23,6 +23,11 @@ const Template = (args, { argTypes }) => ({
 export const Default = Template.bind({})
 Default.args = {
   customClass: 'container bg-white p-3 rounded',
+  initialData: {
+    email: 'asd@asd.com',
+    first_name: 'John',
+    last_name: 'Doe',
+  },
   inputs: [
     {
       component: 'input',
