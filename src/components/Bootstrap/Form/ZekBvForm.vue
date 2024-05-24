@@ -14,9 +14,9 @@
       :validated="validate"
     >
     <!-- //FIXME - fix validation to hide native browser validtion styles -->
-      <div class="row form-container">
+      <div class="row form-container" :key="currentStep">
         <template v-for="input in inputs" :key="input.id">
-          <div :class="`pb-2 col-${input.width ?? 12}`">
+          <div :class="`pb-2 col-${input.width ?? 12}`" v-show="!allowSteps || (allowSteps && stepCount > 0 && input.step == currentStep)">
             <div v-if="input.component == 'custom'" :class="input.class" v-html="input.html" />
             <component
               :is="type[input.component ?? 'input']"
@@ -35,11 +35,21 @@
         <BFormValidFeedback class="col-12 mt-0 mb-3" :state="validation"> {{successMessage}} </BFormValidFeedback>
         <div class="row mx-auto form-btn-container">
           <ZekBvButton
+            v-if="allowSteps && currentStep > 1 && currentStep <= stepCount"
+            v-bind="backButton"
+            @click.prevent="onStep(false)"
+          ></ZekBvButton>
+          <ZekBvButton
+            v-if="allowSteps && currentStep < stepCount"
+            v-bind="nextButton"
+            @click.prevent="onStep(true)"
+          ></ZekBvButton>
+          <ZekBvButton
             v-bind="customButton"
-            v-if="customButton.label"
+            v-if="!allowSteps && customButton.label"
             @click.prevent="onReset(customButton.action)"
           ></ZekBvButton>
-          <ZekBvButton v-bind="submitButton"></ZekBvButton>
+          <ZekBvButton v-bind="submitButton" v-if="!allowSteps || (allowSteps && currentStep >= stepCount)"></ZekBvButton>
         </div>
       </div>
     </b-form>
@@ -70,6 +80,10 @@ export default {
     ZekText
   },
   props: {
+    allowSteps: {
+      type: Boolean,
+      default: false
+    },
     initialData: {
       type: Object,
       default: () => ({})
@@ -107,6 +121,22 @@ export default {
     validate: {
       type: Boolean,
       default: false
+    },
+    nextButton: {
+      type: Object,
+      default: () => ({
+        label: 'Next',
+        variant: 'primary',
+        customClass: 'col-auto'
+      })
+    },
+    backButton: {
+      type: Object,
+      default: () => ({
+        label: 'Back',
+        variant: 'primary',
+        customClass: 'col-auto'
+      })
     },
     submitButton: {
       type: Object,
@@ -147,7 +177,9 @@ export default {
       formData: {},
       resetKey: 0,
       defaultData: {},
-      allValid: true
+      allValid: true,
+      stepCount: 0,
+      currentStep: 1
     }
   },
   async created() {
@@ -177,9 +209,14 @@ export default {
         let obj = {}
         const excludedComponents = ['label', 'custom', 'html'];
         this.inputs.forEach((input) => {
-          // Retrieve saved data from localStorage
+          // ? Retrieve saved data from localStorage
           if (localStorage.getItem(input.save)) {
             input.value = localStorage.getItem(input.save)
+          }
+
+          // NOTE: Get step count
+          if (input.step) {
+            this.stepCount = input.step > this.stepCount ? input.step : this.stepCount
           }
 
           // NOTE: Form Level - Set default values for form
@@ -193,10 +230,17 @@ export default {
             obj[input.name] = input.value
           }
         })
-
         // Set form data
         this.formData = { ...obj }
         this.defaultData = { ...obj }
+      },
+      onStep(forward) {
+        if (forward && this.currentStep < this.stepCount) {
+          // FIXMEE - Add validation for each step
+          this.currentStep++
+        } else if (!forward && this.currentStep > 1){
+          this.currentStep--
+        }
       },
       checkSpecialFields(val) {
         let check = true;
