@@ -21,7 +21,7 @@
           v-for="(cell, cellIndex) in row.cells"
           :key="cellIndex"
           :cell="cell"
-          :editable="editable"
+          :editable="cell.editable ?? editable"
           :row="row"
           @cellUpdate="updateCellData(cell, $event)"
           @click="onCellClick(row, cellIndex)"
@@ -106,6 +106,26 @@ export default {
         this.tableHeaders = Object.keys(this.rawData[0])
       }
       this.processRawData()
+      this.processCustomHeaders()
+    },
+    processCustomHeaders() {
+      this.tableData = this.tableData.map((row) => {
+        this.tableHeaders.map((header, index) => {
+          if (header.component) {
+            row.cells[index].component = header.component
+            row.cells[index].editable = false
+          }
+          if (header.html) {
+            row.cells[index].html = header.html
+            row.cells[index].editable = false
+          }
+          if (header.function) {
+            row.cells[index].value = header.function(row.cells[index].value)
+            row.cells[index].editable = false
+          }
+        })
+        return row
+      })
     },
     processRawData() {
       if (this.rawData.length > 0 && this.data.length === 0) {
@@ -148,7 +168,6 @@ export default {
       this.$emit('cellClick', { row, cellIndex, cell: row.cells[cellIndex] })
     },
     onRowSelect(rowIndex, row) {
-      console.log('Selected Rows:', this.selectedRows)
       this.$nextTick(() => {
         this.$emit('rowSelect', rowIndex, row, this.selectedRows)
       })

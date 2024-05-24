@@ -1,5 +1,5 @@
+import { markRaw } from 'vue'
 import ZekBvTable from './ZekBvTable.vue'
-
 export default {
   title: 'Bootstrap/ZekBvTable',
   component: ZekBvTable,
@@ -143,6 +143,101 @@ Detailed.args = {
   ]
 }
 
+export const CustomHeaders = Template.bind({})
+CustomHeaders.args = {
+  headers: [
+    {
+      label: 'Country',
+      key: 'country'
+    },
+    {
+      label: 'City',
+      key: 'city'
+    },
+    {
+      label: 'Trousers',
+      key: 'trousers'
+    },
+    {
+      label: 'Skirts',
+      key: 'skirts'
+    },
+    {
+      label: 'Dresses',
+      key: 'dresses'
+    },
+    {
+      label: 'Bracelets Images',
+      key: 'bracelets',
+      html: '<a href="#">Link {{cell.value}}</a>'
+    },
+    {
+      label: 'Rings',
+      key: 'rings'
+    },
+    {
+      label: 'Price',
+      key: 'price',
+      function: (value) => `$${value}`
+    },
+    {
+      label: 'Actions',
+      key: 'null',
+      component: markRaw({
+        template: '<button @click="edit" class="btn btn-primary">Edit</button>',
+        props: ['cell', 'row'],
+        methods: {
+          edit() {
+            console.log('Current Cell', this.cell)
+            console.log('Current Row', this.row)
+          }
+        }
+      })
+    }
+  ],
+  rawData: [
+    {
+      country: 'Belgium',
+      city: 'Antwerp',
+      trousers: 56,
+      skirts: 22,
+      dresses: 43,
+      bracelets: 72,
+      price: 80,
+      rings: 23
+    },
+    {
+      country: 'Belgium',
+      city: 'Antwerp',
+      trousers: 56,
+      skirts: 22,
+      dresses: 43,
+      bracelets: 72,
+      price: 20,
+      rings: 23
+    },
+    {
+      country: 'Belgium',
+      city: 'Antwerp',
+      trousers: 56,
+      skirts: 22,
+      dresses: 43,
+      bracelets: 72,
+      price: 40,
+      rings: 23
+    },
+    {
+      country: 'Belgium',
+      city: 'Antwerp',
+      trousers: 56,
+      skirts: 22,
+      dresses: 43,
+      bracelets: 72,
+      price: 60,
+      rings: 23
+    },
+  ]
+}
 export const NoHeaders = Template.bind({})
 NoHeaders.args = {
   rawData: [
@@ -154,6 +249,33 @@ NoHeaders.args = {
       dresses: 43,
       bracelets: 72,
       rings: 23
-    }
+    },
+    {
+      country: 'Belgium',
+      city: 'Antwerp',
+      trousers: 56,
+      skirts: 22,
+      dresses: 43,
+      bracelets: 72,
+      rings: 23
+    },
+    {
+      country: 'Belgium',
+      city: 'Antwerp',
+      trousers: 56,
+      skirts: 22,
+      dresses: 43,
+      bracelets: 72,
+      rings: 23
+    },
+    {
+      country: 'Belgium',
+      city: 'Antwerp',
+      trousers: 56,
+      skirts: 22,
+      dresses: 43,
+      bracelets: 72,
+      rings: 23
+    },
   ]
 }
