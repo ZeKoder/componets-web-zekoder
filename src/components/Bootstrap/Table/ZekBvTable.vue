@@ -66,7 +66,7 @@ export default {
     },
     selectable: {
       type: Boolean,
-      default: true
+      default: false
     },
     rawData: {
       type: Array,
