@@ -44,19 +44,22 @@ const Template = (args, { argTypes }) => ({
   template: '<ZekBvDropdown v-bind="args" />'
 })
 
-export const Default = Template.bind({})
-Default.args = {
-  items: [
-    { href: '/', text: 'go to page1', disabled: true },
-    { href: '/', text: 'go to page2', variant: 'primary', divider: true },
-    { text: 'action', active: true },
-    {
-      header: 'Grouped options',
-      headerVariant: 'primary',
-      text: 'sub action'
-    },
-    { text: 'sub action2', headerClass: 'custom' }
-  ],
-  variant: 'secondary',
-  header: 'Dropdown header'
+export const Default = {
+  render: Template,
+
+  args: {
+    items: [
+      { href: '/', text: 'go to page1', disabled: true },
+      { href: '/', text: 'go to page2', variant: 'primary', divider: true },
+      { text: 'action', active: true },
+      {
+        header: 'Grouped options',
+        headerVariant: 'primary',
+        text: 'sub action'
+      },
+      { text: 'sub action2', headerClass: 'custom' }
+    ],
+    variant: 'secondary',
+    header: 'Dropdown header'
+  }
 }

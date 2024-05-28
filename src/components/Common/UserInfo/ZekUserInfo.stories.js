@@ -18,8 +18,10 @@ const Template = (args, { argTypes }) => ({
   template: '<ZekUserInfo v-bind="args" />'
 })
 
-export const Default = Template.bind({})
-Default.args = {
+export const Default = {
+  render: Template,
+
+  args: {
     firstName: 'John',
     lastName: 'Doe',
     avatar: 'https://avatars3.githubusercontent.com/u/1234?s=460&v=4',
@@ -27,26 +29,26 @@ Default.args = {
     showName: true,
     namePosition: 'left',
     dropdownLinks: [
-        {
-            label: 'Link 1',
-            url: 'https://google.com',
-            icon: 'fas fa-link'
-        },
-        {
-            label: 'Link 2',
-            url: 'https://google.com'
-        },
-        {
-            label: 'Link 3',
-            url: 'https://google.com'
-        }
+      {
+        label: 'Link 1',
+        url: 'https://google.com',
+        icon: 'fas fa-link'
+      },
+      {
+        label: 'Link 2',
+        url: 'https://google.com'
+      },
+      {
+        label: 'Link 3',
+        url: 'https://google.com'
+      }
     ],
     customStyle: {
-        "fontSize": "24px",
-        "textTransform": "capitalize",
-        "backgroundColor": "yellow",
-        "borderRadius": "10px",
+      fontSize: '24px',
+      textTransform: 'capitalize',
+      backgroundColor: 'yellow',
+      borderRadius: '10px'
     },
-    dropdownCustomStyle: {
-    }
+    dropdownCustomStyle: {}
+  }
 }

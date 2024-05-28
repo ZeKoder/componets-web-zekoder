@@ -21,37 +21,39 @@ const Template = (args, { argTypes }) => ({
   template: '<ZekBvCard v-bind="args" />'
 })
 
-export const Default = Template.bind({})
+export const Default = {
+  render: Template,
 
-Default.args = {
-  title: 'Card Title',
-  subTitle: 'Card Subtitle',
-  text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
-  imgSrc: 'https://via.placeholder.com/50',
-  imgAlt: 'Card Image',
-  imgPosition: 'bottom',
-  btnText: 'Go somewhere',
-  bgVariant: 'light',
-  header: {
-    tag: 'h1',
-    html: '<h1>aa aasasddsdasd </h1>'
-    // component: {
-    //   template: "<h1>aa zzzzz </h1>"
-    // }
-  },
-  body: {
-    title: 'Body Title',
-    subtitle: 'Body Subtitle',
-    text: 'Body Text'
-    // component: { // NOTE: replaces text
-    //   template: "<h1>aa zzzzz </h1>"
-    // }
-  },
-  footer: {
-    tag: 'h1',
-    html: '<h1>aa aasasddsdasd </h1>'
-    // component: {
-    //   template: "<h1>aa zzzzz </h1>"
-    // }
+  args: {
+    title: 'Card Title',
+    subTitle: 'Card Subtitle',
+    text: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+    imgSrc: 'https://via.placeholder.com/50',
+    imgAlt: 'Card Image',
+    imgPosition: 'bottom',
+    btnText: 'Go somewhere',
+    bgVariant: 'light',
+    header: {
+      tag: 'h1',
+      html: '<h1>aa aasasddsdasd </h1>'
+      // component: {
+      //   template: "<h1>aa zzzzz </h1>"
+      // }
+    },
+    body: {
+      title: 'Body Title',
+      subtitle: 'Body Subtitle',
+      text: 'Body Text'
+      // component: { // NOTE: replaces text
+      //   template: "<h1>aa zzzzz </h1>"
+      // }
+    },
+    footer: {
+      tag: 'h1',
+      html: '<h1>aa aasasddsdasd </h1>'
+      // component: {
+      //   template: "<h1>aa zzzzz </h1>"
+      // }
+    }
   }
 }

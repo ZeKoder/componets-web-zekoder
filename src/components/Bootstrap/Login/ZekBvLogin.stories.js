@@ -21,8 +21,11 @@ const Template = (args, { argTypes }) => ({
   template: '<ZekBvLogin v-bind="args" />'
 })
 
-export const Default = Template.bind({})
-Default.args = {
-  loginButton: 'fit-content',
-  url: 'https://auth.dev.zekoder.net/login'
+export const Default = {
+  render: Template,
+
+  args: {
+    loginButton: 'fit-content',
+    url: 'https://auth.dev.zekoder.net/login'
+  }
 }
