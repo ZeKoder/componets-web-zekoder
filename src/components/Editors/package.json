@@ -1,6 +1,6 @@
 {
   "name": "@zekoder/zekoder-web-components-editors",
-  "version": "0.0.4-alpha.0",
+  "version": "0.0.5-alpha.0",
   "private": false,
   "description": "Zekoder Web Components Editors Library is a collection of editors that can be used with Vue 3.",
   "license": "ISC",
