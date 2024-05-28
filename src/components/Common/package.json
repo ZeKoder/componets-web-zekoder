@@ -1,6 +1,6 @@
 {
   "name": "@zekoder/zekoder-web-components-common",
-  "version": "0.0.12-alpha.0",
+  "version": "0.0.13-alpha.0",
   "private": false,
   "description": "Zekoder Web Components Common Library is a collection of common components for Zekoder Web Components.",
   "license": "ISC",
