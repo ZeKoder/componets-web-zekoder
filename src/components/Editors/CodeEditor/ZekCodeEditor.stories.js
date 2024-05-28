@@ -20,5 +20,7 @@ const Template = (args, { argTypes }) => ({
   template: '<ZekCodeEditor v-bind="args" />'
 })
 
-export const Default = Template.bind({})
-Default.args = {}
+export const Default = {
+  render: Template,
+  args: {}
+}

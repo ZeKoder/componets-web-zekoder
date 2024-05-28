@@ -81,7 +81,10 @@ const Template = (args, { argTypes }) => ({
   template: '<ZekBvInput v-bind="args" />'
 })
 
-export const Default = Template.bind({})
-Default.args = {
-  type: 'text'
+export const Default = {
+  render: Template,
+
+  args: {
+    type: 'text'
+  }
 }

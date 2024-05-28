@@ -30,5 +30,7 @@ const Template = (args, { argTypes }) => ({
   template: '<ZekBvButton v-bind="args" />'
 })
 
-export const Default = Template.bind({})
-Default.args = {}
+export const Default = {
+  render: Template,
+  args: {}
+}

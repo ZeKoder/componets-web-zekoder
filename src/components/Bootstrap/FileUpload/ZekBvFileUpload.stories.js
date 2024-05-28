@@ -42,5 +42,7 @@ const Template = (args, { argTypes }) => ({
   template: '<ZekBvFileUpload v-bind="args" />'
 })
 
-export const Default = Template.bind({})
-Default.args = {}
+export const Default = {
+  render: Template,
+  args: {}
+}

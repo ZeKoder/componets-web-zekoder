@@ -45,19 +45,22 @@ const Template = (args, { argTypes }) => ({
   template: '<ZekBvRadio v-bind="args" />'
 })
 
-export const Default = Template.bind({})
-Default.args = {
-  value: 'second',
-  items: [
-    { text: 'First Check', value: 'first', disabled: true },
-    { text: 'Second Check', value: 'second' },
-    { text: 'Third Check', value: 'third' }
-  ]
-  // items: ['a', 'b', 'c'],
-  // size: 'md',
-  // successMessage: 'success',
-  // errorMessage: 'error',
-  // label: 'checkbox',
-  // required: true,
-  // description: 'please select two',
+export const Default = {
+  render: Template,
+
+  args: {
+    value: 'second',
+    items: [
+      { text: 'First Check', value: 'first', disabled: true },
+      { text: 'Second Check', value: 'second' },
+      { text: 'Third Check', value: 'third' }
+    ]
+    // items: ['a', 'b', 'c'],
+    // size: 'md',
+    // successMessage: 'success',
+    // errorMessage: 'error',
+    // label: 'checkbox',
+    // required: true,
+    // description: 'please select two',
+  }
 }
