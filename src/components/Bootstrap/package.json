@@ -1,6 +1,6 @@
 {
   "name": "@zekoder/zekoder-web-components-bootstrap",
-  "version": "0.0.12-alpha.0",
+  "version": "0.0.13-alpha.0",
   "private": false,
   "description": "Zekoder Web Components Bootstrap is a library that provides Bootstrap components for Vue 3 applications.",
   "license": "ISC",
