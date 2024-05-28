@@ -31,7 +31,7 @@
         :stacked="stacked"
         :switches="isSwitches"
         :validated="valid"
-        @update:modelValue="change"
+        @update:modelValue="input"
       ></b-form-checkbox-group>
     </b-form-group>
   </div>
@@ -138,7 +138,7 @@ export default {
       validator: (value) => ['buttons', 'plain', 'switched', 'default'].includes(value)
     }
   },
-  emits: ['change'],
+  emits: ['input'],
   data() {
     return {
       selected: this.value
@@ -161,8 +161,8 @@ export default {
     }
   },
   methods: {
-    change(event) {
-      this.$emit('change', event)
+    input(event) {
+      this.$emit('input', event)
     }
   }
 }

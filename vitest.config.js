@@ -20,7 +20,8 @@ export default mergeConfig(
       restoreMocks: true,
       coverage: {
         include: ['src/components/*'],
-        exclude: ['src/**/*.stories.js', '**/index.js']
+        exclude: ['src/**/*.stories.js', '**/index.js'],
+        ignoreEmptyLines: true
       }
     }
   })
