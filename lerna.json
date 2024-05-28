@@ -5,7 +5,7 @@
     "src/components/*"
   ],
   "npmClientArgs": [
-    "--no-cache"
+    "--cache false"
   ],
   "access": "public"
 }

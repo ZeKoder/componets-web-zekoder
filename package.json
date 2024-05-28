@@ -10,6 +10,7 @@
     "src/components/Bootstrap",
     "src/components/Common",
     "src/components/Editors",
+    "src/components/Charts",
     ""
   ],
   "scripts": {
@@ -28,6 +29,7 @@
     "@zekoder/zekoder-web-components-bootstrap": "file:src/components/Bootstrap",
     "@zekoder/zekoder-web-components-common": "file:src/components/Common",
     "ace-builds": "^1.32.6",
+    "apexcharts": "^3.49.1",
     "auth0-js": "^9.26.0",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.2",
@@ -38,6 +40,7 @@
     "vue": "^3.3.11",
     "vue-router": "^4.2.5",
     "vue3-ace-editor": "^2.2.4",
+    "vue3-apexcharts": "^1.5.2",
     "vuetify": "^3.4.10"
   },
   "devDependencies": {

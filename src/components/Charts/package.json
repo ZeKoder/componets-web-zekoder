@@ -1,0 +1,35 @@
+{
+  "name": "@zekoder/zekoder-web-components-charts",
+  "version": "0.0.0",
+  "private": false,
+  "description": "Zekoder Web Components Charts Library",
+  "license": "ISC",
+  "author": "Zekoder",
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "*",
+    "!*.config.js",
+    "!node_modules",
+    "!dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "prepublishOnly": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "apexcharts": "^3.49.1",
+    "vue": "^3.4.15",
+    "vue3-apexcharts": "^1.5.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.3",
+    "vite": "^5.0.11",
+    "vitest": "^1.0.4"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
