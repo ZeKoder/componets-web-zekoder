@@ -14,7 +14,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: fileURLToPath(new URL('./index.js', import.meta.url)),
-      name: 'zekoder-web-components-common',
+      name: 'zekoder-web-components-charts',
     },
     rollupOptions: {
       external: ['vue','vitest','vite'],
