@@ -131,3 +131,48 @@ export const Default = {
     ]
   }
 }
+
+export const WithFileUpload = {
+  render: Template,
+  args: {
+    inputs: [
+      {
+        component: 'input',
+        name: 'first_name',
+        type: 'text',
+        min: '10',
+        label: 'First name',
+        placeholder: 'Enter your first name',
+        required: true,
+        errorMessage: 'something wrong',
+        successMessage: 'looks good',
+        width: '6 mt-4'
+      },
+      {
+        component: 'input',
+        condition: false,
+        name: 'last',
+        value: 'last',
+        type: 'text',
+        min: '10',
+        label: 'First name',
+        placeholder: 'Enter your first name',
+        required: true,
+        errorMessage: 'something wrong',
+        successMessage: 'looks good',
+        width: '6 mt-4'
+      },
+      // {
+      //   component: 'upload',
+      //   name: 'image',
+      //   required: true,
+      //   uploadUrl: 'https://files.dev.zekoder.net/file',
+      //   accessToken: `Bearer ${localStorage.getItem('accessToken')}`,
+      //   label: 'Profile Image',
+      //   errorMessage: 'something wrong',
+      //   successMessage: 'looks good',
+      //   width: '12 mt-4'
+      // }
+    ]
+  }
+}
