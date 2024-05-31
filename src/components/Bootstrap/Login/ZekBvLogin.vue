@@ -65,6 +65,7 @@ export default {
       required: true
     }, //login endpoint url
     redirectUrl: String,
+    callbackUrl: String,
     styleObj: Object,
     customError: String
   },
@@ -182,6 +183,9 @@ export default {
     },
     async login(data) {
       this.$emit('beforeLogin', data)
+      if (this.redirectUrl) {
+        data['redirect_url'] = this.redirectUrl
+      }
       if (!this.email?.error && !this.password?.error) {
         try {
           if (this.webAuth) {
@@ -205,11 +209,21 @@ export default {
     },
     async defaultLogin(data) {
       const res = await axios.post(this.url, data)
-      localStorage.setItem('userInfo', JSON.stringify(res.data.user))
-      localStorage.setItem('accessToken', res.data.accessToken)
-      localStorage.setItem('refreshToken', res.data.refreshToken)
-      localStorage.setItem('expirationTime', res.data.expirationTime)
-      this.handleSuccess(res.data)
+      if (this.redirectUrl) {
+          const callbackUrl = this.callbackUrl ?? `${this.url}_callback`;
+          window.location.href = callbackUrl + '?login_temp_code=' + res.data.login_temp_code;
+          return;
+      }
+      const {user, accessToken, refreshToken, expirationTime} = res.data;
+      if (!accessToken || !refreshToken || !expirationTime) {
+          this.error = 'There was a problem logging you in, please check your username and password. If the problem persists, please contact admin';
+          throw new Error('Invalid response from server');
+      }
+      localStorage.setItem('userInfo', JSON.stringify(user));
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('expirationTime', expirationTime);
+      this.handleSuccess(res.data);
     },
     async auth0Login(data) {
       await this.webAuth.login(
