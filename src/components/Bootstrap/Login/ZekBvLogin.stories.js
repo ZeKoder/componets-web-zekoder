@@ -29,3 +29,11 @@ export const Default = {
     url: 'https://auth.dev.zekoder.net/login'
   }
 }
+export const WithRedirect = {
+  render: Template,
+  args: {
+    url: 'https://auth.dev.zekoder.net/login',
+    redirectUrl: 'https://dev.admin.zekoder.net/auth/verifysociallogin',
+    callbackUrl: 'https://auth.dev.zekoder.net/login_callback',
+  }
+};
