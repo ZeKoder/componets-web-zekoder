@@ -9,7 +9,7 @@
       v-on="customEvents"
       v-if="show"
       :key="resetKey"
-      @submit.prevent="allowSteps ? onStep(true, stepNumber+1) : onSubmit"
+      @submit.prevent="onSubmit"
       :novalidate="false"
       :validated="validate"
     >
@@ -44,12 +44,12 @@
           <ZekBvButton
             v-if="allowSteps && currentStep > 1 && currentStep <= stepCount"
             v-bind="backButton"
-            @click.prevent="onStep(false, stepNumber-1)"
+            @click.prevent="onStep(false)"
           ></ZekBvButton>
           <ZekBvButton
             v-if="allowSteps && currentStep < stepCount"
             v-bind="nextButton"
-            
+            @click.prevent="onStep(true)"
           >
           </ZekBvButton>
           <ZekBvButton
@@ -194,18 +194,11 @@ export default {
       defaultData: {},
       allValid: true,
       stepCount: 0,
-      currentStep: 1,
-      completed: false,
-      stepNumber: 0,
-      stepObj: null,
-      formSteps: this.inputs
+      currentStep: 1
     }
   },
   async created() {
     await this.init()
-    if(this.inputs && this.inputs.length) {
-            this.stepObj = { ...this.formSteps[this.stepNumber] };
-        }
   },
   watch: {
     formData: {
@@ -256,24 +249,10 @@ export default {
       this.formData = { ...obj }
       this.defaultData = { ...obj }
     },
-    onStep(forward, number) {
+    onStep(forward) {
       if (forward && this.currentStep < this.stepCount) {
         // FIXMEE - Add validation for each step
-        if(this.stepObj) {
-                this.formData[this.stepObj.name || this.stepObj.id] = this.formSteps[this.stepNumber].value || this.formSteps[this.stepNumber].initialValue;
-            }
-            this.stepNumber = number;
-            this.stepObj = { ...{}, ...this.formSteps[this.stepNumber] };
-            if(this.stepNumber<this.inputs.length) {
-                this.completed = false;
-                this.currentStep++
-                this.$emit('onStep', number);
-            } else {
-                this.completed = true;
-                this.stepObj = null;
-                this.$emit('onComplete', this.formData)
-            }
-        // this.currentStep++
+        this.currentStep++
       } else if (!forward && this.currentStep > 1) {
         this.currentStep--
       }
@@ -347,7 +326,7 @@ export default {
       } else {
         this.$emit(action, this.formData)
       }
-    },
+    }
   }
 }
 </script>

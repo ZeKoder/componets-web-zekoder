@@ -25,7 +25,6 @@ export const Default = {
 
   args: {
     customClass: 'container bg-white p-3 rounded',
-    allowSteps: true,
     inputs: [
       {
         component: 'input',
@@ -33,7 +32,6 @@ export const Default = {
         type: 'email',
         required: true,
         label: 'Enter email',
-        step: '1',
         width: 12,
         errorMessage: 'something wrong',
         successMessage: 'looks good',
@@ -45,7 +43,6 @@ export const Default = {
         name: 'first_name',
         type: 'text',
         min: '10',
-        step: '1',
         label: 'First name',
         placeholder: 'Enter your first name',
         required: true,
@@ -58,7 +55,6 @@ export const Default = {
         name: 'last_name',
         type: 'text',
         label: 'Last name',
-        step: '1',
         placeholder: 'Enter your last name',
         required: true,
         errorMessage: 'something wrong',
@@ -68,7 +64,6 @@ export const Default = {
       {
         component: 'label',
         text: 'Date of birth',
-        step: '2',
         width: 'auto mt-4'
       },
       {
@@ -76,7 +71,6 @@ export const Default = {
         name: 'date',
         type: 'date',
         required: true,
-        step: '2',
         label: '',
         width: 'auto mt-4',
         errorMessage: 'something wrong',
@@ -92,7 +86,6 @@ export const Default = {
           { value: 'female', text: 'Female' }
         ],
         required: true,
-        step: '2',
         name: 'select',
         label: 'Gender',
         errorMessage: 'something wrong',
@@ -104,7 +97,6 @@ export const Default = {
         name: 'checkbox',
         numberOfRequiredChecks: 1,
         label: 'checkbox',
-        step: '2',
         errorMessage: 'something wrong',
         successMessage: 'looks good',
         items: [
@@ -120,7 +112,6 @@ export const Default = {
         errorMessage: 'something wrong',
         successMessage: 'looks good',
         label: 'details',
-        step: '3',
         value: 'balbal',
         width: 'auto me-auto mt-4'
       },
@@ -129,7 +120,6 @@ export const Default = {
         name: 'radio',
         required: true,
         label: 'radio',
-        step: '3',
         errorMessage: 'something wrong',
         successMessage: 'looks good',
         items: [
