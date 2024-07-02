@@ -15,7 +15,7 @@
     >
       <!-- //FIXME - fix validation to hide native browser validtion styles -->
       <div class="row form-container" :key="currentStep">
-        <template v-for="input in inputs" :key="input.id">
+        <template v-for="input in currentInputs" :key="input.id">
           <div
             :class="`pb-2 col-${input.width ?? 12}`"
             v-show="!allowSteps || (allowSteps && stepCount > 0 && input.step == currentStep)"
@@ -47,19 +47,12 @@
             @click.prevent="onStep(false)"
           ></ZekBvButton>
           <ZekBvButton
-            v-if="allowSteps && currentStep < stepCount"
-            v-bind="nextButton"
-            @click.prevent="onStep(true)"
-          >
-          </ZekBvButton>
-          <ZekBvButton
             v-bind="customButton"
             v-if="!allowSteps && customButton.label"
             @click.prevent="onReset(customButton.action)"
           ></ZekBvButton>
           <ZekBvButton
-            v-bind="submitButton"
-            v-if="!allowSteps || (allowSteps && currentStep >= stepCount)"
+            v-bind="currentStep >= stepCount ? submitButton : nextButton"
           >
           </ZekBvButton>
         </div>
@@ -177,7 +170,7 @@ export default {
       default: 'Submission failed! Please try again. If the problem persists, contact support.'
     }
   },
-  emits: ['submit', 'reset', 'error'],
+  emits: ['submit', 'reset', 'error', 'step'],
   data() {
     return {
       type: {
@@ -199,6 +192,11 @@ export default {
   },
   async created() {
     await this.init()
+  },
+  computed: {
+    currentInputs() {
+      return this.allowSteps ? this.inputs.filter((input) => input.step == this.currentStep) : this.inputs
+    }
   },
   watch: {
     formData: {
@@ -251,11 +249,11 @@ export default {
     },
     onStep(forward) {
       if (forward && this.currentStep < this.stepCount) {
-        // FIXMEE - Add validation for each step
         this.currentStep++
       } else if (!forward && this.currentStep > 1) {
         this.currentStep--
       }
+      this.$emit('step', this.formData, this.currentStep)
     },
     checkSpecialFields(val) {
       let check = true
@@ -308,6 +306,10 @@ export default {
       }
     },
     async onSubmit() {
+      if(this.currentStep < this.stepCount) {
+        this.onStep(true)
+        return;
+      }
       if (!this.checkSpecialFields(this.formData)) return
       await this.uploadFiles(this.formData)
       if (this.validate) {
