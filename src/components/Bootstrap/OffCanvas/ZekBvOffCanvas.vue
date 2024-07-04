@@ -106,7 +106,7 @@
       },
       customClass: {
         type: String,
-        default: 'hii'
+        default: ''
       },
     },
     emits: ['rowClick', 'colClick', 'toggle'],

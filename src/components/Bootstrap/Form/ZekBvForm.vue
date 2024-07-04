@@ -20,7 +20,7 @@
             :class="`pb-2 col-${input.width ?? 12}`"
             v-show="!allowSteps || (allowSteps && stepCount > 0 && input.step == currentStep)"
           >
-            <div v-if="input.component == 'custom'" :class="input.class" v-html="input.html" />
+            <component v-if="input.type == 'custom' && input.component" :class="input.class" :is="input.component" v-bind="input.data || {}" v-on="input.events || {}" />
             <component
               :is="type[input.component ?? 'input']"
               :error="input.validation"

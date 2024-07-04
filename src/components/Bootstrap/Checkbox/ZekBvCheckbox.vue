@@ -135,7 +135,7 @@ export default {
     type: {
       type: String,
       default: 'default',
-      validator: (value) => ['buttons', 'plain', 'switched', 'default'].includes(value)
+      validator: (value) => ['buttons', 'plain', 'switches', 'default'].includes(value)
     }
   },
   emits: ['input'],
