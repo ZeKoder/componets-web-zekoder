@@ -170,7 +170,7 @@ export default {
       default: 'Submission failed! Please try again. If the problem persists, contact support.'
     }
   },
-  emits: ['submit', 'reset', 'error', 'step'],
+  emits: ['submit', 'reset', 'error', 'step', 'update'],
   data() {
     return {
       type: {
@@ -213,6 +213,7 @@ export default {
             }
           })
         }
+        this.$emit('update', this.formData)
       },
       deep: true
     }
