@@ -154,11 +154,11 @@ export default {
   },
   methods: {
     input(event) {
-      let value = this.type === 'number' ? parseFloat(event.target.value) : event.target.value
+      let value = this.type === 'number' ? Number(event.target.value) : event.target.value
       this.$emit('input', value)
     },
     change(event) {
-      let value = this.type === 'number' ? parseFloat(event.target.value) : event.target.value
+      let value = this.type === 'number' ? Number(event.target.value) : event.target.value
       this.$emit('change', value)
     }
   }
