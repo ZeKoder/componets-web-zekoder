@@ -17,7 +17,7 @@ describe('ZekBvSelect', () => {
   })
 
   // Test case 2: Check if emitted events work
-  it('emits input and change events when value changes', async () => {
+  it('emits event when selected changes', async () => {
     const wrapper = mount(ZekBvSelect)
 
     // Simulate dropdown change
@@ -35,7 +35,11 @@ describe('ZekBvSelect', () => {
     const wrapper = mount(ZekBvSelect, {
       props: {
         value: 'Test Value',
-        label: 'Test Label'
+        label: 'Test Label',
+        items: [
+          { value: 'Option 1', text: 'Option 1' },
+          { value: 'Test Value', text: 'Test Value' }
+        ]
       }
     })
 
@@ -43,7 +47,7 @@ describe('ZekBvSelect', () => {
     const dropdownElement = wrapper.find('select')
     expect(dropdownElement.exists()).toBe(true)
     await wrapper.vm.$nextTick()
-    expect(dropdownElement.element._value).toBe('Test Value')
+    expect(dropdownElement.element.value).toBe('Test Value')
   })
 
   // Test case 4: Check if the label has a red asterisk when required

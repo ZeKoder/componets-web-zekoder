@@ -9,6 +9,7 @@ export default {
     onReset: { control: 'action', action: 'reset' },
     onCancel: { control: 'action', action: 'cancel' },
     onStep: { control: 'action', action: 'step' },
+    onUpdate: { control: 'action', action: 'update' },
   }
 }
 
@@ -54,7 +55,7 @@ export const Default = {
       {
         component: 'input',
         name: 'last_name',
-        type: 'text',
+        type: 'number',
         label: 'Last name',
         placeholder: 'Enter your last name',
         required: true,
@@ -80,9 +81,10 @@ export const Default = {
       {
         component: 'select',
         placeholder: 'Enter your last name',
-
+        value: null,
+        multiple: false,
         items: [
-          { value: '1', text: 'Please select an option', disabled: true },
+          { value: null, text: 'Please select an option', disabled: true },
           { value: 'male', text: 'Male' },
           { value: 'female', text: 'Female' }
         ],
@@ -96,13 +98,14 @@ export const Default = {
       {
         component: 'checkbox',
         name: 'checkbox',
-        numberOfRequiredChecks: 1,
+        numberOfRequiredChecks: 2,
         label: 'checkbox',
         errorMessage: 'something wrong',
         successMessage: 'looks good',
         items: [
           { text: 'First Check', value: 'first' },
-          { text: 'Second Check', value: 'second' }
+          { text: 'Second Check', value: 'second' },
+          { text: 'third Check', value: 'third' }
         ],
         width: '12 mt-4'
       },
@@ -113,7 +116,7 @@ export const Default = {
         errorMessage: 'something wrong',
         successMessage: 'looks good',
         label: 'details',
-        value: 'balbal',
+       
         width: 'auto me-auto mt-4'
       },
       {
