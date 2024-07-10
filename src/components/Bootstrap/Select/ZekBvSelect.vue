@@ -14,7 +14,6 @@
         :id="id"
         v-model="selected"
         :options="items"
-        :value="value"
         :size="size"
         :state="error"
         :disabled="disabled"
@@ -27,8 +26,8 @@
         :selectSize="listSize"
         v-bind="customProps"
         v-on="customEvents"
+        @update:modelValue="input"
         @change="change"
-        @input="input"
       ></b-form-select>
     </b-form-group>
   </div>
@@ -126,10 +125,10 @@ export default {
       default: () => ({})
     }
   },
-  emits: ['input', 'change'],
+  emits: ['change', 'input'],
   data() {
     return {
-      selected: null
+      selected: null,
     }
   },
   created() {
@@ -140,15 +139,15 @@ export default {
   watch: {
     value(val) {
       this.selected = val
-    }
+    },
   },
   methods: {
     input(event) {
-      this.$emit('input', event.target.value)
+      this.$emit('input', event)
     },
     change(event) {
       this.$emit('change', event.target.value)
-    }
+    },
   }
 }
 </script>

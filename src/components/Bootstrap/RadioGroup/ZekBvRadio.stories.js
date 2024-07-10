@@ -32,7 +32,7 @@ export default {
       control: { type: 'select' },
       options: ['buttons', 'plain', 'default']
     },
-    onChange: { control: 'action', action: 'change' }
+    onInput: { control: 'action', action: 'input' }
   }
 }
 

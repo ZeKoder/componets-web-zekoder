@@ -14,7 +14,6 @@
           :id="id"
           v-model="selected"
           :options="items"
-          :value="value"
           :size="size"
           :state="error"
           :disabled="disabled"
