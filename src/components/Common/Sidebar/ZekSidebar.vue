@@ -39,6 +39,7 @@
         <li
           v-if="sec.title"
           class="link-container"
+          :class="sec.title.isActive ? 'active-link' : ''"
           :style="sec.title.isActive && activeColor ? { color: activeColor } : ''"
         >
           <a
@@ -46,7 +47,7 @@
             href="javascript:"
             :title="sec.title.tooltip || sec.title.label"
             class="link title"
-            @click="sec.title.isExpanded = !sec.title.isExpanded"
+            @click="expandedStatus(i)"
             :style="(sec.title.isActive || sec.title.isExpanded) && activeColor ? { color: activeColor } : ''"
           >
             <i
@@ -73,8 +74,6 @@
             :href="sec.title.url"
             :title="sec.title.tooltip || sec.title.label"
             class="link title"
-            @click.prevent="sec.title.isExpanded = !sec.title.isExpanded"
-            @click="$emit('onRoute', sec.title.url)"
             :style="sec.title.isActive && activeColor ? { color: activeColor } : ''"
           >
             <i
@@ -294,6 +293,9 @@ export default {
           })
         }
       })
+    },
+    expandedStatus(index){
+      this.$emit('expandedStatus', index)
     }
   }
 }
