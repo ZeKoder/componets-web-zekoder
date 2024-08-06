@@ -2,10 +2,10 @@
   <BCard v-bind="cardProps">
     <BCardHeader v-bind="headerProps">
       <!-- Add NavBar -->
-      <component v-if="header?.component" :is="header?.component" v-on="header?.events" />
+      <component v-if="header?.component" :is="header?.component" v-bind="header?.data" v-on="header?.events || {}" />
     </BCardHeader>
     <BCardBody v-bind="bodyProps">
-      <component v-if="body?.component" :is="body?.component" v-on="body?.events"></component>
+      <component v-if="body?.component" :is="body?.component" v-bind="body?.data" v-on="body?.events || {}"></component>
     </BCardBody>
     <BCardFooter v-bind="footerProps" />
   </BCard>
