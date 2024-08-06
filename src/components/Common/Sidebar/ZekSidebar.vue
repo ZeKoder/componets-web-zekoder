@@ -44,10 +44,10 @@
         >
           <a
             v-if="sec.links && sec.links.length"
-            href="javascript:"
+            href="#"
             :title="sec.title.tooltip || sec.title.label"
             class="link title"
-            @click="expandedStatus(i)"
+            @click.prevent="sec.title.isExpanded = !sec.title.isExpanded"
             :style="(sec.title.isActive || sec.title.isExpanded) && activeColor ? { color: activeColor } : ''"
           >
             <i
@@ -74,6 +74,7 @@
             :href="sec.title.url"
             :title="sec.title.tooltip || sec.title.label"
             class="link title"
+            @click="$emit('onRoute', sec.title.url)"
             :style="sec.title.isActive && activeColor ? { color: activeColor } : ''"
           >
             <i
@@ -293,9 +294,6 @@ export default {
           })
         }
       })
-    },
-    expandedStatus(index){
-      this.$emit('expandedStatus', index)
     }
   }
 }
