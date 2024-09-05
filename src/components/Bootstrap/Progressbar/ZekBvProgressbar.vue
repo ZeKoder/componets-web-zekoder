@@ -6,7 +6,7 @@
         :max="max"
         :height="height"
         :show-value="showValue"
-        v-bind="extraProps"
+        v-bind="customProps"
       >
          <b-progress-bar v-if="customBar" :value="value" :label="customBar.label"> <!--//NOTE - for label to render showValue should be flase  -->
           <component
@@ -63,7 +63,7 @@
               required: false,
               default: ''
           },
-          extraProps: {
+          customProps: {
               type: Object,
               required: false,
           },
