@@ -33,7 +33,7 @@
 
 <script>
 import { VAceEditor } from 'vue3-ace-editor'
-import ace from 'ace-builds'
+import { require as aceRequire, config as aceConfig  } from 'ace-builds'
 // import ZekChatPrompt from "../chat-prompt/ChatPrompt.vue";
 export default {
   name: 'ZekCodeEditor',
@@ -137,12 +137,12 @@ export default {
   },
   async created() {
     try {
-      ace.config.set('basePath', '/node_modules/ace-builds/src-noconflict')
-      ace.require(`mode-${this.language}`)
-      ace.require(`theme-${this.theme}`)
-      ace.require(`snippets/${this.language}`)
-      ace.require(`worker-${this.language}`)
-      ace.require('ext/language_tools')
+      aceConfig.set('basePath', '/node_modules/ace-builds/src-noconflict')
+      aceRequire(`mode-${this.language}`)
+      aceRequire(`theme-${this.theme}`)
+      aceRequire(`snippets/${this.language}`)
+      aceRequire(`worker-${this.language}`)
+      aceRequire('ext/language_tools')
     } catch (error) {
       console.error(error)
     }
