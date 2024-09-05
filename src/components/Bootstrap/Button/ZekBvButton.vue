@@ -19,9 +19,12 @@
     v-on="customEvents"
     @click="onClick"
     @update:pressed="onPressed"
-    >{{ label }}
-    <template v-if="customButton" #default> <span v-html="customButton"></span></template
-  ></b-button>
+    >
+    <i v-if="icon" :class="icon"></i>
+    {{ label }}
+    <template v-if="customButton" #default> <span v-html="customButton"></span></template>
+    <i v-if="trailingIcon" :class="trailingIcon"></i>
+  </b-button>
 </template>
 
 <script>
@@ -32,6 +35,14 @@ export default {
     BButton
   },
   props: {
+    icon: {
+      type: String,
+      default: ''
+    },
+    trailingIcon: {
+      type: String,
+      default: ''
+    },
     label: {
       type: String,
       default: 'Button'

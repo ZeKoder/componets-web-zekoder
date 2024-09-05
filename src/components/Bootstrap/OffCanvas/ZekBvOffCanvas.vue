@@ -19,6 +19,7 @@
         @shown="$emit('toggle', true)"
       >
         <ZekContainer
+          :key="showModel"
           :column="column"
           :customClass="containerClass"
           @rowClick="$emit('rowClick', $event)"

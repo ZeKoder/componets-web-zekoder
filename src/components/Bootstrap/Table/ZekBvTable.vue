@@ -1,5 +1,5 @@
 <template>
-  <BTableSimple class="zek-bv-table" hover small caption-top responsive :class="tableClass">
+  <BTableSimple class="zek-bv-table" :hover="hover" small caption-top responsive :class="customClass" v-bind="customProps" v-on="customEvents || {}">
     <BThead class="zek-bv-thead" head-variant="dark">
       <BTr class="zek-bv-tr">
         <BTd v-if="selectable" class="zek-bv-td">
@@ -42,7 +42,7 @@
 <script>
 // Custom Cell component 
 import ZekBvTableCell from './ZekBvTableCell.vue'
-
+import { markRaw } from 'vue';
 import { BTableSimple, BThead, BTr, BTh, BTbody, BTfoot, BTd, BFormCheckbox, BFormCheckboxGroup } from 'bootstrap-vue-next'
 export default {
   name: 'ZekBvTable',
@@ -60,6 +60,14 @@ export default {
     BFormCheckboxGroup
   },
   props: {
+    customClass: {
+      type: String,
+      default: ''
+    },
+    hover: {
+      type: Boolean,
+      default: false
+    },
     editable: {
       type: Boolean,
       default: false
@@ -84,9 +92,13 @@ export default {
       type: Boolean,
       default: false
     },
-    tableClass: {
-      type: String,
-      default: ''
+    customProps: {
+      type: Object,
+      default: () => ({})
+    },
+    customEvents: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -112,7 +124,7 @@ export default {
       this.tableData = this.tableData.map((row) => {
         this.tableHeaders.map((header, index) => {
           if (header.component) {
-            row.cells[index].component = header.component
+            row.cells[index].component = markRaw(header.component)
             row.cells[index].editable = false
           }
           if (header.html) {
@@ -140,8 +152,9 @@ export default {
           id: index,
           cells: this.tableHeaders.map((header) => {
             return {
-              value: row[header.key ? header.key : header] || '',
-              variant: 'light'
+              value: row[header.key ? header.key : header] || row,
+              variant: 'light',
+              key: header.key ? header.key : header
             }
           })
         }
@@ -162,7 +175,13 @@ export default {
       this.$emit('update', this.convertTableDataToRawData())
     },
     onRowClick(row) {
-      this.$emit('rowClick', row)
+      const data = row.cells.reduce((acc, cell) => {
+        if ('key' in cell.value) acc[cell.key] = cell.value.value
+        else
+        acc[cell.key] = cell.value
+        return acc
+      }, {})
+      this.$emit('rowClick', {...row, row: data})
     },
     onCellClick(row, cellIndex) {
       this.$emit('cellClick', { row, cellIndex, cell: row.cells[cellIndex] })
@@ -184,7 +203,7 @@ export default {
   watch: {
     rawData: {
       handler() {
-        this.processRawData()
+        this.init()
       },
       deep: true
     },
