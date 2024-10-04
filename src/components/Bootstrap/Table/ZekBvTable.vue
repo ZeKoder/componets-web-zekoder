@@ -40,7 +40,7 @@
 </template>
 
 <script>
-// Custom Cell component 
+// Custom Cell component
 import ZekBvTableCell from './ZekBvTableCell.vue'
 import { markRaw } from 'vue';
 import { BTableSimple, BThead, BTr, BTh, BTbody, BTfoot, BTd, BFormCheckbox, BFormCheckboxGroup } from 'bootstrap-vue-next'
@@ -156,7 +156,8 @@ export default {
               variant: 'light',
               key: header.key ? header.key : header
             }
-          })
+          }),
+          value: row
         }
       })
     },
@@ -175,13 +176,7 @@ export default {
       this.$emit('update', this.convertTableDataToRawData())
     },
     onRowClick(row) {
-      const data = row.cells.reduce((acc, cell) => {
-        if ('key' in cell.value) acc[cell.key] = cell.value.value
-        else
-        acc[cell.key] = cell.value
-        return acc
-      }, {})
-      this.$emit('rowClick', {...row, row: data})
+      this.$emit('rowClick', row)
     },
     onCellClick(row, cellIndex) {
       this.$emit('cellClick', { row, cellIndex, cell: row.cells[cellIndex] })
