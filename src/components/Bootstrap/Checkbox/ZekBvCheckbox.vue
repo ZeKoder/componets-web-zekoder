@@ -30,7 +30,6 @@
         :stacked="stacked"
         :switches="isSwitches"
         :validated="valid"
-        @update:modelValue="input"
       ></b-form-checkbox-group>
     </b-form-group>
   </div>
@@ -50,7 +49,7 @@ export default {
       default: () => []
     },
     value: {
-      type: Array,
+      type: [Array, String, Number, Boolean],
       default: () => []
     },
     id: {
@@ -140,8 +139,13 @@ export default {
   emits: ['input'],
   data() {
     return {
-      selected: this.value
+      selected: []
     }
+  },
+  mounted() {
+    const validOptions = this.items.map((item) => item.value)
+    // if the value is not in the options, remove it
+    this.selected = this.value.filter((item) => validOptions.includes(item))
   },
   computed: {
     isButtons() {
@@ -157,13 +161,15 @@ export default {
   watch: {
     value(val) {
       this.selected = val
+    },
+    selected(val) {
+        if (this.items.length === 1) {
+            this.$emit('input', val[0])
+            return
+        }
+        this.$emit('input', val)
     }
   },
-  methods: {
-    input(event) {
-      this.$emit('input', event)
-    }
-  }
 }
 </script>
 <style>
