@@ -21,16 +21,17 @@
             v-show="!allowSteps || (allowSteps && stepCount > 0 && input.step == currentStep)"
           >
             <component v-if="input.type == 'custom' && input.component" :class="input.class" :is="input.component" v-bind="input.data || {}" v-on="input.events || {}" />
+            <div v-else-if="input.type == 'html'" v-html="input.html"></div>
             <component
               :is="type[input.component ?? 'input']"
               :error="input.validation"
               :customClass="input.class"
-              :value="formData[input.name]"
+              :value="formData[handleFunctionInput(input).name]"
               :formID="id"
-              v-bind="input"
+              v-bind="handleFunctionInput(input)"
               :key="resetKey"
               v-else-if="input.condition ?? true"
-              @input="formData[input.name] = $event"
+              @input="formData[handleFunctionInput(input).name] = $event"
             />
           </div>
         </template>
@@ -195,7 +196,7 @@ export default {
   },
   computed: {
     currentInputs() {
-      return this.allowSteps ? this.inputs.filter((input) => input.step == this.currentStep) : this.inputs
+      return this.allowSteps ? this.inputs.filter((input) => this.handleFunctionInput(input).step == this.currentStep) : this.inputs
     }
   },
   watch: {
@@ -203,6 +204,7 @@ export default {
       handler(val) {
         if (this.validate) {
           this.inputs.forEach((input) => {
+            input = this.handleFunctionInput(input)
             if (input.type !== 'email' || input.type !== 'url') {
               input.requireValid = input.required && !val[input.name] ? false : true
             }
@@ -223,6 +225,10 @@ export default {
       let obj = {}
       const excludedComponents = ['label', 'custom', 'html']
       this.inputs.forEach((input) => {
+
+        // ? Handle function input
+        input = this.handleFunctionInput(input)
+
         // ? Retrieve saved data from localStorage
         if (localStorage.getItem(input.save)) {
           input.value = localStorage.getItem(input.save)
@@ -256,9 +262,17 @@ export default {
       }
       this.$emit('step', this.formData, this.currentStep)
     },
+    handleFunctionInput(input) {
+      if (typeof input === 'function') {
+        return input(this.formData)
+      }
+      return input
+    },
     checkSpecialFields(val) {
       let check = true
       this.inputs.forEach((input) => {
+        input = this.handleFunctionInput(input)
+
         if (input?.save) {
           localStorage.setItem(input.save, val[input.name])
         }
@@ -279,11 +293,23 @@ export default {
         if (input?.exclude) {
           delete val[input.name]
         }
+        if (input?.presist) {
+          if (!input.default) {
+            console.error('Default value is required for presist field')
+            check = false
+          }
+          val[input.name] = val[input.name] || input.default;
+        } else {
+          if (val[input.name] === undefined) {
+            delete val[input.name];
+          }
+        }
       })
       return check
     },
     async uploadFiles(formData) {
-      for (const input of this.inputs) {
+      for (let input of this.inputs) {
+        input = this.handleFunctionInput(input)
         if (input.component == 'upload' && input.uploadUrl && formData[input.name]) {
           const files = Array.from(formData[input.name].target.files)
           for (const file of files) {

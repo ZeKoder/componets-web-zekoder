@@ -1,5 +1,5 @@
 <template>
-  <div class="image-container">
+  <div class="image-container" :class="customClass">
     <a :href="link" @click.prevent="handleClick" class="image-anchor">
       <img
         v-if="!isLoading"
@@ -63,6 +63,10 @@ export default {
     showLoading: {
       type: Boolean,
       default: true
+    },
+    customClass: {
+      type: String,
+      default: ''
     },
     customStyle: {
       type: Object,
