@@ -12,7 +12,9 @@
       @click="$emit('linkClicked', {sec: sec, link: link})"
       :style="link.isActive && activeColor ? { color: activeColor } : ''"
     >
-      <a
+      <component
+        :is="linkComponent(link.url)"
+        :to="link.url"
         :href="link.url"
         :title="link.tooltip || link.label"
         class="link"
@@ -24,7 +26,7 @@
         <span v-show="link.label && !isCollapsed">
           {{ link.label }}
         </span>
-      </a>
+    </component>
       <!--TODO - apply recursivness -->
       <!-- <template v-if="link.sections && link.sections.length">
         <SectionLinks
@@ -55,6 +57,15 @@ export default {
     sec: {
       type: Object,
       default: () => ({})
+    },
+  },
+  methods: {
+    linkComponent(url) {
+        const isExternal = /^(https?:|http?:|mailto:|tel:|#)/.test(url)
+        if (isExternal) {
+            return 'a';
+        }
+        return this.$nuxt ? resolveComponent('NuxtLink') : 'router-link';
     },
   }
 }
