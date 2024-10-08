@@ -1,38 +1,19 @@
 <template>
   <div :class="customClass ? customClass + '-container' : ''">
-    <b-form
-      ref="ZekBvForm"
-      :id="id"
-      :class="customClass"
-      :style="customStyle"
-      v-bind="customProps"
-      v-on="customEvents"
-      v-if="show"
-      :key="resetKey"
-      @submit.prevent="onSubmit"
-      :novalidate="false"
-      :validated="validate"
-    >
+    <b-form ref="ZekBvForm" :id="id" :class="customClass" :style="customStyle" v-bind="customProps" v-on="customEvents"
+      v-if="show" :key="resetKey" @submit.prevent="onSubmit" :novalidate="false" :validated="validate">
       <!-- //FIXME - fix validation to hide native browser validtion styles -->
       <div class="row form-container" :key="currentStep">
         <template v-for="input in currentInputs" :key="input.id">
-          <div
-            :class="`pb-2 col-${input.width ?? 12}`"
-            v-show="!allowSteps || (allowSteps && stepCount > 0 && input.step == currentStep)"
-          >
-            <component v-if="input.type == 'custom' && input.component" :class="input.class" :is="input.component" v-bind="input.data || {}" v-on="input.events || {}" />
+          <div :class="`pb-2 col-${input.width ?? 12}`"
+            v-show="!allowSteps || (allowSteps && stepCount > 0 && input.step == currentStep)">
+            <component v-if="input.type == 'custom' && input.component" :class="input.class" :is="input.component"
+              v-bind="input.data || {}" v-on="input.events || {}" />
             <div v-else-if="input.type == 'html'" v-html="input.html"></div>
-            <component
-              :is="type[input.component ?? 'input']"
-              :error="input.validation"
-              :customClass="input.class"
-              :value="formData[handleFunctionInput(input).name]"
-              :formID="id"
-              v-bind="handleFunctionInput(input)"
-              :key="resetKey"
-              v-else-if="input.condition ?? true"
-              @input="formData[handleFunctionInput(input).name] = $event"
-            />
+            <component :is="type[input.component ?? 'input']" :error="input.validation" :customClass="input.class"
+              :value="formData[handleFunctionInput(input).name]" :formID="id" v-bind="handleFunctionInput(input)"
+              :key="resetKey" v-else-if="input.condition ?? true"
+              @input="formData[handleFunctionInput(input).name] = $event" />
           </div>
         </template>
         <BFormInvalidFeedback class="col-12 mt-0 mb-3" :state="validation">
@@ -42,19 +23,11 @@
           {{ successMessage }}
         </BFormValidFeedback>
         <div class="row mx-auto form-btn-container">
-          <ZekBvButton
-            v-if="allowSteps && currentStep > 1 && currentStep <= stepCount"
-            v-bind="backButton"
-            @click.prevent="onStep(false)"
-          ></ZekBvButton>
-          <ZekBvButton
-            v-bind="customButton"
-            v-if="!allowSteps && customButton.label"
-            @click.prevent="onReset(customButton.action)"
-          ></ZekBvButton>
-          <ZekBvButton
-            v-bind="currentStep >= stepCount ? submitButton : nextButton"
-          >
+          <ZekBvButton v-if="allowSteps && currentStep > 1 && currentStep <= stepCount" v-bind="backButton"
+            @click.prevent="onStep(false)"></ZekBvButton>
+          <ZekBvButton v-bind="customButton" v-if="!allowSteps && customButton.label"
+            @click.prevent="onReset(customButton.action)"></ZekBvButton>
+          <ZekBvButton v-bind="currentStep >= stepCount ? submitButton : nextButton">
           </ZekBvButton>
         </div>
       </div>
@@ -171,7 +144,7 @@ export default {
       default: 'Submission failed! Please try again. If the problem persists, contact support.'
     }
   },
-  emits: ['submit', 'reset', 'error', 'step', 'update'],
+  emits: ['submit', 'reset', 'error', 'step', 'update', 'loading'],
   data() {
     return {
       type: {
@@ -311,40 +284,62 @@ export default {
       for (let input of this.inputs) {
         input = this.handleFunctionInput(input)
         if (input.component == 'upload' && input.uploadUrl && formData[input.name]) {
-          const files = Array.from(formData[input.name].target.files)
-          for (const file of files) {
-            const formData = new FormData()
-            formData.append('file', file)
-            let headers = {}
-            if (input.accessToken) {
-              headers = {
-                Authorization: input.accessToken
-              }
-            }
-            const response = await fetch(input.uploadUrl, {
-              method: 'POST',
-              body: formData,
-              headers: headers
-            })
-            const data = await response.json()
-            this.formData[input.name] = data.id
+          const files = Array.isArray(formData[input.name]) ? formData[input.name] : [formData[input.name]]
+          if (input.multiple) {
+            formData[input.name] = await Promise.all(files.map((file) => this.uploadFile(file, input)))
+          } else {
+            formData[input.name] = await this.uploadFile(files[0], input)
           }
         }
       }
     },
+    async uploadFile(file, input) {
+      const formData = new FormData()
+      formData.append('file', file)
+      let headers = {}
+      if (input.secure) {
+        const accessToken = input.accessToken || 'Bearer ' + localStorage.getItem('accessToken') || null
+        if (!accessToken) {
+          console.error('No access token provided for secure upload')
+          return
+        }
+        headers = {
+          Authorization: accessToken
+        }
+      }
+      const response = await fetch(input.uploadUrl, {
+        method: 'POST',
+        body: formData,
+        headers: headers
+      })
+      const data = await response.json()
+      if (response.status >= 400) {
+        console.error(data)
+        this.$emit('error', data)
+      }
+      return data.id
+    },
     async onSubmit() {
-      if(this.currentStep < this.stepCount) {
+      if (this.currentStep < this.stepCount) {
         this.onStep(true)
         return;
       }
-      if (!this.checkSpecialFields(this.formData)) return
-      await this.uploadFiles(this.formData)
-      if (this.validate) {
-        if (this.allValid) {
+      try {
+        this.$emit('loading', true)
+        if (!this.checkSpecialFields(this.formData)) return
+        await this.uploadFiles(this.formData)
+        if (this.validate) {
+          if (this.allValid) {
+            this.$emit('submit', this.formData)
+          }
+        } else {
           this.$emit('submit', this.formData)
         }
-      } else {
-        this.$emit('submit', this.formData)
+      } catch (error) {
+        console.error(error)
+        this.$emit('error', error)
+      } finally {
+        this.$emit('loading', false)
       }
     },
     onReset(action) {
