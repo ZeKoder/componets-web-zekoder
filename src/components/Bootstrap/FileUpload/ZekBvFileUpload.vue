@@ -9,18 +9,18 @@
           <label :for="id">{{ label }}</label>
           <div v-if="allowPreview" class="file-preview-container">
             <div v-if="loading" class="loading">Loading preview...</div>
-            <div class="file-preview" v-else-if="fileUrls.length">
+            <div class="file-preview" v-else-if="currentFile">
               <button v-if="multiple" class="pagination-arrow left-arrow" @click.prevent="prevPage"
                 :disabled="currentPage === 0">
                 <i class="fa-solid fa-chevron-left"></i>
               </button>
-              <div class="file-preview-item" :title="files[currentPage].name"
+              <div class="file-preview-item" :title="currentFile?.name"
                 @click.prevent="handlePreviewClick(currentPage)">
-                <img v-if="isImage(files[currentPage])" :src="fileUrls[currentPage]" :class="imagePreviewClass"
+                <img v-if="isImage(currentFile)" :src="createObjectURL(currentFile)" :class="imagePreviewClass"
                   alt="File Preview" class="img-preview" />
                 <div v-else class="file-details">
-                  <p>{{ files[currentPage]?.name || "Couldn't Fetch File" }}</p>
-                  <p v-if="files[currentPage]?.size">{{ formatSize(files[currentPage]?.size) }}</p>
+                  <p>{{ currentFile?.name || "Couldn't Fetch File" }}</p>
+                  <p v-if="currentFile?.size">{{ formatSize(currentFile?.size) }}</p>
                 </div>
                 <button v-if="allowRemove" class="remove-file-btn" @click.prevent="removeFile(currentPage)">
                   <i :class="removeIcon"></i>
@@ -160,7 +160,6 @@ export default {
     try {
       this.loading = true;
       this.files = await this.handleFiles(this.value)
-      this.fileUrls = this.files.map(file => this.isImage(file) ? URL.createObjectURL(file) : '');
     } catch (err) {
       console.error(err);
     } finally {
@@ -171,7 +170,6 @@ export default {
     return {
       files: [],
       refreshKey: 0,
-      fileUrls: [],
       loading: false,
       errorMessage: '',
       currentPage: 0
@@ -182,11 +180,9 @@ export default {
       if (newVal) {
         this.handleFiles(newVal).then(files => {
           this.files = files;
-          this.fileUrls = files.map(file => this.isImage(file) ? URL.createObjectURL(file) : '');
         });
       } else {
         this.files = [];
-        this.fileUrls = [];
       }
     },
     files: {
@@ -211,7 +207,16 @@ export default {
       deep: true
     }
   },
+  computed: {
+    currentFile() {
+      return Array.isArray(this.files) ? this.files[this.currentPage] : this.files;
+    }
+  },
   methods: {
+    createObjectURL(file) {
+      if (!file) return;
+      return URL.createObjectURL(file);
+    },
     nextPage() {
       if (this.currentPage < this.files.length - 1) {
         this.currentPage++;
@@ -294,13 +299,10 @@ export default {
       return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
     },
     handleUpdate() {
-      this.files = this.files.length ? this.files : [];
-      this.fileUrls = this.files.map(file => this.isImage(file) ? URL.createObjectURL(file) : '');
-      this.$emit('input', this.files)
+      this.$emit('input', this.files);
     },
     removeFile(index) {
       this.files.splice(index, 1);
-      this.fileUrls.splice(index, 1);
       this.$emit('remove', index);
     },
     handlePreviewClick(i) {

@@ -301,7 +301,7 @@ export default {
         const accessToken = input.accessToken || 'Bearer ' + localStorage.getItem('accessToken') || null
         if (!accessToken) {
           console.error('No access token provided for secure upload')
-          return
+          throw new Error("No access token provided for secure upload")
         }
         headers = {
           Authorization: accessToken
@@ -315,7 +315,7 @@ export default {
       const data = await response.json()
       if (response.status >= 400) {
         console.error(data)
-        this.$emit('error', data)
+        throw new Error("Error while uploading assets", data.message)
       }
       return data.id
     },
