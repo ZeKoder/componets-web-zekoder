@@ -1,24 +1,34 @@
 <template>
-  <div class="position-relative" :class="customClass ? customClass + '-container' : ''" :key="refreshKey">
+  <div class="position-relative" :class="customClass" :style="customStyle" :key="refreshKey">
     <b-form-group :description="description" :state="error">
       <b-form-file ref="ZekBvFileUpload" :id="id" v-model="files" :accept="accept" :size="size" :state="error"
         :disabled="disabled" :directory="allowFolders" :required="required" :name="name"
-        :label-class="labelClass + (required ? ' required' : '')" :class="customClass" :style="customStyle"
-        :form="formID" :noDrop="disableDrop" :multiple="multiple" v-bind="customProps" v-on="customEvents"
-        @update:modelValue="handleUpdate">
+        :label-class="labelClass + (required ? ' required' : '')" :form="formID" :noDrop="disableDrop"
+        :multiple="multiple" v-bind="customProps" v-on="customEvents" @update:modelValue="handleUpdate">
         <template #label>
           <label :for="id">{{ label }}</label>
-          <div v-if="allowPreview" class="file-preview" @click.prevent="onPreviewClick">
+          <div v-if="allowPreview" class="file-preview-container">
             <div v-if="loading" class="loading">Loading preview...</div>
-            <div v-for="(file, index) in files" :key="index" class="file-preview-item">
-              <img v-if="isImage(file)" :src="fileUrls[index]" :class="imagePreviewClass" alt="File Preview"
-                class="img-preview" @click="handlePreviewClick" />
-              <div v-else class="file-details">
-                <p>{{ file?.name || "Couldn't Fetch File" }}</p>
-                <p v-if="file?.size">{{ formatSize(file?.size) }}</p>
+            <div class="file-preview" v-else-if="fileUrls.length">
+              <button v-if="multiple" class="pagination-arrow left-arrow" @click.prevent="prevPage"
+                :disabled="currentPage === 0">
+                <i class="fa-solid fa-chevron-left"></i>
+              </button>
+              <div class="file-preview-item" :title="files[currentPage].name"
+                @click.prevent="handlePreviewClick(currentPage)">
+                <img v-if="isImage(files[currentPage])" :src="fileUrls[currentPage]" :class="imagePreviewClass"
+                  alt="File Preview" class="img-preview" />
+                <div v-else class="file-details">
+                  <p>{{ files[currentPage]?.name || "Couldn't Fetch File" }}</p>
+                  <p v-if="files[currentPage]?.size">{{ formatSize(files[currentPage]?.size) }}</p>
+                </div>
+                <button v-if="allowRemove" class="remove-file-btn" @click.prevent="removeFile(currentPage)">
+                  <i :class="removeIcon"></i>
+                </button>
               </div>
-              <button v-if="allowRemove" class="remove-file-btn" @click.prevent="removeFile(index)">
-                <i :class="removeIcon"></i>
+              <button v-if="multiple" class="pagination-arrow right-arrow" @click.prevent="nextPage"
+                :disabled="currentPage === files.length - 1">
+                <i class="fa-solid fa-chevron-right"></i>
               </button>
             </div>
           </div>
@@ -145,10 +155,17 @@ export default {
       default: ''
     }
   },
-  emits: ['update', 'remove', 'preview'],
+  emits: ['input', 'remove', 'preview'],
   async created() {
-    this.files = await this.handleFiles(this.value)
-    this.fileUrls = this.files.map(file => this.isImage(file) ? URL.createObjectURL(file) : '');
+    try {
+      this.loading = true;
+      this.files = await this.handleFiles(this.value)
+      this.fileUrls = this.files.map(file => this.isImage(file) ? URL.createObjectURL(file) : '');
+    } catch (err) {
+      console.error(err);
+    } finally {
+      this.loading = false;
+    }
   },
   data() {
     return {
@@ -156,7 +173,8 @@ export default {
       refreshKey: 0,
       fileUrls: [],
       loading: false,
-      errorMessage: ''
+      errorMessage: '',
+      currentPage: 0
     }
   },
   watch: {
@@ -170,9 +188,40 @@ export default {
         this.files = [];
         this.fileUrls = [];
       }
+    },
+    files: {
+      handler() {
+        this.$nextTick(() => {
+          // Change Label to show number of files uploaded if multiple files are uploaded, else show the file name, if any
+          // If no files are uploaded, show the default label
+          const label = this.$el.querySelector('.input-group-text');
+          if (label) {
+            if (this.files.length > 1) {
+              label.textContent = `${this.files.length} files uploaded`;
+            } else if (this.files.length === 1) {
+              label.textContent = this.files[0].name;
+            } else {
+              label.textContent = "No file chosen";
+            }
+          }
+          // Reload the component to update the label
+          this.refreshKey++;
+        });
+      },
+      deep: true
     }
   },
   methods: {
+    nextPage() {
+      if (this.currentPage < this.files.length - 1) {
+        this.currentPage++;
+      }
+    },
+    prevPage() {
+      if (this.currentPage > 0) {
+        this.currentPage--;
+      }
+    },
     async handleFiles(files) {
       if (!files) return [];
       if (Array.isArray(files)) {
@@ -197,7 +246,6 @@ export default {
       }
     },
     async getFile(image) {
-      this.loading = true;
       const headers = {};
       const accessToken = this.accessToken || 'Bearer ' + localStorage.getItem('accessToken') || null;
       if (this.secure && accessToken) {
@@ -223,8 +271,6 @@ export default {
       } catch (err) {
         console.error(err);
         this.errorMessage = 'Failed to fetch the file';
-      } finally {
-        this.loading = false;
       }
     },
     isUrl(text) {
@@ -247,22 +293,43 @@ export default {
       const i = Math.floor(Math.log(size) / Math.log(1024));
       return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
     },
-    handleUpdate(files) {
-      this.$emit('update', files)
+    handleUpdate() {
+      this.files = this.files.length ? this.files : [];
+      this.fileUrls = this.files.map(file => this.isImage(file) ? URL.createObjectURL(file) : '');
+      this.$emit('input', this.files)
     },
     removeFile(index) {
       this.files.splice(index, 1);
       this.fileUrls.splice(index, 1);
       this.$emit('remove', index);
     },
-    handlePreviewClick() {
-      this.$emit('preview', this.files);
+    handlePreviewClick(i) {
+      this.$emit('preview', this.files[i]);
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+:deep(.form-input-file) {
+  .form-control {
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+  }
+
+  .input-group-text {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
 .required::after {
   content: '*';
   color: red;
@@ -277,11 +344,12 @@ export default {
   aspect-ratio: 1;
   border: none;
   background: none;
+  background-color: #c0c0c0;
+  border-radius: 50%;
 
   &:hover {
     cursor: pointer;
-    background-color: #c0c0c0;
-    border-radius: 50%;
+    background-color: #a0a0a0;
   }
 }
 
@@ -289,14 +357,21 @@ export default {
   width: 100%;
 }
 
-.file-preview {
+.file-preview-container {
   margin-top: 10px;
-  cursor: pointer;
+}
+
+.file-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
 .file-preview-item {
   position: relative;
   margin-bottom: 10px;
+  cursor: pointer;
 }
 
 .img-preview {
@@ -324,5 +399,18 @@ export default {
 .placeholder {
   text-align: center;
   margin-top: 10px;
+}
+
+.pagination-arrow {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  padding: 0;
+  margin: 0 10px;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.5;
+  }
 }
 </style>
