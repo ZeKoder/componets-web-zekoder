@@ -7,41 +7,75 @@
       :valid-feedback="successMessage"
       :invalid-feedback="errorMessage"
       :state="error"
-      :label-class="labelClass + (required ? ' required' : '')"
+      :label-class="labelClass"
     >
-      <b-form-input
-        ref="ZekBvInput"
-        :id="id"
-        :value="value"
-        v-model="modelValue"
-        :placeholder="placeholder"
-        :type="type"
-        :min="min"
-        :max="max"
-        :step="step"
-        :formatter="formatter"
-        :state="error"
-        :disabled="disabled"
-        :readonly="readonly"
-        :required="required"
-        :name="name"
-        :class="customClass"
-        :style="customStyle"
-        :form="formID"
-        v-bind="customProps"
-        v-on="customEvents"
-        @change="change"
-        @input="input"
-      ></b-form-input>
+      <template #label>
+        <span>{{ label }}</span>
+        <span v-if="required" class="required"></span>
+        <i
+          v-if="hint"
+          class="input-hint-icon far fa-circle-question"
+          v-b-tooltip.hover.top
+          :title="hint"
+          @click="hintClick"
+        />
+      </template>
+      <b-input-group>
+        <b-input-group-text
+          v-if="icon || leadingComponent"
+          :class="{ clickable: icon.includes('clickable') }"
+        >
+          <i v-if="icon" :class="icon" @click="iconClick"></i>
+          <template v-if="leadingComponent" #default>
+            <component v-if="leadingComponent" :is="leadingComponent" />
+          </template>
+          <component v-if="leadingComponent" :is="leadingComponent" />
+        </b-input-group-text>
+        <b-form-input
+          ref="ZekBvInput"
+          :id="id"
+          v-model="modelValue"
+          :placeholder="placeholder"
+          :type="type"
+          :min="min"
+          :max="max"
+          :step="step"
+          :formatter="formatter"
+          :state="error"
+          :disabled="disabled"
+          :readonly="readonly"
+          :required="required"
+          :name="name"
+          :class="customClass"
+          :style="customStyle"
+          :form="formID"
+          v-bind="customProps"
+          v-on="customEvents"
+          @keydown="onKeyDown"
+          @keydown.enter.exact="onEnter"
+          @update:modelValue="input"
+        ></b-form-input>
+        <b-input-group-text
+          v-if="trailingIcon || trailingComponent"
+          :class="{ clickable: trailingIcon.includes('clickable') }"
+        >
+          <i v-if="trailingIcon" :class="trailingIcon" @click="trailingIconClick"></i>
+          <template v-if="trailingComponent" #default>
+            <component :is="trailingComponent" />
+          </template>
+        </b-input-group-text>
+      </b-input-group>
     </b-form-group>
   </div>
 </template>
 <script>
-import { BFormGroup, BFormInput } from 'bootstrap-vue-next'
+import { BFormGroup, BInputGroup, BInputGroupText, BFormInput } from 'bootstrap-vue-next'
 export default {
   name: 'ZekBvInput',
   components: {
     BFormGroup,
+    BInputGroup,
+    BInputGroupText,
     BFormInput
   },
   props: {
@@ -59,7 +93,9 @@ export default {
     },
     id: {
       type: String,
-      default: Math.floor(Math.random() * 10000).toString().padStart(4, '0')
+      default: Math.floor(Math.random() * 10000)
+        .toString()
+        .padStart(4, '0')
     },
     min: {
       type: String,
@@ -79,7 +115,7 @@ export default {
     },
     formatter: {
       type: Function,
-      default: () => {}
+      default: undefined
     },
     description: {
       type: String,
@@ -124,8 +160,12 @@ export default {
     formID: {
       type: String,
       default: ''
-    }, 
+    },
     labelClass: {
+      type: String,
+      default: ''
+    },
+    hint: {
       type: String,
       default: ''
     },
@@ -137,8 +177,24 @@ export default {
       type: Object,
       default: () => ({})
     },
+    icon: {
+      type: String,
+      default: ''
+    },
+    trailingIcon: {
+      type: String,
+      default: ''
+    },
+    leadingComponent: {
+      type: [String, Object],
+      default: null
+    },
+    trailingComponent: {
+      type: [String, Object],
+      default: null
+    }
   },
-  emits: ['input', 'change'],
+  emits: ['input', 'change', 'keydown', 'enter', 'hintClick', 'iconClick', 'trailingIconClick'],
   watch: {
     value(val) {
       this.modelValue = val
@@ -154,20 +210,58 @@ export default {
   },
   methods: {
     input(event) {
-      let value = this.type === 'number' ? Number(event.target.value) : event.target.value
+      const value = this.type === 'number' ? Number(event) : event
       this.$emit('input', value)
-    },
-    change(event) {
-      let value = this.type === 'number' ? Number(event.target.value) : event.target.value
       this.$emit('change', value)
+    },
+    onKeyDown(event) {
+      this.$emit('keydown', event)
+    },
+    onEnter() {
+      this.$emit('enter', this.modelValue, event)
+    },
+    hintClick(event) {
+      this.$emit('hintClick', event)
+    },
+    iconClick(event) {
+      this.$emit('iconClick', event)
+    },
+    trailingIconClick(event) {
+      this.$emit('trailingIconClick', event)
     }
   }
 }
 </script>
-<style>
-.required::after {
-  content: '*';
-  color: red;
-  margin-left: 4px;
+
+<style scoped>
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.show-hide-password {
+  text-transform: uppercase;
+  position: absolute;
+  right: 0;
+  font-size: 12px;
+  line-height: 50px;
+}
+
+.input-hint-icon {
+  color: #999;
+  cursor: pointer;
+  height: 100%;
+  margin-left: 5px;
+}
+
+.clickable {
+  cursor: pointer;
+  &:hover {
+    filter: brightness(90%);
+  }
 }
 </style>
