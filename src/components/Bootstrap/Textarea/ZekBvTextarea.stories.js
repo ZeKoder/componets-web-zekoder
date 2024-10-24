@@ -50,5 +50,8 @@ const Template = (args, { argTypes }) => ({
 
 export const Default = {
   render: Template,
-  args: {}
+  args: {
+    min: 10,
+    max: 100,
+  }
 }
