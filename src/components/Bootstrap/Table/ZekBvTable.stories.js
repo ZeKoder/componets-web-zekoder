@@ -121,3 +121,59 @@ export const NoHeaders = {
     ]
   }
 }
+
+export const CustomHeaders = {
+  render: Template,
+
+  args: {
+    headerClass: 'text-center',
+    cellClass: 'bg-warning',
+    headers: [
+      {
+        label: 'Country',
+        key: 'country'
+      },
+      {
+        label: 'City',
+        key: 'city'
+      },
+      {
+        label: 'Trousers',
+        key: 'trousers'
+      },
+      {
+        label: 'Skirts',
+        key: 'skirts'
+      },
+      {
+        label: 'Dresses',
+        key: 'dresses'
+      },
+      {
+        label: 'Bracelets',
+        key: 'bracelets'
+      },
+      {
+        label: 'Rings',
+        key: 'rings'
+      },
+      {
+        label: 'Total',
+        headerClass: 'text-danger',
+        class: 'text-center',
+        html: "<div style='color: green'>{{ row.value.trousers + row.value.skirts + row.value.dresses + row.value.bracelets + row.value.rings }}</div>"
+      }
+    ],
+    rawData: [
+      {
+        country: 'Belgium',
+        city: 'Antwerp',
+        trousers: 56,
+        skirts: 22,
+        dresses: 43,
+        bracelets: 72,
+        rings: 23
+      }
+    ]
+  }
+}

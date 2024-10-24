@@ -1,19 +1,49 @@
 <template>
   <div :class="customClass ? customClass + '-container' : ''">
-    <b-form ref="ZekBvForm" :id="id" :class="customClass" :style="customStyle" v-bind="customProps" v-on="customEvents"
-      v-if="show" :key="resetKey" @submit.prevent="onSubmit" :novalidate="false" :validated="validate">
+    <b-form
+      ref="ZekBvForm"
+      :id="id"
+      :class="customClass"
+      :style="customStyle"
+      v-bind="customProps"
+      v-on="customEvents"
+      v-if="show"
+      :key="resetKey"
+      @submit.prevent="onSubmit"
+      :novalidate="false"
+      :validated="validate"
+    >
       <!-- //FIXME - fix validation to hide native browser validtion styles -->
       <div class="row form-container" :key="currentStep">
         <template v-for="input in currentInputs" :key="input.id">
-          <div :class="`pb-2 col-${input.width ?? 12}`"
-            v-show="!allowSteps || (allowSteps && stepCount > 0 && input.step == currentStep)">
-            <component v-if="input.type == 'custom' && input.component" :class="input.class" :is="input.component"
-              v-bind="input.data || {}" v-on="input.events || {}" />
+          <div
+            :class="`pb-2 col-${input.width ?? 12}`"
+            v-if="input.condition ?? true"
+            v-show="!allowSteps || (allowSteps && stepCount > 0 && input.step == currentStep)"
+          >
+          <!-- ? If Custom Component -->
+            <component
+              v-if="input.type == 'custom' && input.component"
+              :class="input.class"
+              :is="input.component"
+              v-bind="input.data || {}"
+              v-on="input.events || {}"
+            />
+            <!-- ? Component Type is HTML -->
+             <!-- FIXME: Requires Sanitization -->
             <div v-else-if="input.type == 'html'" v-html="input.html"></div>
-            <component :is="type[input.component ?? 'input']" :error="input.validation" :customClass="input.class"
-              :value="formData[handleFunctionInput(input).name]" :formID="id" v-bind="handleFunctionInput(input)"
-              :key="resetKey" v-else-if="input.condition ?? true"
-              @input="formData[handleFunctionInput(input).name] = $event" />
+            <!-- ? If Normal Mapped Component -->
+            <component
+              v-else
+              :is="type[input.component ?? 'input']"
+              :error="input.validation"
+              :customClass="input.class"
+              :value="formData[handleFunctionInput(input).name]"
+              :formID="id"
+              v-bind="handleFunctionInput(input)"
+              :key="resetKey"
+              @input="formData[handleFunctionInput(input).name] = $event"
+            />
           </div>
         </template>
         <BFormInvalidFeedback class="col-12 mt-0 mb-3" :state="validation">
@@ -23,11 +53,20 @@
           {{ successMessage }}
         </BFormValidFeedback>
         <div class="row mx-auto form-btn-container">
-          <ZekBvButton v-if="allowSteps && currentStep > 1 && currentStep <= stepCount" v-bind="backButton"
-            @click.prevent="onStep(false)"></ZekBvButton>
-          <ZekBvButton v-bind="customButton" v-if="!allowSteps && customButton.label"
-            @click.prevent="onReset(customButton.action)"></ZekBvButton>
-          <ZekBvButton v-bind="currentStep >= stepCount ? submitButton : nextButton">
+          <ZekBvButton
+            v-if="allowSteps && currentStep > 1 && currentStep <= stepCount"
+            v-bind="backButton"
+            @click.prevent="onStep(false)"
+          ></ZekBvButton>
+          <ZekBvButton
+            v-bind="customButton"
+            v-if="!allowSteps && customButton.label"
+            @click.prevent="onReset(customButton.action)"
+          ></ZekBvButton>
+          <ZekBvButton
+            v-bind="currentStep >= stepCount ? submitButton : nextButton"
+            @click.prevent="triggerSubmit"
+          >
           </ZekBvButton>
         </div>
       </div>
@@ -169,7 +208,9 @@ export default {
   },
   computed: {
     currentInputs() {
-      return this.allowSteps ? this.inputs.filter((input) => this.handleFunctionInput(input).step == this.currentStep) : this.inputs
+      return this.allowSteps
+        ? this.inputs.filter((input) => this.handleFunctionInput(input).step == this.currentStep)
+        : this.inputs
     }
   },
   watch: {
@@ -198,7 +239,6 @@ export default {
       let obj = {}
       const excludedComponents = ['label', 'custom', 'html']
       this.inputs.forEach((input) => {
-
         // ? Handle function input
         input = this.handleFunctionInput(input)
 
@@ -226,6 +266,10 @@ export default {
       // Set form data
       this.formData = { ...obj }
       this.defaultData = { ...obj }
+    },
+    triggerSubmit() {
+      // Trigger submit on form component
+      this.$el.querySelector('form').requestSubmit()
     },
     onStep(forward) {
       if (forward && this.currentStep < this.stepCount) {
@@ -271,10 +315,10 @@ export default {
             console.error('Default value is required for presist field')
             check = false
           }
-          val[input.name] = val[input.name] || input.default;
+          val[input.name] = val[input.name] || input.default
         } else {
           if (val[input.name] === undefined) {
-            delete val[input.name];
+            delete val[input.name]
           }
         }
       })
@@ -284,9 +328,13 @@ export default {
       for (let input of this.inputs) {
         input = this.handleFunctionInput(input)
         if (input.component == 'upload' && input.uploadUrl && formData[input.name]) {
-          const files = Array.isArray(formData[input.name]) ? formData[input.name] : [formData[input.name]]
+          const files = Array.isArray(formData[input.name])
+            ? formData[input.name]
+            : [formData[input.name]]
           if (input.multiple) {
-            formData[input.name] = await Promise.all(files.map((file) => this.uploadFile(file, input)))
+            formData[input.name] = await Promise.all(
+              files.map((file) => this.uploadFile(file, input))
+            )
           } else {
             formData[input.name] = await this.uploadFile(files[0], input)
           }
@@ -298,10 +346,11 @@ export default {
       formData.append('file', file)
       let headers = {}
       if (input.secure) {
-        const accessToken = input.accessToken || 'Bearer ' + localStorage.getItem('accessToken') || null
+        const accessToken =
+          input.accessToken || 'Bearer ' + localStorage.getItem('accessToken') || null
         if (!accessToken) {
           console.error('No access token provided for secure upload')
-          throw new Error("No access token provided for secure upload")
+          throw new Error('No access token provided for secure upload')
         }
         headers = {
           Authorization: accessToken
@@ -315,14 +364,14 @@ export default {
       const data = await response.json()
       if (response.status >= 400) {
         console.error(data)
-        throw new Error("Error while uploading assets", data.message)
+        throw new Error('Error while uploading assets', data.message)
       }
       return data.id
     },
     async onSubmit() {
       if (this.currentStep < this.stepCount) {
         this.onStep(true)
-        return;
+        return
       }
       try {
         this.$emit('loading', true)

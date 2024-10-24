@@ -5,7 +5,7 @@ const app = createApp(App)
 // BootstrapVue
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
-import BootstrapVueNextPlugin from 'bootstrap-vue-next'
+import { createBootstrap as BootstrapVueNextPlugin } from 'bootstrap-vue-next'
 
 // Vuetify (Can be lazy-loaded with vite-plugin-vuetify)
 import 'vuetify/styles'

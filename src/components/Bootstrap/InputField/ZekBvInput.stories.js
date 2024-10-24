@@ -68,7 +68,12 @@ export default {
       control: { type: 'boolean' }
     },
     onInput: { control: 'action', action: 'input' },
-    onChange: { control: 'action', action: 'change' }
+    onChange: { control: 'action', action: 'change' },
+    onKeyDown: { control: 'action', action: 'keydown' },
+    onEnter: { control: 'action', action: 'enter' },
+    onHintClick: { control: 'action', action: 'hint-click' },
+    onIconClick: { control: 'action', action: 'icon-click' },
+    onTrailingIconClick: { control: 'action', action: 'trailing-icon-click' },
   }
 }
 
@@ -85,6 +90,9 @@ export const Default = {
   render: Template,
 
   args: {
-    type: 'text'
+    type: 'number',
+    hint: 'This is hint',
+    icon: "fas fa-envelope clickable",
+    trailingIcon: "fas fa-check",
   }
 }
