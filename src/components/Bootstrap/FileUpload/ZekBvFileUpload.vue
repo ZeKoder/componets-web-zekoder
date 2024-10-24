@@ -7,7 +7,7 @@
         :multiple="multiple" v-bind="customProps" v-on="customEvents" @update:modelValue="handleUpdate">
         <template #label>
           <label :for="id">{{ label }}</label>
-          <div v-if="allowPreview" class="file-preview-container">
+          <div v-if="allowPreview" class="file-preview-container" @click.prevent>
             <div v-if="loading" class="loading">Loading preview...</div>
             <div class="file-preview" v-else-if="currentFile">
               <button v-if="multiple" class="pagination-arrow left-arrow" @click.prevent="prevPage"
