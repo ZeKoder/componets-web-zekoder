@@ -143,9 +143,20 @@ export default {
     }
   },
   mounted() {
-    const validOptions = this.items.map((item) => item.value)
     // if the value is not in the options, remove it
-    this.selected = this.value.filter((item) => validOptions.includes(item))
+    if (!this.checkValidOption(this.value)) {
+      console.warn('The value is not in the options, removing it')
+      this.$emit('input', [])
+      return
+    }
+    this.selected = Array.isArray(this.value) ? this.value : [this.value]
+  },
+  methods: {
+    checkValidOption(value) {
+      const validOptions = this.items.map((item) => item.value)
+      if (Array.isArray(value)) return value.every((val) => validOptions.includes(val))
+      return validOptions.includes(value)
+    }
   },
   computed: {
     isButtons() {
@@ -160,16 +171,18 @@ export default {
   },
   watch: {
     value(val) {
-      this.selected = val
+      if (this.checkValidOption(val)) {
+        this.selected = Array.isArray(val) ? val : [val]
+      }
     },
     selected(val) {
-        if (this.items.length === 1) {
-            this.$emit('input', val[0])
-            return
-        }
-        this.$emit('input', val)
+      if (this.items.length === 1) {
+        this.$emit('input', val[0])
+        return
+      }
+      this.$emit('input', Array.isArray(val) ? val : [val])
     }
-  },
+  }
 }
 </script>
 <style>
