@@ -1,11 +1,11 @@
 <template>
-  <BTd class="zek-table-cell" :variant="cell.variant" @click="enterEditMode" v-if="!isEditing || !editable">
+  <BTd class="zek-table-cell" :variant="cell.variant" :class="cell.class" @click="enterEditMode" v-if="!isEditing || !editable">
     <component v-if="cell.html" :is="{props: ['row', 'cell'], template: cell.html}" :row="row" :cell="cell" />
     <component v-else-if="cell.component" :is="cell.component" :cell="cell" :row="row" v-bind="cell.props || {}"
       v-on="cell.events || {}" />
     <span v-else>{{ cell.value }}</span>
   </BTd>
-  <BTd class="zek-table-cell" :variant="cell.variant" v-else>
+  <BTd class="zek-table-cell" :variant="cell.variant" :class="cell.class" v-else>
     <input class="cell-form-control" type="text" :value="editedValue" @input="handleInput" @blur="exitEditMode"
       ref="input" />
   </BTd>

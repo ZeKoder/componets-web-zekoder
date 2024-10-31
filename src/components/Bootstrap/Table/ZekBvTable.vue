@@ -3,9 +3,8 @@
     <BThead class="zek-bv-thead" head-variant="dark">
       <BTr class="zek-bv-tr">
         <BTd v-if="selectable" class="zek-bv-td">
-          <BFormCheckbox class="zek-bv-form-checkbox" @input="selectAll" />
         </BTd>
-        <BTh v-for="header in tableHeaders" :key="header.key ? header.key : header" class="zek-bv-th">{{
+        <BTh class="zek-bv-th" v-for="header in tableHeaders" :key="header.key ? header.key : header" :class="`${headerClass} ${header.headerClass}`">{{
           header.label ? header.label : header
         }}</BTh>
       </BTr>
@@ -14,7 +13,7 @@
       <BTr v-for="(row, i) in tableData" :key="i" @click="onRowClick(row)" class="zek-bv-tr">
         <BTd v-if="selectable" class="zek-bv-td">
           <BFormCheckboxGroup v-model="selectedRows">
-            <BFormCheckbox :value="i" @input="onRowSelect(i, row)" class="zek-bv-form-checkbox"/>
+            <BFormCheckbox :value="i" @update:modelValue="onRowSelect(i, row)" class="zek-bv-form-checkbox"/>
           </BFormCheckboxGroup>
         </BTd>
         <ZekBvTableCell
@@ -26,10 +25,11 @@
           @cellUpdate="updateCellData(cell, $event)"
           @click="onCellClick(row, cellIndex)"
           class="zek-bv-table-cell"
+          :class="`${cellClass} ${tableHeaders[cellIndex]?.class}`"
         />
       </BTr>
     </BTbody>
-    <BTfoot v-if="showFooter">
+    <BTfoot v-if="showFooter" :class="footerClass">
       <BTr class="zek-bv-tr">
         <BTd :colspan="tableHeaders.length" variant="secondary" class="text-end zek-bv-td">
           Total Rows: <b>{{ tableData.length }}</b>
@@ -60,6 +60,18 @@ export default {
     BFormCheckboxGroup
   },
   props: {
+    headerClass: {
+      type: String,
+      default: ''
+    },
+    cellClass: {
+      type: String,
+      default: ''
+    },
+    footerClass: {
+      type: String,
+      default: ''
+    },
     customClass: {
       type: String,
       default: ''
@@ -135,6 +147,9 @@ export default {
             row.cells[index].value = header.function(row.cells[index].value)
             row.cells[index].editable = false
           }
+          if (header.class) {
+            row.cells[index].class = header.class
+          }
         })
         return row
       })
@@ -154,7 +169,8 @@ export default {
             return {
               value: row[header.key ? header.key : header] || row,
               variant: 'light',
-              key: header.key ? header.key : header
+              key: header.key ? header.key : header,
+              class: header.class ? header.class : ''
             }
           }),
           value: row
@@ -187,7 +203,7 @@ export default {
       })
     },
     selectAll(e) {
-      if (e.target.checked === false) {
+      if (e === false) {
         this.selectedRows = []
       } else {
         this.selectedRows = this.tableData.map((_, index) => index)

@@ -12,7 +12,6 @@
       <b-form-textarea
         ref="ZekBvTextarea"
         :id="id"
-        :value="value"
         v-model="modelValue"
         :placeholder="placeholder"
         :formatter="formatter"
@@ -30,8 +29,9 @@
         :no-resize="noResize"
         v-bind="customProps"
         v-on="customEvents"
-        @change="change"
-        @input="input"
+        @keydown="onKeyDown"
+        @keydown.enter.exact="onEnter"
+        @update:modelValue="input"
       ></b-form-textarea>
     </b-form-group>
   </div>
@@ -66,7 +66,15 @@ export default {
     },
     formatter: {
       type: Function,
-      default: () => {}
+      default: undefined
+    },
+    min: {
+      type: [String, Number],
+      default: ''
+    },
+    max: {
+      type: [String, Number],
+      default: ''
     },
     description: {
       type: String,
@@ -141,7 +149,7 @@ export default {
       default: () => ({})
     }
   },
-  emits: ['input', 'change'],
+  emits: ['input', 'change', 'keydown', 'enter'],
   watch: {
     value(val) {
       this.modelValue = val
@@ -156,11 +164,33 @@ export default {
     this.modelValue = this.value
   },
   methods: {
-    input(event) {
-      this.$emit('input', event.target.value)
+    specialChecks() {
+      let check = true
+      const textarea = this.$el.querySelector('textarea')
+      // Handle min and max length in textarea
+      if (this.min || this.max) {
+        if (this.min && this.modelValue.length < this.min) {
+          textarea.setCustomValidity(`Please enter at least ${this.min} characters.`)
+          check = false
+        } else if (this.max && this.modelValue.length > this.max) {
+          textarea.setCustomValidity(`Please enter no more than ${this.max} characters.`)
+          check = false
+        } else {
+          textarea.setCustomValidity('')
+        }
+      }
+      return check
     },
-    change(event) {
-      this.$emit('change', event.target.value)
+    input(event) {
+      if (!this.specialChecks()) return
+      this.$emit('input', event)
+      this.$emit('change', event)
+    },
+    onKeyDown(event) {
+      this.$emit('keydown', event)
+    },
+    onEnter(event) {
+      this.$emit('enter', this.modelValue, event)
     }
   }
 }

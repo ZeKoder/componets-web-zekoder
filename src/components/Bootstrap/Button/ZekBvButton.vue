@@ -3,6 +3,7 @@
     :variant="variant"
     ref="ZekBvButton"
     :href="url"
+    :to="to"
     :type="type"
     :size="size"
     :disabled="disabled"
@@ -53,6 +54,10 @@ export default {
     },
     url: {
       type: String,
+      default: ''
+    },
+    to: {
+      type: [String, Object],
       default: ''
     },
     type: {

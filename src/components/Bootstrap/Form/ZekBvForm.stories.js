@@ -29,6 +29,13 @@ export const Default = {
     customClass: 'container bg-white p-3 rounded',
     inputs: [
       {
+        component: {
+          template: "<div> <h1> Hello, I'm custom component </h1> </div>"
+        },
+        type: 'custom',
+        condition: false, // Render condition should be here
+      },
+      {
         component: 'input',
         name: 'email',
         type: 'email',
@@ -38,7 +45,7 @@ export const Default = {
         errorMessage: 'something wrong',
         successMessage: 'looks good',
         placeholder: 'Enter your email',
-        description: 'please enter correct email format'
+        description: 'please enter correct email format',
       },
       {
         component: 'input',
@@ -65,7 +72,7 @@ export const Default = {
       },
       {
         component: 'label',
-        text: 'Date of birth',
+        text: 'Random Label',
         width: 'auto mt-4'
       },
       {
@@ -73,7 +80,7 @@ export const Default = {
         name: 'date',
         type: 'date',
         required: true,
-        label: '',
+        label: 'Date of Birth',
         width: 'auto mt-4',
         errorMessage: 'something wrong',
         successMessage: 'looks good'
@@ -238,7 +245,8 @@ export const WithSteps = {
         label: 'details',
         value: 'balbal',
         width: 'auto me-auto mt-4',
-        step: 3
+        step: 3,
+        min: 10
       },
       {
         component: 'radio',
