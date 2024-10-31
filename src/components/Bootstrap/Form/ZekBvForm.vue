@@ -21,7 +21,7 @@
             v-if="input.condition ?? true"
             v-show="!allowSteps || (allowSteps && stepCount > 0 && input.step == currentStep)"
           >
-          <!-- ? If Custom Component -->
+            <!-- ? If Custom Component -->
             <component
               v-if="input.type == 'custom' && input.component"
               :class="input.class"
@@ -30,19 +30,23 @@
               v-on="input.events || {}"
             />
             <!-- ? Component Type is HTML -->
-             <!-- FIXME: Requires Sanitization -->
-            <div v-else-if="input.type == 'html'" v-html="input.html"></div>
+            <!-- FIXME: Requires Sanitization -->
+            <div
+              v-else-if="input.type == 'html' && (input.condition ?? true)"
+              v-html="input.html"
+            ></div>
             <!-- ? If Normal Mapped Component -->
             <component
               v-else
               :is="type[input.component ?? 'input']"
               :error="input.validation"
               :customClass="input.class"
-              :value="formData[handleFunctionInput(input).name]"
+              :value="formData[input.name]"
               :formID="id"
-              v-bind="handleFunctionInput(input)"
+              :id="`${id}-${input.name}`"
+              v-bind="input"
               :key="resetKey"
-              @input="formData[handleFunctionInput(input).name] = $event"
+              @input="formData[input.name] = $event"
             />
           </div>
         </template>
@@ -128,6 +132,10 @@ export default {
       type: Array,
       default: () => []
     },
+    separator: {
+      type: String,
+      default: undefined
+    },
     id: {
       type: String,
       default: Math.floor(Math.random() * 10000)
@@ -210,7 +218,7 @@ export default {
     currentInputs() {
       return this.allowSteps
         ? this.inputs.filter((input) => this.handleFunctionInput(input).step == this.currentStep)
-        : this.inputs
+        : this.inputs.map((input) => this.handleFunctionInput(input))
     }
   },
   watch: {
@@ -368,6 +376,24 @@ export default {
       }
       return data.id
     },
+    constructNestedData(formData) {
+      if (!this.separator) return formData
+      const nestedData = {}
+
+      Object.keys(formData).forEach((key) => {
+        const keys = key.split(this.separator)
+        let current = nestedData
+
+        keys.forEach((k, index) => {
+          if (!current[k]) {
+            current[k] = index === keys.length - 1 ? formData[key] : {}
+          }
+          current = current[k]
+        })
+      })
+
+      return nestedData
+    },
     async onSubmit() {
       if (this.currentStep < this.stepCount) {
         this.onStep(true)
@@ -377,12 +403,13 @@ export default {
         this.$emit('loading', true)
         if (!this.checkSpecialFields(this.formData)) return
         await this.uploadFiles(this.formData)
+        const formData = this.constructNestedData(this.formData)
         if (this.validate) {
           if (this.allValid) {
-            this.$emit('submit', this.formData)
+            this.$emit('submit', formData)
           }
         } else {
-          this.$emit('submit', this.formData)
+          this.$emit('submit', formData)
         }
       } catch (error) {
         console.error(error)
