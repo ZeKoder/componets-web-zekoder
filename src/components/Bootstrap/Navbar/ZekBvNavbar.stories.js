@@ -30,10 +30,26 @@ export const Default = {
       { type: 'tab', text: 'about', href: '#', disabled: true },
       {
         type: 'dropdown',
-        text: 'lang',
+        dropdownProps: {
+          label: 'settings',
+          variant: 'danger',
+          header: 'Dropdown header',
+        },
+        dropdownEvents: {
+          select: (e, item) => {console.log('selected', item)},
+        },
         navClass: 'ms-auto',
-        href: '#',
-        options: [{ text: 'en', link: '#' }]
+        options: [
+          { href: '/', text: 'go to page1', disabled: true },
+          { href: '/', text: 'go to page2', variant: 'primary', divider: true },
+          { text: 'action', active: true },
+          {
+            header: 'Grouped options',
+            headerVariant: 'primary',
+            text: 'sub action'
+          },
+          { text: 'sub action2', headerClass: 'custom' }
+        ],
       }
     ],
     toggleable: 'sm',

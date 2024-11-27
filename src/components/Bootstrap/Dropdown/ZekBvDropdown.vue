@@ -217,7 +217,8 @@ export default {
       this.$emit('toggle', !this.show)
     },
     linkClicked(event, item) {
-      this.$emit('linkClick', event, item)
+      this.$emit('linkClick', event, item) //TODO - remove this when all components are updated to use select instead of linkClick.
+      this.$emit('select', event, item)
     },
     onClick(event) {
       this.$emit('click', event)
