@@ -18,14 +18,8 @@
       <BNavbarToggle target="nav-collapse" />
       <BCollapse id="nav-collapse" is-nav>
         <BNavbarNav v-for="(item, index) in items" :key="index" :class="item.navClass">
-          <ZekBvDropdown
-              v-if="item.type == 'dropdown'"
-              :items="item.options"
-              v-bind="item.dropdownProps"
-              v-on="item.dropdownEvents"
-            ></ZekBvDropdown>
-          <component v-else :is="tabType[item.type]" v-bind="item"
-            >{{ item.text }}
+          <component :is="tabType[item.type]" v-bind="item" v-on="item.events || {}"
+            >{{ item.type != 'dropdown' ? item.text : '' }}
           </component>
         </BNavbarNav>
         <BNavForm v-if="allowInput || allowButton" class="d-flex nav-form">
@@ -151,6 +145,7 @@ export default {
       tabType: {
         text: 'BNavText',
         tab: 'BNavItem',
+        dropdown: 'ZekBvDropdown'
       },
       inputValue: ''
     }
