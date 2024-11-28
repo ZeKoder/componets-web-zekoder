@@ -28,6 +28,8 @@ export const Default = {
       { type: 'text', text: 'navbar text' },
       { type: 'tab', text: 'home', href: '#' },
       { type: 'tab', text: 'about', href: '#', disabled: true },
+      { type: 'custom', component: 'textarea', data: {class: 'me-2 bg-light', placeholder: 'Search'}  },
+      { type: 'html', html: '<button type="submit" class="btn btn-outline-success">Search</button>' },
       {
         type: 'dropdown',
         label: 'settings',

@@ -18,7 +18,22 @@
       <BNavbarToggle target="nav-collapse" />
       <BCollapse id="nav-collapse" is-nav>
         <BNavbarNav v-for="(item, index) in items" :key="index" :class="item.navClass">
-          <component :is="tabType[item.type]" v-bind="item" v-on="item.events || {}"
+          <!-- ? If Custom Component -->
+          <component
+            v-if="item.type == 'custom' && item.component"
+            :is="item.component"
+            :class="item.class"
+            v-bind="item.data || {}"
+            v-on="item.events || {}"
+          />
+          <!-- ? Component Type is HTML -->
+          <!-- FIXME: Requires Sanitization -->
+          <div
+            v-else-if="item.type == 'html' && (item.condition ?? true)"
+            v-html="item.html"
+          ></div>
+          <!-- ? If Normal Mapped Component -->
+          <component v-else :is="tabType[item.type]" v-bind="item" v-on="item.events || {}"
             >{{ item.type != 'dropdown' ? item.text : '' }}
           </component>
         </BNavbarNav>
