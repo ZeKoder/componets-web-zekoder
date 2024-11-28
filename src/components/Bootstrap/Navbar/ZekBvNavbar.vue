@@ -18,16 +18,23 @@
       <BNavbarToggle target="nav-collapse" />
       <BCollapse id="nav-collapse" is-nav>
         <BNavbarNav v-for="(item, index) in items" :key="index" :class="item.navClass">
-          <component :is="tabType[item.type]" v-bind="item"
+          <!-- ? If Custom Component -->
+          <component
+            v-if="item.type == 'custom' && item.component"
+            :is="item.component"
+            :class="item.class"
+            v-bind="item.data || {}"
+            v-on="item.events || {}"
+          />
+          <!-- ? Component Type is HTML -->
+          <!-- FIXME: Requires Sanitization -->
+          <div
+            v-else-if="item.type == 'html' && (item.condition ?? true)"
+            v-html="item.html"
+          ></div>
+          <!-- ? If Normal Mapped Component -->
+          <component v-else :is="tabType[item.type]" v-bind="item" v-on="item.events || {}"
             >{{ item.type != 'dropdown' ? item.text : '' }}
-            <template v-if="item.type == 'dropdown'"
-              ><BDropdownItem
-                v-for="(option, index) in item.options"
-                :key="index"
-                :href="option.link"
-                >{{ option.text }}</BDropdownItem
-              ></template
-            >
           </component>
         </BNavbarNav>
         <BNavForm v-if="allowInput || allowButton" class="d-flex nav-form">
@@ -49,13 +56,12 @@ import {
   BNavItem,
   BNavText,
   BCollapse,
-  BNavItemDropdown,
-  BDropdownItem,
   BNavForm,
 } from 'bootstrap-vue-next'
 import ZekBvInput from '../InputField/ZekBvInput.vue'
 import ZekBvButton from '../Button/ZekBvButton.vue'
 import { ZekUserInfo } from '@zekoder/zekoder-web-components-common'
+import ZekBvDropdown from '../Dropdown/ZekBvDropdown.vue'
 export default {
   name: 'ZekBvNavbar',
   components: {
@@ -66,12 +72,11 @@ export default {
     BNavText,
     BNavbarNav,
     BCollapse,
-    BNavItemDropdown,
-    BDropdownItem,
     BNavForm,
     ZekBvInput,
     ZekBvButton,
-    ZekUserInfo
+    ZekUserInfo,
+    ZekBvDropdown
   },
   props: {
     container: {
@@ -155,7 +160,7 @@ export default {
       tabType: {
         text: 'BNavText',
         tab: 'BNavItem',
-        dropdown: 'BNavItemDropdown'
+        dropdown: 'ZekBvDropdown'
       },
       inputValue: ''
     }

@@ -28,12 +28,28 @@ export const Default = {
       { type: 'text', text: 'navbar text' },
       { type: 'tab', text: 'home', href: '#' },
       { type: 'tab', text: 'about', href: '#', disabled: true },
+      { type: 'custom', component: 'textarea', data: {class: 'me-2 bg-light', placeholder: 'Search'}  },
+      { type: 'html', html: '<button type="submit" class="btn btn-outline-success">Search</button>' },
       {
         type: 'dropdown',
-        text: 'lang',
-        navClass: 'ms-auto',
-        href: '#',
-        options: [{ text: 'en', link: '#' }]
+        label: 'settings',
+        variant: 'danger',
+        header: 'Dropdown header',
+        events: {
+          select: (e, item) => {console.log('selected', item)},
+        },
+        navClass: 'ms-auto me-3',
+        items: [
+          { href: '/', text: 'go to page1', disabled: true },
+          { href: '/', text: 'go to page2', variant: 'primary', divider: true },
+          { text: 'action', active: true },
+          {
+            header: 'Grouped options',
+            headerVariant: 'primary',
+            text: 'sub action'
+          },
+          { text: 'sub action2', headerClass: 'custom' }
+        ],
       }
     ],
     toggleable: 'sm',
