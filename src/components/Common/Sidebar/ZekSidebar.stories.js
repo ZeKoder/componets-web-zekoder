@@ -72,24 +72,48 @@ export const Default = {
   render: Template,
 
   args: {
-    title: 'Zekoder',
+    title: {
+      label: 'Zekoder'
+    },
+    collapsed: true,
     footer: {
-      links: [
-        {
-          label: 'Settings',
-          url: '#',
-          tooltip: 'Settings',
-          icon: 'fa fa-cog',
-          isActive: false
-        }
-      ],
-      // ! This should changed outside the component as it is reactive
+      class: 'rounded p-1',
+      style: {
+        backgroundColor: 'black',
+        height: '40px',
+        textAlign: 'center'
+      },
+      // links: [
+      //   {
+      //     label: 'Settings',
+      //     url: '#',
+      //     tooltip: 'Settings',
+      //     icon: 'fa fa-cog',
+      //     isActive: false
+      //   }
+      // ],
       darkmode: {
         enabled: false,
-        backgroundColor: '#000',
-        icon: 'fa fa-moon',
-        iconColor: 'yellow',
-        circleColor: '#fff'
+        class: 'darkmode rounded-0 h-100 w-auto d-block',
+        left: {
+          backgroundColor: 'transparent',
+          class: 'w-50 text-center',
+          icon: 'fa fa-moon fs-5',
+          color: 'lightgrey',
+          activeColor: 'white'
+        },
+        right: {
+          backgroundColor: 'transparent',
+          icon: 'fa fa-sun fs-5',
+          color: 'lightgrey',
+          class: 'w-50 text-center',
+          activeColor: 'white'
+        },
+        toggle: {
+          class: 'rounded w-50 h-100 p-1 text-center',
+          color: 'lightgrey',
+          activeColor: 'lightgrey'
+        }
       }
     },
     expandIcon: {
