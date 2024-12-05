@@ -14,7 +14,6 @@
         <div :title="isCollapsed ? 'Expand' : 'Collapse'" class="link sidebar-title-link">
           <ZekLink
             :link="title"
-            :activeColor="activeColor"
             :isCollapsed="isCollapsed"
             :collapsedWidth="collapsedWidth"
           />
@@ -43,7 +42,7 @@
 
       <!-- SECTION: Groups of Link (treated as a section) -->
       <div
-        v-for="(sec, i) in sections"
+        v-for="(sec, i) in localSections"
         :key="i + sec?.title"
         class="section-container"
         :class="sec.class"
@@ -55,27 +54,10 @@
         </div>
 
         <!-- SECTION:  Section Title -->
-        <li
-          v-if="sec.title"
-          class="link-container"
-          :class="sec.title.isActive ? 'active-link' : ''"
-          :style="sec.title.isActive && activeColor ? { color: activeColor } : ''"
-        >
-          <!-- TODO: Check why we inforce "#" here -->
+        <li v-if="sec.title">
           <ZekLink
-            v-if="sec.links && sec.links.length"
-            class="title"
-            :link="{ ...sec.title, url: '#' }"
-            :activeColor="activeColor"
-            :isCollapsed="isCollapsed"
-            :collapsedWidth="collapsedWidth"
-            @click.prevent="sec.title.isExpanded = !sec.title.isExpanded"
-          />
-          <ZekLink
-            v-else
-            class="title"
-            :link="sec.title"
-            :activeColor="activeColor"
+            class="link-container"
+            :link="{...sec.title, isTitle: sec.links.length !== 0}"
             :isCollapsed="isCollapsed"
             :collapsedWidth="collapsedWidth"
             @click.prevent="sec.title.isExpanded = !sec.title.isExpanded"
@@ -84,17 +66,17 @@
 
         <!-- SECTION: Content of the Section -->
         <section
-          v-show="sec.title ? sec.title.isExpanded : true"
-          :class="!isCollapsed && sec.title ? 'nested' : ''"
-          :style="isCollapsed ? '' : sec.style"
+          v-show="sec.links.length && sec.title.isExpanded"
+          class="section-links nested"
+          :class="isCollapsed ? 'collapsed' : ''"
         >
           <ZekLink
             v-for="(link, i) in sec.links"
             :key="i"
-            class="link-container link-container-child"
+            class="link-container link-container-child nested-link"
+            :class="{ 'collapsed': isCollapsed }"
             @click="$emit('linkClicked', { sec: sec, link: link })"
             :link="link"
-            :activeColor="activeColor"
             :isCollapsed="isCollapsed"
             :collapsedWidth="collapsedWidth"
           />
@@ -122,7 +104,6 @@
           v-for="(link, i) in footer.links"
           :key="i"
           :link="link"
-          :activeColor="activeColor"
           :isCollapsed="isCollapsed"
           :collapsedWidth="collapsedWidth"
         />
@@ -135,8 +116,8 @@
         :class="darkmode.class"
         :style="{
           backgroundColor: isDarkModeEnabled
-            ? darkmode.right.backgroundColor
-            : darkmode.left.backgroundColor
+            ? darkmode.right?.backgroundColor
+            : darkmode.left?.backgroundColor
         }"
       >
         <input
@@ -148,40 +129,40 @@
         <div class="darkmode-toggle" :class="darkmode.class" :style="darkmode.style">
           <div
             class="icon-container left"
-            :class="`${darkmode.left.class}`"
+            :class="`${darkmode.left?.class}`"
             :style="{
-              color: !isDarkModeEnabled ? darkmode.left.activeColor : darkmode.left.color,
-              ...darkmode.left.style
+              color: !isDarkModeEnabled ? darkmode.left?.activeColor : darkmode.left?.color,
+              ...darkmode.left?.style
             }"
           >
-            <i v-if="darkmode.left.icon" class="left-icon" :class="`${darkmode.left.icon}`" />
+            <i v-if="darkmode.left?.icon" class="left-icon" :class="`${darkmode.left?.icon}`" />
           </div>
           <div
             class="icon-container right"
-            :class="`${darkmode.right.class}`"
+            :class="`${darkmode.right?.class}`"
             :style="{
-              color: isDarkModeEnabled ? darkmode.right.activeColor : darkmode.right.color,
-              ...darkmode.right.style
+              color: isDarkModeEnabled ? darkmode.right?.activeColor : darkmode.right?.color,
+              ...darkmode.right?.style
             }"
           >
-            <i v-if="darkmode.right.icon" class="right-icon" :class="`${darkmode.right.icon}`" />
+            <i v-if="darkmode.right?.icon" class="right-icon" :class="`${darkmode.right?.icon}`" />
           </div>
           <div
             class="toggle"
-            :class="darkmode.toggle.class"
+            :class="darkmode.toggle?.class"
             :style="
               isDarkModeEnabled
                 ? {
-                    backgroundColor: darkmode.toggle.activeColor,
+                    backgroundColor: darkmode.toggle?.activeColor,
                     left: '50%'
                   }
                 : {
-                    backgroundColor: darkmode.toggle.color,
+                    backgroundColor: darkmode.toggle?.color,
                     left: '0'
                   }
             "
           >
-            <i v-if="darkmode.toggle.icon" class="toggle-icon" :class="`${darkmode.toggle.icon}`" />
+            <i v-if="darkmode.toggle?.icon" class="toggle-icon" :class="`${darkmode.toggle?.icon}`" />
           </div>
         </div>
       </div>
@@ -240,10 +221,6 @@ export default {
       type: String,
       default: ''
     },
-    activeColor: {
-      type: String,
-      default: ''
-    },
     alignItems: {
       type: String,
       default: ''
@@ -275,7 +252,8 @@ export default {
       justifyContent: this.alignItems === 'center' ? 'center' : 'flex-start',
       styleObject: {},
       refreshKey: 0,
-      isDarkModeEnabled: this.footer.darkmode?.enabled || false
+      isDarkModeEnabled: this.footer?.darkmode?.enabled || false,
+      localSections: [...this.sections]
     }
   },
   created() {
@@ -289,12 +267,18 @@ export default {
   computed: {
     darkmode() {
       return this.footer?.darkmode || {}
-    }
+    },
   },
   watch: {
     footer: {
       handler(val) {
         this.isDarkModeEnabled = val.darkmode.enabled ?? this.isDarkModeEnabled
+      },
+      deep: true
+    },
+    sections: {
+      handler() {
+        this.checkActiveLink()
       },
       deep: true
     }
@@ -314,26 +298,34 @@ export default {
     },
     checkActiveLink() {
       const path = window.location.pathname
-      this.sections.forEach((sec) => {
-        if (path == sec.url) {
-          sec.isActive = true
-        }
+      this.localSections.forEach((sec) => {
+        sec.title.isActive = this.isActiveOn(path, sec?.title?.isActiveOn)
         if (sec.links && sec.links.length) {
           sec.links.forEach((link) => {
-            if (path == link.url) {
-              link.isActive = true
-            }
+            link.isActive = this.isActiveOn(path, link.isActiveOn)
           })
         }
       })
-    }
+    },
+    isActiveOn(path, links) {
+        if (!Array.isArray(links)) {
+            links = [links];
+        }
+        console.log(path, links);
+        console.log("Cond",links.some((link) => path.match(link)));
+        return links.some((link) => path.match(link));
+    },
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 $backgroundColor: v-bind(backgroundColor);
-$activeColor: v-bind(activeColor);
+li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 .zek-sidebar {
   height: 100%;
   overflow-y: auto;
@@ -369,6 +361,7 @@ $activeColor: v-bind(activeColor);
   text-align: center;
   justify-content: v-bind(justifyContent);
   overflow-y: auto;
+  overflow-x: hidden;
   &::-webkit-scrollbar {
     width: 0px;
     background-color: transparent;
@@ -383,12 +376,6 @@ $activeColor: v-bind(activeColor);
   width: 100%;
   padding: 5px 10px;
 
-  &:hover {
-    * {
-      color: $activeColor;
-    }
-  }
-
   &.sidebar-title {
     text-decoration: none;
     border-radius: inherit;
@@ -400,9 +387,6 @@ $activeColor: v-bind(activeColor);
     .icon {
       object-fit: contain;
       margin-left: auto;
-      :hover {
-        color: v-bind(activeColor);
-      }
     }
     .sidebar-title-link {
       display: flex;
@@ -420,7 +404,7 @@ $activeColor: v-bind(activeColor);
     padding-left: 20px;
   }
 }
-.link {
+.zek-link {
   cursor: pointer;
   transition: 0.3s ease-out;
   color: #fff;
@@ -443,7 +427,7 @@ $activeColor: v-bind(activeColor);
     }
   }
 }
-.link span {
+.zek-link span {
   margin-left: 0.5rem;
 }
 .icon {

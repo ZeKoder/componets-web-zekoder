@@ -4,7 +4,7 @@
     v-bind="linkAttributes(link.url)"
     :title="link.tooltip || link.label"
     class="zek-link"
-    :style="link.isActive && activeColor ? { color: activeColor } : ''"
+    :class="{ [link.class]: link.class , expanded: link.isExpanded, active: link.isActive, title: link.isTitle }"
     @click="$emit('onRoute', link.url)"
   >
     <i v-if="link.icon && link.iconType !== 'custom'" class="icon" :class="link.icon"></i>
@@ -14,7 +14,7 @@
     </span>
     <i
       class="icon section-expand fa"
-      :class="link.isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'"
+      :class="expandCollapseIcon"
       v-show="link.showArrow && !isCollapsed"
     />
   </component>
@@ -29,10 +29,6 @@ export default {
       type: Object,
       required: true
     },
-    activeColor: {
-      type: String,
-      default: ''
-    },
     isCollapsed: {
       type: Boolean,
       default: false
@@ -40,6 +36,13 @@ export default {
     collapsedWidth: {
       type: String,
       default: '2rem'
+    }
+  },
+  computed: {
+    expandCollapseIcon() {
+        const expandIcon = this.link.expandIcon || 'fa-chevron-right'
+        const collapseIcon = this.link.collapseIcon || 'fa-chevron-up'
+      return this.link.isExpanded ? collapseIcon : expandIcon
     }
   },
   methods: {
@@ -50,7 +53,8 @@ export default {
       }
       // Check if Nuxt is present by looking for window.__NUXT__
       const isNuxt = typeof window !== 'undefined' && window.__NUXT__
-      return isNuxt ? resolveComponent('NuxtLink') : 'router-link'
+      const component = isNuxt ? resolveComponent('NuxtLink') : 'router-link'
+      return this.link.isTitle ? 'span' : component
     },
     linkAttributes(url) {
       const component = this.linkComponent(url)
