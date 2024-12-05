@@ -311,8 +311,6 @@ export default {
         if (!Array.isArray(links)) {
             links = [links];
         }
-        console.log(path, links);
-        console.log("Cond",links.some((link) => path.match(link)));
         return links.some((link) => path.match(link));
     },
   }
