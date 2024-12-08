@@ -37,11 +37,13 @@ import { VAceEditor } from "vue3-ace-editor";
 import { require as aceRequire, config as aceConfig } from "ace-builds";
 import "ace-builds/src-noconflict/ext-language_tools";
 import "ace-builds/src-noconflict/ext-searchbox";
+import ZekChatPrompt from "./ZekChatPrompt.vue";
 
 export default {
   name: "ZekCodeEditor",
   components: {
       VAceEditor,
+      ZekChatPrompt
   },
   emits: ["onInput", "onError", "onSendPrompt"],
   props: {
