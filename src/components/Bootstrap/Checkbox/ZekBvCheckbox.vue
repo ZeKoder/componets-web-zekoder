@@ -12,7 +12,7 @@
       <b-form-checkbox-group
         ref="ZekBvCheckbox"
         :id="id"
-        v-model="selected"
+        :modelValue="selected"
         :options="items"
         :size="size"
         :state="error"
@@ -30,6 +30,7 @@
         :stacked="stacked"
         :switches="isSwitches"
         :validated="valid"
+        @update:model-value="input"
       ></b-form-checkbox-group>
     </b-form-group>
   </div>
@@ -145,7 +146,7 @@ export default {
   mounted() {
     // if the value is not in the options, remove it
     if (!this.checkValidOption(this.value)) {
-      console.warn('The value is not in the options, removing it')
+      console.warn(`The value ${this.value} is not in the options ${this.items}, removing it`)
       this.$emit('input', [])
       return
     }
@@ -156,6 +157,13 @@ export default {
       const validOptions = this.items.map((item) => item.value)
       if (Array.isArray(value)) return value.every((val) => validOptions.includes(val))
       return validOptions.includes(value)
+    },
+    input(val) {
+        if (this.items.length === 1) {
+            this.$emit('input', val[0])
+            return
+        }
+        this.$emit('input', Array.isArray(val) ? val : [val])
     }
   },
   computed: {
@@ -174,13 +182,6 @@ export default {
       if (this.checkValidOption(val)) {
         this.selected = Array.isArray(val) ? val : [val]
       }
-    },
-    selected(val) {
-      if (this.items.length === 1) {
-        this.$emit('input', val[0])
-        return
-      }
-      this.$emit('input', Array.isArray(val) ? val : [val])
     }
   }
 }
