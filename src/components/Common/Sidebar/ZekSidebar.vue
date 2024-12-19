@@ -16,6 +16,7 @@
             :link="title"
             :isCollapsed="isCollapsed"
             :collapsedWidth="collapsedWidth"
+            :showLabelWhenCollapsed="showLabelWhenCollapsed"
           />
           <i
             v-if="expandIcon.icon && expandIcon.iconType !== 'custom'"
@@ -60,12 +61,14 @@
             :link="{...sec.title, isTitle: sec.links.length !== 0}"
             :isCollapsed="isCollapsed"
             :collapsedWidth="collapsedWidth"
+            :showLabelWhenCollapsed="showLabelWhenCollapsed"
             @click.prevent="sec.title.isExpanded = !sec.title.isExpanded"
           />
         </li>
 
         <!-- SECTION: Content of the Section -->
         <section
+          v-if="sec.title"
           v-show="sec.links.length && sec.title.isExpanded"
           class="section-links nested"
           :class="isCollapsed ? 'collapsed' : ''"
@@ -79,6 +82,7 @@
             :link="link"
             :isCollapsed="isCollapsed"
             :collapsedWidth="collapsedWidth"
+            :showLabelWhenCollapsed="showLabelWhenCollapsed"
           />
         </section>
       </div>
@@ -106,6 +110,7 @@
           :link="link"
           :isCollapsed="isCollapsed"
           :collapsedWidth="collapsedWidth"
+          :showLabelWhenCollapsed="showLabelWhenCollapsed"
         />
       </div>
 
@@ -244,6 +249,10 @@ export default {
     showFooterOnCollapse: {
       type: Boolean,
       default: false
+    },
+    showLabelWhenCollapsed: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -299,10 +308,13 @@ export default {
     checkActiveLink() {
       const path = window.location.pathname
       this.localSections.forEach((sec) => {
+          if(sec?.component) {
+              return;
+          }
         sec.title.isActive = this.isActiveOn(path, sec?.title?.isActiveOn)
-        if (sec.links && sec.links.length) {
+        if (sec?.links?.length) {
           sec.links.forEach((link) => {
-            link.isActive = this.isActiveOn(path, link.isActiveOn)
+            link.isActive = this.isActiveOn(path, link?.isActiveOn)
           })
         }
       })
