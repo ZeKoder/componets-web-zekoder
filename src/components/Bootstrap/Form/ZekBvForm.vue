@@ -2,7 +2,7 @@
   <div :class="customClass ? customClass + '-container' : ''">
     <b-form
       ref="ZekBvForm"
-      :id="id"
+      :id="id ? id : generateId()"
       :class="customClass"
       :style="customStyle"
       v-bind="customProps"
@@ -137,18 +137,11 @@ export default {
       default: undefined
     },
     id: {
-      type: String,
-      default: Math.floor(Math.random() * 10000)
-        .toString()
-        .padStart(4, '0')
+      type: String
     },
     show: {
       type: Boolean,
       default: true
-    },
-    validate: {
-      type: Boolean,
-      default: false
     },
     nextButton: {
       type: Object,
@@ -194,6 +187,7 @@ export default {
   emits: ['submit', 'reset', 'error', 'step', 'update', 'loading'],
   data() {
     return {
+      validate: false,
       type: {
         input: 'ZekBvInput',
         checkbox: 'ZekBvCheckbox',
@@ -275,9 +269,24 @@ export default {
       this.formData = { ...obj }
       this.defaultData = { ...obj }
     },
+    generateId() {
+      return Math.random().toString(36).substring(2, 15)
+    },
     triggerSubmit() {
       // Trigger submit on form component
-      this.$el.querySelector('form').requestSubmit()
+      const form = this.$el.querySelector('form')
+
+      // form.addEventListener('submit', event => {
+      //   if (!form.checkValidity()) {
+      //     event.preventDefault()
+      //     event.stopPropagation()
+      //   }
+
+      //   form.classList.add('was-validated')
+      // }, false)
+      this.validate = true
+      form.requestSubmit()
+
     },
     onStep(forward) {
       if (forward && this.currentStep < this.stepCount) {
@@ -401,7 +410,11 @@ export default {
       }
       try {
         this.$emit('loading', true)
-        if (!this.checkSpecialFields(this.formData)) return
+        if (!this.checkSpecialFields(this.formData)) {
+          console.warn('Form special fields check failed')
+          return
+        }
+
         await this.uploadFiles(this.formData)
         const formData = this.constructNestedData(this.formData)
         if (this.validate) {
