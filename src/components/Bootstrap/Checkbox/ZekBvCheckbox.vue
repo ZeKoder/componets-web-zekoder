@@ -7,18 +7,19 @@
       :valid-feedback="successMessage"
       :invalid-feedback="errorMessage"
       :state="error"
-      :label-class="labelClass + (numberOfRequiredChecks > 0 ? ' required' : '')"
+      :label-class="labelClass + (required ? ' required' : '')"
     >
-      <b-form-checkbox-group
+      <b-form-checkbox 
+        v-if="isSingle"
         ref="ZekBvCheckbox"
         :id="id"
-        :modelValue="selected"
-        :options="items"
+        :model-value="selected"
+        :value="items[0].value"
+        :unchecked-value="items[0].unchecked"
         :size="size"
         :state="error"
         :disabled="disabled"
-        :buttons="isButtons"
-        :required="selected.length < numberOfRequiredChecks"
+        :required="required || selected?.length < required ? true : false"
         :name="name"
         :class="customClass"
         :style="customStyle"
@@ -29,7 +30,30 @@
         :plain="isPlain"
         :stacked="stacked"
         :switches="isSwitches"
-        :validated="valid"
+        @update:model-value="input">
+        <span :class="{'required': required}">{{ items[0].text }}</span>
+      </b-form-checkbox>
+      <b-form-checkbox-group
+        v-else
+        ref="ZekBvCheckbox"
+        :id="id"
+        :model-value="selected"
+        :options="items"
+        :size="size"
+        :state="error"
+        :disabled="disabled"
+        :buttons="isButtons"
+        :required="required || selected?.length < required"
+        :name="name"
+        :class="customClass"
+        :style="customStyle"
+        :form="formID"
+        v-bind="customProps"
+        v-on="customEvents"
+        :button-variant="buttonVariant"
+        :plain="isPlain"
+        :stacked="stacked"
+        :switches="isSwitches"
         @update:model-value="input"
       ></b-form-checkbox-group>
     </b-form-group>
@@ -37,10 +61,11 @@
 </template>
 
 <script>
-import { BFormCheckboxGroup, BFormGroup } from 'bootstrap-vue-next'
+import { BFormCheckbox, BFormCheckboxGroup, BFormGroup } from 'bootstrap-vue-next'
 export default {
   name: 'ZekBvCheckbox',
   components: {
+    BFormCheckbox,
     BFormCheckboxGroup,
     BFormGroup
   },
@@ -79,9 +104,9 @@ export default {
       type: Boolean,
       default: false
     },
-    numberOfRequiredChecks: {
-      type: Number,
-      default: 0
+    required: {
+      type: [Number, Boolean],
+      default: false
     },
     customClass: {
       type: String,
@@ -140,33 +165,27 @@ export default {
   emits: ['input'],
   data() {
     return {
-      selected: []
+      selected: null
     }
   },
   mounted() {
-    // if the value is not in the options, remove it
-    if (!this.checkValidOption(this.value)) {
-      console.warn(`The value ${this.value} is not in the options ${this.items}, removing it`)
-      this.$emit('input', [])
-      return
-    }
-    this.selected = Array.isArray(this.value) ? this.value : [this.value]
+    this.selected = Array.isArray(this.value) || this.isSingle ? this.value : [this.value]
+    this.input(this.selected)
   },
   methods: {
-    checkValidOption(value) {
-      const validOptions = this.items.map((item) => item.value)
-      if (Array.isArray(value)) return value.every((val) => validOptions.includes(val))
-      return validOptions.includes(value)
-    },
     input(val) {
-        if (this.items.length === 1) {
-            this.$emit('input', val[0])
-            return
+        this.selected = val
+        if (this.isSingle) {
+            this.$emit('input', val)
+            return;
         }
-        this.$emit('input', Array.isArray(val) ? val : [val])
+        this.$emit('input', val)
     }
   },
   computed: {
+    isSingle() {
+      return this.items.length === 1;
+    },
     isButtons() {
       return this.type === 'buttons'
     },
@@ -179,9 +198,7 @@ export default {
   },
   watch: {
     value(val) {
-      if (this.checkValidOption(val)) {
-        this.selected = Array.isArray(val) ? val : [val]
-      }
+      this.selected = Array.isArray(val) || this.isSingle ? val : [val]
     }
   }
 }
