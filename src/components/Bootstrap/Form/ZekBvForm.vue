@@ -46,7 +46,7 @@
               :id="`${id}-${input.name}`"
               v-bind="input"
               :key="resetKey"
-              @input="formData[input.name] = $event"
+              @input="onInput(input.name, $event)"
             />
           </div>
         </template>
@@ -218,20 +218,7 @@ export default {
   watch: {
     formData: {
       handler(val) {
-        if (this.validate) {
-          this.inputs.forEach((input) => {
-            input = this.handleFunctionInput(input)
-            if (input.type !== 'email' || input.type !== 'url') {
-              input.requireValid = input.required && !val[input.name] ? false : true
-            }
-            if (!input.requireValid) {
-              this.allValid = false
-            } else {
-              this.allValid = true
-            }
-          })
-        }
-        this.$emit('update', this.formData)
+        this.$emit('update', val)
       },
       deep: true
     }
@@ -272,18 +259,12 @@ export default {
     generateId() {
       return Math.random().toString(36).substring(2, 15)
     },
+    onInput(name, value) {
+      this.formData = { ...this.formData, [name]: value }
+    },
     triggerSubmit() {
       // Trigger submit on form component
       const form = this.$el.querySelector('form')
-
-      // form.addEventListener('submit', event => {
-      //   if (!form.checkValidity()) {
-      //     event.preventDefault()
-      //     event.stopPropagation()
-      //   }
-
-      //   form.classList.add('was-validated')
-      // }, false)
       this.validate = true
       form.requestSubmit()
 

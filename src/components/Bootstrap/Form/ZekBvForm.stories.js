@@ -321,3 +321,21 @@ export const WithFileUpload = {
     ]
   }
 }
+export const Checkbox = {
+  render: Template,
+  args: {
+    inputs: [
+      {
+        name: "is_auth_provider",
+        component: "checkbox",
+        required: true,
+        items: [
+            {
+                text: "Is Auth Provider?",
+            }
+        ],
+        value: true
+    },
+    ]
+  }
+}
