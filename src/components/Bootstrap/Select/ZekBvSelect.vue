@@ -28,7 +28,11 @@
         v-on="customEvents"
         @update:modelValue="input"
         @change="change"
-      ></b-form-select>
+      >
+      <template #first>
+        <option value="" disabled>{{ placeholder }}</option>
+      </template>
+    </b-form-select>
     </b-form-group>
   </div>
 </template>
@@ -42,6 +46,10 @@ export default {
     BFormGroup
   },
   props: {
+    placeholder: {
+      type: String,
+      default: ''
+    },
     items: {
       type: Array,
       default: () => []
@@ -128,7 +136,7 @@ export default {
   emits: ['change', 'input'],
   data() {
     return {
-      selected: null,
+      selected: "",
     }
   },
   created() {
