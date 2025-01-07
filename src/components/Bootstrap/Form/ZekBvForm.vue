@@ -340,6 +340,9 @@ export default {
       }
     },
     async uploadFile(file, input) {
+      if(!(file instanceof File)) {
+          return file
+      }
       const formData = new FormData()
       formData.append('file', file)
       let headers = {}
