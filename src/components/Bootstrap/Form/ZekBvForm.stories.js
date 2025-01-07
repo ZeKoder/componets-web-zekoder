@@ -68,6 +68,18 @@ export const Default = {
         required: true,
         errorMessage: 'something wrong',
         successMessage: 'looks good',
+        width: '6 mt-4',
+        hint: "This is a hint"
+      },
+      {
+        component: 'input',
+        name: 'password',
+        type: 'password',
+        label: 'Password',
+        placeholder: 'Enter your passowrd',
+        required: true,
+        errorMessage: 'something wrong',
+        successMessage: 'looks good',
         width: '6 mt-4'
       },
       {
@@ -87,11 +99,10 @@ export const Default = {
       },
       {
         component: 'select',
-        placeholder: 'Enter your last name',
         value: null,
         multiple: false,
+        placeholder: 'Please select an option',
         items: [
-          { value: null, text: 'Please select an option', disabled: true },
           { value: 'male', text: 'Male' },
           { value: 'female', text: 'Female' }
         ],
@@ -307,6 +318,24 @@ export const WithFileUpload = {
         successMessage: 'looks good',
         width: '12 mt-4'
       }
+    ]
+  }
+}
+export const Checkbox = {
+  render: Template,
+  args: {
+    inputs: [
+      {
+        name: "is_auth_provider",
+        component: "checkbox",
+        required: true,
+        items: [
+            {
+                text: "Is Auth Provider?",
+            }
+        ],
+        value: true
+    },
     ]
   }
 }

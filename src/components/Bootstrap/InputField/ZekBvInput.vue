@@ -36,7 +36,7 @@
           :id="id"
           v-model="modelValue"
           :placeholder="placeholder"
-          :type="type"
+          :type="type === 'password' ? (showPassword ? 'password' : 'text') : type"
           :min="min"
           :max="max"
           :step="step"
@@ -55,6 +55,13 @@
           @keydown.enter.exact="onEnter"
           @update:modelValue="input"
         ></b-form-input>
+        <b-input-group-text
+          class="show-hide-password"
+          v-if="type == 'password' && !trailingIcon && !trailingComponent"
+          @click="showPassword = !showPassword"
+        >
+          <i class="fas" :class="showPassword ? 'fa-eye' : 'fa-eye-slash'" />
+        </b-input-group-text>
         <b-input-group-text
           v-if="trailingIcon || trailingComponent"
           :class="{ clickable: trailingIcon.includes('clickable') }"
@@ -202,7 +209,8 @@ export default {
   },
   data() {
     return {
-      modelValue: ''
+      modelValue: '',
+      showPassword: false
     }
   },
   created() {
@@ -234,21 +242,21 @@ export default {
 </script>
 
 <style scoped>
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
+  appearance: none;
 }
 
-input[type="number"] {
+input[type='number'] {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .show-hide-password {
   text-transform: uppercase;
-  position: absolute;
-  right: 0;
   font-size: 12px;
-  line-height: 50px;
+  cursor: pointer;
 }
 
 .input-hint-icon {

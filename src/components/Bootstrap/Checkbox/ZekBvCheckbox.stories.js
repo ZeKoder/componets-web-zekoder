@@ -52,12 +52,13 @@ export const Default = {
   render: Template,
 
   args: {
-    value: [false],
+    value: 'kk',
     items: [
-      // { text: 'First Check', value: 'first', disabled: true },
-      // { text: 'Second Check', value: 'second' },
-      // { text: 'Third Check', value: 'third' }
-      { text: 'Boolean', value: false }
+      { text: 'First Check', value: 'first', disabled: true },
+      { text: 'Second Check', value: 'second' },
+      { text: 'Third Check', value: 'third' },
+      { text: 'Boolean', value: 'kk'}
+      // { text: 'Boolean', value: true, unchecked: false}
     ]
     // items: ['a', 'b', 'c'],
     // size: 'md',

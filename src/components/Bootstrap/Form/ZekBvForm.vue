@@ -2,7 +2,7 @@
   <div :class="customClass ? customClass + '-container' : ''">
     <b-form
       ref="ZekBvForm"
-      :id="id"
+      :id="id ? id : generateId()"
       :class="customClass"
       :style="customStyle"
       v-bind="customProps"
@@ -46,7 +46,7 @@
               :id="`${id}-${input.name}`"
               v-bind="input"
               :key="resetKey"
-              @input="formData[input.name] = $event"
+              @input="onInput(input.name, $event)"
             />
           </div>
         </template>
@@ -137,18 +137,11 @@ export default {
       default: undefined
     },
     id: {
-      type: String,
-      default: Math.floor(Math.random() * 10000)
-        .toString()
-        .padStart(4, '0')
+      type: String
     },
     show: {
       type: Boolean,
       default: true
-    },
-    validate: {
-      type: Boolean,
-      default: false
     },
     nextButton: {
       type: Object,
@@ -194,6 +187,7 @@ export default {
   emits: ['submit', 'reset', 'error', 'step', 'update', 'loading'],
   data() {
     return {
+      validate: false,
       type: {
         input: 'ZekBvInput',
         checkbox: 'ZekBvCheckbox',
@@ -224,20 +218,7 @@ export default {
   watch: {
     formData: {
       handler(val) {
-        if (this.validate) {
-          this.inputs.forEach((input) => {
-            input = this.handleFunctionInput(input)
-            if (input.type !== 'email' || input.type !== 'url') {
-              input.requireValid = input.required && !val[input.name] ? false : true
-            }
-            if (!input.requireValid) {
-              this.allValid = false
-            } else {
-              this.allValid = true
-            }
-          })
-        }
-        this.$emit('update', this.formData)
+        this.$emit('update', val)
       },
       deep: true
     }
@@ -275,9 +256,18 @@ export default {
       this.formData = { ...obj }
       this.defaultData = { ...obj }
     },
+    generateId() {
+      return Math.random().toString(36).substring(2, 15)
+    },
+    onInput(name, value) {
+      this.formData = { ...this.formData, [name]: value }
+    },
     triggerSubmit() {
       // Trigger submit on form component
-      this.$el.querySelector('form').requestSubmit()
+      const form = this.$el.querySelector('form')
+      this.validate = true
+      form.requestSubmit()
+
     },
     onStep(forward) {
       if (forward && this.currentStep < this.stepCount) {
@@ -350,6 +340,9 @@ export default {
       }
     },
     async uploadFile(file, input) {
+      if(!(file instanceof File)) {
+          return file
+      }
       const formData = new FormData()
       formData.append('file', file)
       let headers = {}
@@ -401,7 +394,11 @@ export default {
       }
       try {
         this.$emit('loading', true)
-        if (!this.checkSpecialFields(this.formData)) return
+        if (!this.checkSpecialFields(this.formData)) {
+          console.warn('Form special fields check failed')
+          return
+        }
+
         await this.uploadFiles(this.formData)
         const formData = this.constructNestedData(this.formData)
         if (this.validate) {

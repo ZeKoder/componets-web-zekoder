@@ -10,7 +10,7 @@
           class="zek-ace-editor"
           :class="customClass"
           :placeholder="placeholder"
-          :readOnly="disabled"
+          :readonly="disabled"
           :wrap="wrapText"
           :printMargin="showMargin"
           :options="{
