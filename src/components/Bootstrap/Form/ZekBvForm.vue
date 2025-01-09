@@ -200,7 +200,6 @@ export default {
       formData: {},
       resetKey: 0,
       defaultData: {},
-      allValid: true,
       stepCount: 0,
       currentStep: 1
     }
@@ -401,13 +400,7 @@ export default {
 
         await this.uploadFiles(this.formData)
         const formData = this.constructNestedData(this.formData)
-        if (this.validate) {
-          if (this.allValid) {
-            this.$emit('submit', formData)
-          }
-        } else {
-          this.$emit('submit', formData)
-        }
+        this.$emit('submit', formData)
       } catch (error) {
         console.error(error)
         this.$emit('error', error)

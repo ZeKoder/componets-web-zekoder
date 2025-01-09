@@ -1,33 +1,68 @@
 <template>
   <div class="position-relative" :class="customClass" :style="customStyle" :key="refreshKey">
     <b-form-group :description="description" :state="error">
-      <b-form-file ref="ZekBvFileUpload" :id="id" v-model="files" :accept="accept" :size="size" :state="error"
-        :disabled="disabled" :directory="allowFolders" :required="required" :name="name"
-        :label-class="labelClass + (required ? ' required' : '')" :form="formID" :noDrop="disableDrop"
-        :multiple="multiple" v-bind="customProps" v-on="customEvents" @update:modelValue="handleUpdate">
+      <b-form-file
+        ref="ZekBvFileUpload"
+        :id="id"
+        v-model="files"
+        :accept="accept"
+        :size="size"
+        :state="error"
+        :disabled="disabled"
+        :directory="allowFolders"
+        :required="required"
+        :name="name"
+        :label-class="labelClass + (required ? ' required' : '')"
+        :form="formID"
+        :noDrop="disableDrop"
+        :multiple="multiple"
+        v-bind="customProps"
+        v-on="customEvents"
+        @update:modelValue="handleUpdate"
+      >
         <template #label>
           <label :for="id">{{ label }}</label>
           <div v-if="allowPreview" class="file-preview-container" @click.prevent>
             <div v-if="loading" class="loading">Loading preview...</div>
             <div class="file-preview" v-else-if="currentFile">
-              <button v-if="multiple" class="pagination-arrow left-arrow" @click.prevent="prevPage"
-                :disabled="currentPage === 0">
+              <button
+                v-if="multiple"
+                class="pagination-arrow left-arrow"
+                @click.prevent="prevPage"
+                :disabled="currentPage === 0"
+              >
                 <i class="fa-solid fa-chevron-left"></i>
               </button>
-              <div class="file-preview-item" :title="currentFile?.name"
-                @click.prevent="handlePreviewClick(currentPage)">
-                <img v-if="isImage(currentFile)" :src="createObjectURL(currentFile)" :class="imagePreviewClass"
-                  alt="File Preview" class="img-preview" />
+              <div
+                class="file-preview-item"
+                :title="currentFile?.name"
+                @click.prevent="handlePreviewClick(currentPage)"
+              >
+                <img
+                  v-if="isImage(currentFile)"
+                  :src="createObjectURL(currentFile)"
+                  :class="imagePreviewClass"
+                  alt="File Preview"
+                  class="img-preview"
+                />
                 <div v-else class="file-details">
                   <p>{{ currentFile?.name || "Couldn't Fetch File" }}</p>
                   <p v-if="currentFile?.size">{{ formatSize(currentFile?.size) }}</p>
                 </div>
-                <button v-if="allowRemove" class="remove-file-btn" @click.prevent="removeFile(currentPage)">
+                <button
+                  v-if="allowRemove"
+                  class="remove-file-btn"
+                  @click.prevent="removeFile(currentPage)"
+                >
                   <i :class="removeIcon"></i>
                 </button>
               </div>
-              <button v-if="multiple" class="pagination-arrow right-arrow" @click.prevent="nextPage"
-                :disabled="currentPage === files.length - 1">
+              <button
+                v-if="multiple"
+                class="pagination-arrow right-arrow"
+                @click.prevent="nextPage"
+                :disabled="currentPage === files.length - 1"
+              >
                 <i class="fa-solid fa-chevron-right"></i>
               </button>
             </div>
@@ -158,12 +193,12 @@ export default {
   emits: ['input', 'remove', 'preview'],
   async created() {
     try {
-      this.loading = true;
+      this.loading = true
       this.files = await this.handleFiles(this.value)
     } catch (err) {
-      console.error(err);
+      console.error(err)
     } finally {
-      this.loading = false;
+      this.loading = false
     }
   },
   data() {
@@ -178,11 +213,11 @@ export default {
   watch: {
     value(newVal) {
       if (newVal) {
-        this.handleFiles(newVal).then(files => {
-          this.files = files;
-        });
+        this.handleFiles(newVal).then((files) => {
+          this.files = files
+        })
       } else {
-        this.files = [];
+        this.files = []
       }
     },
     files: {
@@ -190,76 +225,78 @@ export default {
         this.$nextTick(() => {
           // Change Label to show number of files uploaded if multiple files are uploaded, else show the file name, if any
           // If no files are uploaded, show the default label
-          const label = this.$el.querySelector('.input-group-text');
+          const label = this.$el.querySelector('.input-group-text')
           if (label) {
             if (this.files.length > 1) {
-              label.textContent = `${this.files.length} files uploaded`;
+              label.textContent = `${this.files.length} files uploaded`
             } else if (this.files.length === 1) {
-              label.textContent = this.files[0].name;
+              label.textContent = this.files[0].name
             } else {
-              label.textContent = "No file chosen";
+              label.textContent = 'No file chosen'
             }
           }
           // Reload the component to update the label
-          this.refreshKey++;
-        });
+          this.refreshKey++
+        })
       },
       deep: true
     }
   },
   computed: {
     currentFile() {
-      return Array.isArray(this.files) ? this.files[this.currentPage] : this.files;
+      return Array.isArray(this.files) ? this.files[this.currentPage] : this.files
     }
   },
   methods: {
     createObjectURL(file) {
-      if (!file) return;
-      return URL.createObjectURL(file);
+      if (!file) return
+      return URL.createObjectURL(file)
     },
     nextPage() {
       if (this.currentPage < this.files.length - 1) {
-        this.currentPage++;
+        this.currentPage++
       }
     },
     prevPage() {
       if (this.currentPage > 0) {
-        this.currentPage--;
+        this.currentPage--
       }
     },
     async handleFiles(files) {
-      if (!files) return [];
+      if (!files) return []
+
       if (Array.isArray(files)) {
-        return await Promise.all(files.map(async file => {
-          if (typeof file === 'string') {
-            if (this.isUrl(file)) {
-              return await this.getFile(file) // get file from url
-            } else if (this.fetchUrl) {
-              return await this.getFile(this.fetchUrl + file) // get file from fetch url
-            } else {
-              console.error('Invalid file path provided for asset');
-              return file
-            }
-          } else {
-            return file
-          }
-        }))
-      } else if (typeof files === 'string') {
-        return [await this.getFile(files)]
+        return await Promise.all(files.map(this.processFile))
       } else {
-        return [files]
+        return [await this.processFile(files)]
+      }
+    },
+    async processFile(file) {
+      console.log(this.isUrl(file))
+      if (typeof file === 'string') {
+        if (this.isUrl(file)) {
+          return await this.getFile(file)
+        } else if (this.fetchUrl) {
+          return await this.getFile(this.fetchUrl + file)
+        } else {
+          console.error('Invalid file path provided for asset')
+          return file
+        }
+      } else {
+        return file
       }
     },
     async getFile(image) {
-      const headers = {};
-      const accessToken = this.accessToken || 'Bearer ' + localStorage.getItem('accessToken') || null;
+      const headers = {}
+      const accessToken =
+        this.accessToken || 'Bearer ' + localStorage.getItem('accessToken') || null
       if (this.secure && accessToken) {
-        headers['Authorization'] = accessToken;
+        headers['Authorization'] = accessToken
       } else if (this.secure && !accessToken) {
-        console.error('No access token provided for asset');
-        this.errorMessage = 'No access token provided for asset';
-        this.loading = false;
-        return;
+        console.error('No access token provided for asset')
+        this.errorMessage = 'No access token provided for asset'
+        this.loading = false
+        return
       }
       try {
         const res = await axios({
@@ -267,46 +304,41 @@ export default {
           url: image,
           headers,
           responseType: 'blob'
-        });
-        const fileName = this.isUrl(image) ? image.split('/').pop() : image;
+        })
+        const fileName = this.isUrl(image) ? image.split('/').pop() : image
         const file = new File([res.data], fileName, {
           type: res.data.type
-        });
-        return file;
+        })
+        return file
       } catch (err) {
-        console.error(err);
-        this.errorMessage = 'Failed to fetch the file';
+        console.error(err)
+        this.errorMessage = 'Failed to fetch the file'
       }
     },
     isUrl(text) {
       // check if text is a url using regex
-      const urlRegex = new RegExp(
-        '^(https?:\\/\\/)?' + // protocol
-        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-        '(\\#[-a-z\\d_]*)?$',
-        'i'
-      ); // fragment locator
-      return urlRegex.test(text);
+      const urlRegex =
+        /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_.~#?&//=]*)/i
+      // fragment locator
+      return urlRegex.test(text)
     },
     isImage(file) {
-      return file?.type?.startsWith('image/');
+      return file?.type?.startsWith('image/')
     },
     formatSize(size) {
-      const i = Math.floor(Math.log(size) / Math.log(1024));
-      return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+      const i = Math.floor(Math.log(size) / Math.log(1024))
+      return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i]
     },
     handleUpdate() {
-      this.$emit('input', this.files);
+      this.$emit('input', this.files)
     },
     removeFile(index) {
-      this.files.splice(index, 1);
-      this.$emit('remove', index);
+      this.files.splice(index, 1)
+      this.handleUpdate()
+      this.$emit('remove', index)
     },
     handlePreviewClick(i) {
-      this.$emit('preview', this.files[i]);
+      this.$emit('preview', this.files[i])
     }
   }
 }
@@ -348,6 +380,7 @@ export default {
   background: none;
   background-color: #c0c0c0;
   border-radius: 50%;
+  padding: 0 0.5em;
 
   &:hover {
     cursor: pointer;
@@ -395,7 +428,6 @@ export default {
 .loading {
   text-align: center;
   margin-top: 10px;
-
 }
 
 .placeholder {
