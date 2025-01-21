@@ -186,8 +186,8 @@ export default {
   emits: ['onRoute', 'onExpandCollapse', 'linkClicked', 'darkModeToggle'],
   props: {
     title: {
-      type: [String, Object],
-      default: ''
+      type: Object,
+      default: () => ({})
     },
     expandIcon: {
       type: Object,

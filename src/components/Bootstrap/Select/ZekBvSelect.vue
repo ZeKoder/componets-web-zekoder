@@ -29,7 +29,7 @@
         @update:modelValue="input"
         @change="change"
       >
-      <template #first>
+      <template #first v-if="placeholder">
         <option value="" disabled>{{ placeholder }}</option>
       </template>
     </b-form-select>

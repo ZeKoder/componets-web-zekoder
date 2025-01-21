@@ -52,9 +52,9 @@ export const Default = {
   render: Template,
 
   args: {
-    value: null,
+    value: "",
     items: [
-      { value: null, text: 'Please select an option', disabled: true },
+      { value: "", text: 'Please select an option', disabled: true },
       { value: 'a', text: 'This is First option' },
       { value: 'b', text: 'Selected Option' },
       {

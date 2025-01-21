@@ -49,6 +49,18 @@ export const Default = {
       },
       {
         component: 'input',
+        name: 'custom_validate',
+        type: 'text',
+        label: 'Custom Validate',
+        width: 12,
+        errorMessage: 'something wrong',
+        successMessage: 'looks good',
+        placeholder: 'Enter text',
+        description: 'please enter correct email format',
+        validator: (value) => value.length < 5
+      },
+      {
+        component: 'input',
         name: 'first_name',
         type: 'text',
         min: '10',
@@ -61,10 +73,12 @@ export const Default = {
       },
       {
         component: 'input',
-        name: 'last_name',
+        name: 'age',
+        min: '10',
+        max: '20',
+        label: 'Age',
         type: 'number',
-        label: 'Last name',
-        placeholder: 'Enter your last name',
+        placeholder: 'Enter your age',
         required: true,
         errorMessage: 'something wrong',
         successMessage: 'looks good',
@@ -116,7 +130,7 @@ export const Default = {
       {
         component: 'checkbox',
         name: 'checkbox',
-        numberOfRequiredChecks: 2,
+        required: 2,
         label: 'checkbox',
         errorMessage: 'something wrong',
         successMessage: 'looks good',
@@ -125,6 +139,21 @@ export const Default = {
           { text: 'Second Check', value: 'second' },
           { text: 'third Check', value: 'third' }
         ],
+        value: ['first'],
+        width: '12 mt-4'
+      },
+      {
+        component: 'checkbox',
+        name: 'single_checkbox',
+        label: 'checkbox',
+        errorMessage: 'something wrong',
+        successMessage: 'looks good',
+        items: [
+          { text: 'First Check', value: true, unchecked: false },
+        ],
+        value: false,
+        presist: true,
+        default: false,
         width: '12 mt-4'
       },
       {
@@ -134,7 +163,6 @@ export const Default = {
         errorMessage: 'something wrong',
         successMessage: 'looks good',
         label: 'details',
-       
         width: 'auto me-auto mt-4'
       },
       {
