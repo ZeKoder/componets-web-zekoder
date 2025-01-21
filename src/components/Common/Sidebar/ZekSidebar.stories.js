@@ -72,9 +72,10 @@ export const Default = {
   render: Template,
 
   args: {
-    title: {
-      label: 'Zekoder'
-    },
+    // title: {
+    //   icon: 'https://www.pngfind.com/pngs/m/9-95287_double-left-chevron-svg-png-icon-free-download.png',
+    //   iconType: 'custom'
+    // },
     collapsed: true,
     footer: {
       class: 'rounded p-1',
