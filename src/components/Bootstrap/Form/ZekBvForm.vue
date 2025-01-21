@@ -2,7 +2,7 @@
   <div :class="customClass ? customClass + '-container' : ''">
     <b-form
       ref="ZekBvForm"
-      :id="id ? id : generateId()"
+      :id="formId"
       :class="customClass"
       :style="customStyle"
       v-bind="customProps"
@@ -24,6 +24,7 @@
             <!-- ? If Custom Component -->
             <component
               v-if="input.type == 'custom' && input.component"
+              :formID="formId"
               :class="input.class"
               :is="input.component"
               v-bind="input.data || {}"
@@ -42,7 +43,7 @@
               :error="input.validation"
               :customClass="input.class"
               :value="formData[input.name]"
-              :formID="id"
+              :formID="formId"
               :id="`${id}-${input.name}`"
               v-bind="input"
               :key="resetKey"
@@ -187,6 +188,7 @@ export default {
   emits: ['submit', 'reset', 'error', 'step', 'update', 'loading'],
   data() {
     return {
+      formId: this.id || this.generateId(),
       validate: false,
       type: {
         input: 'ZekBvInput',
@@ -308,7 +310,7 @@ export default {
           delete val[input.name]
         }
         if (input?.presist) {
-          if (!input.default) {
+          if (input.default === undefined) {
             console.error('Default value is required for presist field')
             check = false
           }
