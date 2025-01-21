@@ -19,7 +19,7 @@
         :size="size"
         :state="error"
         :disabled="disabled"
-        :required="required || selected?.length < required ? true : false"
+        :required="required === true || selected?.length < required ? true : false"
         :name="name"
         :class="customClass"
         :style="customStyle"
@@ -43,7 +43,7 @@
         :state="error"
         :disabled="disabled"
         :buttons="isButtons"
-        :required="required || selected?.length < required"
+        :required="required === true || selected?.length < required"
         :name="name"
         :class="customClass"
         :style="customStyle"
@@ -170,7 +170,6 @@ export default {
   },
   mounted() {
     this.selected = Array.isArray(this.value) || this.isSingle ? this.value : [this.value]
-    this.input(this.selected)
   },
   methods: {
     input(val) {
