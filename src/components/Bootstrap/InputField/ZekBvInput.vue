@@ -36,12 +36,13 @@
           :id="id"
           v-model="modelValue"
           :placeholder="placeholder"
-          :type="type === 'password' ? (showPassword ? 'password' : 'text') : type"
+          :type="type === 'password' ? (showPassword ? 'text' : 'password') : type"
           :min="min"
           :max="max"
           :step="step"
           :formatter="formatter"
           :state="error"
+          :debounce="debounce"
           :disabled="disabled"
           :readonly="readonly"
           :required="required"
@@ -49,6 +50,7 @@
           :class="customClass"
           :style="customStyle"
           :form="formID"
+          :tooltip="true"
           v-bind="customProps"
           v-on="customEvents"
           @keydown="onKeyDown"
@@ -60,7 +62,7 @@
           v-if="type == 'password' && !trailingIcon && !trailingComponent"
           @click="showPassword = !showPassword"
         >
-          <i class="fas" :class="showPassword ? 'fa-eye' : 'fa-eye-slash'" />
+          <i class="fas" :class="showPassword ? 'fa-eye-slash' : 'fa-eye'" />
         </b-input-group-text>
         <b-input-group-text
           v-if="trailingIcon || trailingComponent"
@@ -76,7 +78,7 @@
   </div>
 </template>
 <script>
-import { BFormGroup, BInputGroup, BInputGroupText, BFormInput } from 'bootstrap-vue-next'
+import { BFormGroup, BInputGroup, BInputGroupText, BFormInput, BTooltip } from 'bootstrap-vue-next'
 export default {
   name: 'ZekBvInput',
   components: {
@@ -84,6 +86,9 @@ export default {
     BInputGroup,
     BInputGroupText,
     BFormInput
+  },
+  directives: {
+    BTooltip
   },
   props: {
     value: {
@@ -199,6 +204,18 @@ export default {
     trailingComponent: {
       type: [String, Object],
       default: null
+    },
+    validator: {
+      type: Function,
+      default: null
+    },
+    validationMessage: {
+      type: String,
+      default: ''
+    },
+    debounce: {
+      type: Number,
+      default: 0
     }
   },
   emits: ['input', 'change', 'keydown', 'enter', 'hintClick', 'iconClick', 'trailingIconClick'],
@@ -210,7 +227,8 @@ export default {
   data() {
     return {
       modelValue: '',
-      showPassword: false
+      showPassword: false,
+      customError: undefined
     }
   },
   created() {
@@ -219,8 +237,31 @@ export default {
   methods: {
     input(event) {
       const value = this.type === 'number' ? Number(event) : event
+      if (!this.handleValidation(value)) return;
       this.$emit('input', value)
       this.$emit('change', value)
+    },
+    handleValidation(value) {
+      let validationResult = true;
+      if (this.validator) {
+        try {
+          validationResult = this.validator(value)
+          if (typeof validationResult !== 'boolean') {
+            throw new Error('Error validating input')
+          }
+          const errorMessage = !validationResult
+            ? this.validationMessage || 'Invalid input format'
+            : ''
+          this.$refs.ZekBvInput.element.setCustomValidity(errorMessage)
+          this.$refs.ZekBvInput.element.checkValidity()
+          this.$refs.ZekBvInput.element.reportValidity()
+        } catch (err) {
+          validationResult = false
+          this.customError = err.message
+          this.$refs.ZekBvInput.setCustomValidity(this.customError)
+        }
+      }
+      return validationResult
     },
     onKeyDown(event) {
       this.$emit('keydown', event)
