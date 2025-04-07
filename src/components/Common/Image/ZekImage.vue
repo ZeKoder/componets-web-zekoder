@@ -8,6 +8,7 @@
         :src="imgSrc"
         :alt="altText"
         @load="handleImageLoad"
+        @error="handleImageError"
         :style="imgStyle"
         v-bind="customProps"
         v-on="customEvents"
@@ -39,6 +40,10 @@ export default {
     imageUrl: {
       type: String,
       required: true
+    },
+    fallbackImageUrl: {
+      type: String,
+      default: ''
     },
     altText: {
       type: String,
@@ -81,7 +86,7 @@ export default {
       default: () => ({})
     }
   },
-  emits: ['onClick', 'onImageLoad'],
+  emits: ['onClick', 'onImageLoad', 'onImageError'],
   data() {
     return {
       isLoading: false,
@@ -89,7 +94,8 @@ export default {
         objectFit: this.objectFit,
         ...this.customStyle
       },
-      imgSrc: this.imageUrl
+      imgSrc: this.imageUrl,
+      loadFailed: false
     }
   },
   async created() {
@@ -125,11 +131,20 @@ export default {
         .catch((error) => {
           console.error('Error fetching image with security:', error)
           this.isLoading = false
+          this.handleImageError()
         })
     },
     handleImageLoad() {
       this.isLoading = false
       this.$emit('onImageLoad')
+    },
+    handleImageError() {
+      if (this.fallbackImageUrl && !this.loadFailed) {
+        this.loadFailed = true
+        this.imgSrc = this.fallbackImageUrl
+      }
+      this.isLoading = false
+      this.$emit('onImageError')
     }
   }
 }
