@@ -258,7 +258,7 @@ export default {
         } catch (err) {
           validationResult = false
           this.customError = err.message
-          this.$refs.ZekBvInput.setCustomValidity(this.customError)
+          this.$refs.ZekBvInput.element.setCustomValidity(this.customError)
         }
       }
       return validationResult
