@@ -227,9 +227,9 @@ export default {
           // If no files are uploaded, show the default label
           const label = this.$el.querySelector('.input-group-text')
           if (label) {
-            if (this.files.length > 1) {
+            if (this.files?.length > 1) {
               label.textContent = `${this.files.length} files uploaded`
-            } else if (this.files.length === 1) {
+            } else if (this.files?.length === 1) {
               label.textContent = this.files[0].name
             } else {
               label.textContent = 'No file chosen'
@@ -333,12 +333,20 @@ export default {
       this.$emit('input', this.files)
     },
     removeFile(index) {
-      this.files.splice(index, 1)
+      if(this.multiple) {
+        this.files.splice(index, 1)
+      } else {
+        this.files = null
+      }
       this.handleUpdate()
       this.$emit('remove', index)
     },
     handlePreviewClick(i) {
-      this.$emit('preview', this.files[i])
+        if(this.multiple) {
+            this.$emit('preview', this.files[i])
+        } else {
+            this.$emit('preview', this.files)
+        }
     }
   }
 }
