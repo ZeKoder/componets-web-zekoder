@@ -167,7 +167,7 @@ export default {
           id: index,
           cells: this.tableHeaders.map((header) => {
             return {
-              value: row[header.key ? header.key : header] || row,
+              value: row[header.key ? header.key : header] || '-NA-',
               variant: 'light',
               key: header.key ? header.key : header,
               class: header.class ? header.class : ''
