@@ -1,19 +1,35 @@
 <template>
-  <BTableSimple class="zek-bv-table" :hover="hover" small caption-top responsive :class="customClass" v-bind="customProps" v-on="customEvents || {}">
+  <BTableSimple
+    class="zek-bv-table"
+    :hover="hover"
+    small
+    caption-top
+    responsive
+    :class="customClass"
+    v-bind="customProps"
+    v-on="customEvents || {}"
+  >
     <BThead class="zek-bv-thead" head-variant="dark">
       <BTr class="zek-bv-tr">
-        <BTd v-if="selectable" class="zek-bv-td">
-        </BTd>
-        <BTh class="zek-bv-th" v-for="header in tableHeaders" :key="header.key ? header.key : header" :class="`${headerClass} ${header.headerClass}`">{{
-          header.label ? header.label : header
-        }}</BTh>
+        <BTd v-if="selectable" class="zek-bv-td"> </BTd>
+        <BTh
+          class="zek-bv-th"
+          v-for="header in tableHeaders"
+          :key="header.key ? header.key : header"
+          :class="`${headerClass} ${header.headerClass}`"
+          >{{ header.label ? header.label : header }}</BTh
+        >
       </BTr>
     </BThead>
     <BTbody>
       <BTr v-for="(row, i) in tableData" :key="i" @click="onRowClick(row)" class="zek-bv-tr">
         <BTd v-if="selectable" class="zek-bv-td">
           <BFormCheckboxGroup v-model="selectedRows">
-            <BFormCheckbox :value="i" @update:modelValue="onRowSelect(i, row)" class="zek-bv-form-checkbox"/>
+            <BFormCheckbox
+              :value="i"
+              @update:modelValue="onRowSelect(i, row)"
+              class="zek-bv-form-checkbox"
+            />
           </BFormCheckboxGroup>
         </BTd>
         <ZekBvTableCell
@@ -42,8 +58,18 @@
 <script>
 // Custom Cell component
 import ZekBvTableCell from './ZekBvTableCell.vue'
-import { markRaw } from 'vue';
-import { BTableSimple, BThead, BTr, BTh, BTbody, BTfoot, BTd, BFormCheckbox, BFormCheckboxGroup } from 'bootstrap-vue-next'
+import { markRaw } from 'vue'
+import {
+  BTableSimple,
+  BThead,
+  BTr,
+  BTh,
+  BTbody,
+  BTfoot,
+  BTd,
+  BFormCheckbox,
+  BFormCheckboxGroup
+} from 'bootstrap-vue-next'
 export default {
   name: 'ZekBvTable',
   emits: ['update', 'rowClick', 'cellClick', 'rowSelect'],
@@ -126,7 +152,7 @@ export default {
   methods: {
     init() {
       // If headers are not provided, use the keys of the first row of raw data
-      if(this.headers.length === 0 && this.rawData.length > 0) {
+      if (this.headers.length === 0 && this.rawData.length > 0) {
         this.tableHeaders = Object.keys(this.rawData[0])
       }
       this.processRawData()
@@ -167,7 +193,7 @@ export default {
           id: index,
           cells: this.tableHeaders.map((header) => {
             return {
-              value: row[header.key ? header.key : header] || '-NA-',
+              value: this.getCellValue(row, header),
               variant: 'light',
               key: header.key ? header.key : header,
               class: header.class ? header.class : ''
@@ -177,12 +203,31 @@ export default {
         }
       })
     },
+    // Get cell value based on header type
+    getCellValue(row, header) {
+      // if header is an object and has any of the key function, component, html, return the value of the whole row
+      if (typeof header === 'object' && (header.function || header.component || header.html)) {
+        return row
+      }
+      // if header exists and is an object with a key, use that key
+      if (typeof header === 'object' && header.key) {
+        return row[header.key] !== undefined ? row[header.key] : '-NA-'
+      }
+      // if header is a string, use it directly
+      if (typeof header === 'string') {
+        return row[header] !== undefined ? row[header] : '-NA-'
+      }
+      // if header is an object but does not have a key, return an empty string
+      return '-NA-'
+    },
     // Convert from table data (BootstrapVue Table Data format) to raw data (Array of Object)
     convertTableDataToRawData() {
       return this.tableData.map((row) => {
         let obj = {}
         row.cells.forEach((cell, index) => {
-          obj[this.tableHeaders[index].key ? this.tableHeaders[index].key : this.tableHeaders[index]] = cell.value
+          obj[
+            this.tableHeaders[index].key ? this.tableHeaders[index].key : this.tableHeaders[index]
+          ] = cell.value
         })
         return obj
       })
