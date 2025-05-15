@@ -35,6 +35,8 @@
             <div
               v-else-if="input.type == 'html' && (input.condition ?? true)"
               v-html="input.html"
+              :class="input.class"
+              v-on="input.events || {}"
             ></div>
             <!-- ? If Normal Mapped Component -->
             <component
@@ -46,6 +48,7 @@
               :formID="formId"
               :id="`${id}-${input.name}`"
               v-bind="input"
+              v-on="input.events || {}"
               :key="resetKey"
               @input="onInput(input.name, $event)"
             />
