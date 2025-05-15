@@ -9,6 +9,16 @@
       :state="error"
       :label-class="labelClass + (required ? ' required' : '')"
     >
+      <template #label>
+        <span>{{ label }}</span>
+        <i
+          v-if="hint"
+          class="input-hint-icon far fa-circle-question"
+          v-b-tooltip.hover.top
+          :title="hint"
+          @click.prevent="hintClick"
+        />
+      </template>
       <b-form-select
         ref="ZekBvSelect"
         :id="id"
@@ -124,6 +134,10 @@ export default {
       type: [String, Number],
       default: 0
     },
+    hint: {
+      type: String,
+      default: ''
+    },
     customProps: {
       type: Object,
       default: () => ({})
@@ -133,7 +147,7 @@ export default {
       default: () => ({})
     }
   },
-  emits: ['change', 'input'],
+  emits: ['change', 'input', 'hintClick'],
   data() {
     return {
       selected: "",
@@ -156,6 +170,9 @@ export default {
     change(event) {
       this.$emit('change', event.target.value)
     },
+    hintClick(event) {
+      this.$emit('hintClick', event)
+    },
   }
 }
 </script>
@@ -164,5 +181,11 @@ export default {
   content: '*';
   color: red;
   margin-left: 4px;
+}
+.input-hint-icon {
+  color: #999;
+  cursor: pointer;
+  height: 100%;
+  margin-left: 5px;
 }
 </style>
