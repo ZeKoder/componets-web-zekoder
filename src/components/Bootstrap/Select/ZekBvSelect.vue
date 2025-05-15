@@ -7,10 +7,11 @@
       :valid-feedback="successMessage"
       :invalid-feedback="errorMessage"
       :state="error"
-      :label-class="labelClass + (required ? ' required' : '')"
+      :label-class="labelClass"
     >
       <template #label>
         <span>{{ label }}</span>
+        <span v-if="required" class="required"></span>
         <i
           v-if="hint"
           class="input-hint-icon far fa-circle-question"
