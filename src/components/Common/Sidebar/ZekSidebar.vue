@@ -44,7 +44,7 @@
       <!-- SECTION: Groups of Link (treated as a section) -->
       <div
         v-for="(sec, i) in localSections"
-        :key="i + ' ' + sec?.title"
+        :key="i + '-' + sec?.title"
         class="section-container"
         :class="sec.class"
         :style="sec.style"
