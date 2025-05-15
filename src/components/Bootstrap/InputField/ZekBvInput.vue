@@ -7,7 +7,7 @@
       :valid-feedback="successMessage"
       :invalid-feedback="errorMessage"
       :state="error"
-      :label-class="labelClass"
+      :label-class="labelClass "
     >
       <template #label>
         <span>{{ label }}</span>
@@ -17,7 +17,7 @@
           class="input-hint-icon far fa-circle-question"
           v-b-tooltip.hover.top
           :title="hint"
-          @click="hintClick"
+          @click.prevent="hintClick"
         />
       </template>
       <b-input-group>
@@ -78,7 +78,7 @@
   </div>
 </template>
 <script>
-import { BFormGroup, BInputGroup, BInputGroupText, BFormInput, BTooltip } from 'bootstrap-vue-next'
+import { BFormGroup, BInputGroup, BInputGroupText, BFormInput } from 'bootstrap-vue-next'
 export default {
   name: 'ZekBvInput',
   components: {
@@ -86,9 +86,6 @@ export default {
     BInputGroup,
     BInputGroupText,
     BFormInput
-  },
-  directives: {
-    BTooltip
   },
   props: {
     value: {
